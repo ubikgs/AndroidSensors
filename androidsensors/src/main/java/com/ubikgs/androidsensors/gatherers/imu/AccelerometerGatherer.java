@@ -33,7 +33,8 @@ public class AccelerometerGatherer extends IMUSensorGatherer {
                 sensorTypeToAndroidSensor);
     }
 
-    protected SensorType getSensorType() {
+    @Override
+    public SensorType getSensorType() {
         return SensorType.ACCELEROMETER;
     }
 }

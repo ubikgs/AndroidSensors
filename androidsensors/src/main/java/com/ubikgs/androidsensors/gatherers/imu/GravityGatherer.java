@@ -34,7 +34,7 @@ public class GravityGatherer extends IMUSensorGatherer {
     }
 
     @Override
-    protected SensorType getSensorType() {
+    public SensorType getSensorType() {
         return SensorType.GRAVITY;
     }
 }

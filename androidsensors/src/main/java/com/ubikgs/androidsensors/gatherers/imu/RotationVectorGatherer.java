@@ -33,7 +33,7 @@ public class RotationVectorGatherer extends IMUSensorGatherer {
     }
 
     @Override
-    protected SensorType getSensorType() {
+    public SensorType getSensorType() {
         return SensorType.ROTATION_VECTOR;
     }
 }

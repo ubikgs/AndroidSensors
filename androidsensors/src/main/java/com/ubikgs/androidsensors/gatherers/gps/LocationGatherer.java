@@ -90,7 +90,7 @@ public class LocationGatherer extends GPSGatherer {
     }
 
     @Override
-    protected SensorType getSensorType() {
+    public SensorType getSensorType() {
         return SensorType.LOCATION;
     }
 }

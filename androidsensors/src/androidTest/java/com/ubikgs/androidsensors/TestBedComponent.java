@@ -56,4 +56,6 @@ public interface TestBedComponent {
     void inject(GPSSensorGatheringTest test);
 
     void inject(SensorGathererFactoryIntegrationTest test);
+
+    void inject(AndroidSensorsIntegrationTest test);
 }

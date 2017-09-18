@@ -75,7 +75,7 @@ public class RawGPSMeasurementsGatherer extends RawGPSGatherer {
     }
 
     @Override
-    protected SensorType getSensorType() {
+    public SensorType getSensorType() {
         return SensorType.RAW_GPS_MEASUREMENTS;
     }
 }

@@ -34,7 +34,7 @@ public class LinearAccelerationGatherer extends IMUSensorGatherer {
     }
 
     @Override
-    protected SensorType getSensorType() {
+    public SensorType getSensorType() {
         return SensorType.LINEAR_ACCELERATION;
     }
 }

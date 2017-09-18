@@ -70,5 +70,5 @@ public abstract class AbstractSensorGatherer implements SensorGatherer {
         return criticalityChecker.isCritical(getSensorType());
     }
 
-    protected abstract SensorType getSensorType();
+    public abstract SensorType getSensorType();
 }

@@ -34,7 +34,7 @@ public class GyroscopeGatherer extends IMUSensorGatherer {
     }
 
     @Override
-    protected SensorType getSensorType() {
+    public SensorType getSensorType() {
         return SensorType.GYROSCOPE;
     }
 }

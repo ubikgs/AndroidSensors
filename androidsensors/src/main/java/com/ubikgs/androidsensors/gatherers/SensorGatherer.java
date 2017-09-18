@@ -1,5 +1,6 @@
 package com.ubikgs.androidsensors.gatherers;
 
+import com.ubikgs.androidsensors.SensorType;
 import com.ubikgs.androidsensors.records.SensorRecord;
 
 import io.reactivex.Flowable;
@@ -21,5 +22,7 @@ public interface SensorGatherer {
     void askForEnabling();
 
     boolean isCritical();
+
+    SensorType getSensorType();
 
 }

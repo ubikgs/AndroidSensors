@@ -34,7 +34,7 @@ public class MagneticFieldGatherer extends IMUSensorGatherer {
     }
 
     @Override
-    protected SensorType getSensorType() {
+    public SensorType getSensorType() {
         return SensorType.MAGNETIC_FIELD;
     }
 }
