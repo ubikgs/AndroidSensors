@@ -13,7 +13,8 @@ import com.ubikgs.androidsensors.gatherers.imu.GyroscopeGathererIntegrationTest;
 import com.ubikgs.androidsensors.gatherers.imu.LinearAccelerationGathererIntegrationTest;
 import com.ubikgs.androidsensors.gatherers.imu.MagneticFieldGathererIntegrationTest;
 import com.ubikgs.androidsensors.gatherers.imu.RotationVectorGathererIntegrationTest;
-import com.ubikgs.androidsensors.modules.SensorsModule;
+import com.ubikgs.androidsensors.modules.AndroidSensorsCoreModule;
+import com.ubikgs.androidsensors.modules.AndroidSensorsEdgeModule;
 import com.ubikgs.androidsensors.modules.SystemServicesModule;
 import com.ubikgs.androidsensors.modules.TestBedModule;
 
@@ -26,7 +27,8 @@ import dagger.Component;
 @Component(modules = {
         TestBedModule.class,
         SystemServicesModule.class,
-        SensorsModule.class
+        AndroidSensorsCoreModule.class,
+        AndroidSensorsEdgeModule.class
 })
 public interface TestBedComponent {
     void inject(AccelerometerGathererIntegrationTest test);
