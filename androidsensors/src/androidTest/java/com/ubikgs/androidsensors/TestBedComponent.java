@@ -1,6 +1,5 @@
 package com.ubikgs.androidsensors;
 
-import com.ubikgs.androidsensors.factories.SensorGathererFactoryIntegrationTest;
 import com.ubikgs.androidsensors.gatherers.GPSSensorGatheringTest;
 import com.ubikgs.androidsensors.gatherers.IMUSensorFrequencyTest;
 import com.ubikgs.androidsensors.gatherers.gps.LocationGathererIntegrationTest;
@@ -54,8 +53,6 @@ public interface TestBedComponent {
     void inject(RawGPSStatusGathererIntegrationTest test);
 
     void inject(GPSSensorGatheringTest test);
-
-    void inject(SensorGathererFactoryIntegrationTest test);
 
     void inject(AndroidSensorsIntegrationTest test);
 }
