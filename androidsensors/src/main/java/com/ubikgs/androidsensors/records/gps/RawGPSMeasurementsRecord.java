@@ -1,0 +1,270 @@
+package com.ubikgs.androidsensors.records.gps;
+
+import android.location.GnssMeasurement;
+import android.location.GnssMeasurementsEvent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
+import com.ubikgs.androidsensors.records.RecordInfo;
+import com.ubikgs.androidsensors.records.SensorRecord;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+
+/**
+ * Created by alberto on 18/9/17.
+ */
+
+public class RawGPSMeasurementsRecord extends SensorRecord {
+
+    private int satelliteCount;
+
+    private int[] svids;
+    private int[] constellations;
+    private double[] timeOffsets;
+    private int[] stateCodes;
+    private long[] svTimes;
+    private long[] svTimeUncerts;
+    private double[] cn0DbHzs;
+    private double[] pseudoranges;
+    private double[] pseudorangeUncerts;
+    private int[] deltaStates;
+    private double[] deltas;
+    private double[] deltaUncerts;
+    private int[] multipaths;
+
+    public RawGPSMeasurementsRecord() {
+        super();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public RawGPSMeasurementsRecord(GnssMeasurementsEvent event) {
+        super(new RecordInfo(0.0f, event.getClock().getTimeNanos()));
+        Collection<GnssMeasurement> measurements = event.getMeasurements();
+
+        this.satelliteCount = measurements.size();
+
+        this.svids = new int[satelliteCount];
+        this.constellations = new int[satelliteCount];
+        this.timeOffsets = new double[satelliteCount];
+        this.stateCodes = new int[satelliteCount];
+        this.svTimes = new long[satelliteCount];
+        this.svTimeUncerts = new long[satelliteCount];
+        this.cn0DbHzs = new double[satelliteCount];
+        this.pseudoranges = new double[satelliteCount];
+        this.pseudorangeUncerts = new double[satelliteCount];
+        this.deltaStates = new int[satelliteCount];
+        this.deltas = new double[satelliteCount];
+        this.deltaUncerts = new double[satelliteCount];
+        this.multipaths = new int[satelliteCount];
+
+        Iterator<GnssMeasurement> it = measurements.iterator();
+        GnssMeasurement measurement = it.next();
+        for (int i = 0; i < satelliteCount; i++, measurement = it.next()) {
+            svids[i] = measurement.getSvid();
+            constellations[i] = measurement.getConstellationType();
+            timeOffsets[i] = measurement.getTimeOffsetNanos();
+            stateCodes[i] = measurement.getState();
+            svTimes[i] = measurement.getReceivedSvTimeNanos();
+            svTimeUncerts[i] = measurement.getReceivedSvTimeUncertaintyNanos();
+            cn0DbHzs[i] = measurement.getCn0DbHz();
+            pseudoranges[i] = measurement.getPseudorangeRateMetersPerSecond();
+            pseudorangeUncerts[i] = measurement.getPseudorangeRateUncertaintyMetersPerSecond();
+            deltaStates[i] = measurement.getAccumulatedDeltaRangeState();
+            deltas[i] = measurement.getAccumulatedDeltaRangeMeters();
+            deltaUncerts[i] = measurement.getAccumulatedDeltaRangeUncertaintyMeters();
+            multipaths[i] = measurement.getMultipathIndicator();
+        }
+    }
+
+    public int getSatelliteCount() {
+        return satelliteCount;
+    }
+
+    public RawGPSMeasurementsRecord setSatelliteCount(int satelliteCount) {
+        this.satelliteCount = satelliteCount;
+        return this;
+    }
+
+    public int[] getSvids() {
+        return svids;
+    }
+
+    public RawGPSMeasurementsRecord setSvids(int[] svids) {
+        this.svids = svids;
+        return this;
+    }
+
+    public int[] getConstellations() {
+        return constellations;
+    }
+
+    public RawGPSMeasurementsRecord setConstellations(int[] constellations) {
+        this.constellations = constellations;
+        return this;
+    }
+
+    public double[] getTimeOffsets() {
+        return timeOffsets;
+    }
+
+    public RawGPSMeasurementsRecord setTimeOffsets(double[] timeOffsets) {
+        this.timeOffsets = timeOffsets;
+        return this;
+    }
+
+    public int[] getStateCodes() {
+        return stateCodes;
+    }
+
+    public RawGPSMeasurementsRecord setStateCodes(int[] stateCodes) {
+        this.stateCodes = stateCodes;
+        return this;
+    }
+
+    public long[] getSvTimes() {
+        return svTimes;
+    }
+
+    public RawGPSMeasurementsRecord setSvTimes(long[] svTimes) {
+        this.svTimes = svTimes;
+        return this;
+    }
+
+    public long[] getSvTimeUncerts() {
+        return svTimeUncerts;
+    }
+
+    public RawGPSMeasurementsRecord setSvTimeUncerts(long[] svTimeUncerts) {
+        this.svTimeUncerts = svTimeUncerts;
+        return this;
+    }
+
+    public double[] getCn0DbHzs() {
+        return cn0DbHzs;
+    }
+
+    public RawGPSMeasurementsRecord setCn0DbHzs(double[] cn0DbHzs) {
+        this.cn0DbHzs = cn0DbHzs;
+        return this;
+    }
+
+    public double[] getPseudoranges() {
+        return pseudoranges;
+    }
+
+    public RawGPSMeasurementsRecord setPseudoranges(double[] pseudoranges) {
+        this.pseudoranges = pseudoranges;
+        return this;
+    }
+
+    public double[] getPseudorangeUncerts() {
+        return pseudorangeUncerts;
+    }
+
+    public RawGPSMeasurementsRecord setPseudorangeUncerts(double[] pseudorangeUncerts) {
+        this.pseudorangeUncerts = pseudorangeUncerts;
+        return this;
+    }
+
+    public int[] getDeltaStates() {
+        return deltaStates;
+    }
+
+    public RawGPSMeasurementsRecord setDeltaStates(int[] deltaStates) {
+        this.deltaStates = deltaStates;
+        return this;
+    }
+
+    public double[] getDeltas() {
+        return deltas;
+    }
+
+    public RawGPSMeasurementsRecord setDeltas(double[] deltas) {
+        this.deltas = deltas;
+        return this;
+    }
+
+    public double[] getDeltaUncerts() {
+        return deltaUncerts;
+    }
+
+    public RawGPSMeasurementsRecord setDeltaUncerts(double[] deltaUncerts) {
+        this.deltaUncerts = deltaUncerts;
+        return this;
+    }
+
+    public int[] getMultipaths() {
+        return multipaths;
+    }
+
+    public RawGPSMeasurementsRecord setMultipaths(int[] multipaths) {
+        this.multipaths = multipaths;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "RawGPSMeasurementsRecord{" +
+                "satelliteCount=" + satelliteCount +
+                ", svids=" + Arrays.toString(svids) +
+                ", constellations=" + Arrays.toString(constellations) +
+                ", timeOffsets=" + Arrays.toString(timeOffsets) +
+                ", stateCodes=" + Arrays.toString(stateCodes) +
+                ", svTimes=" + Arrays.toString(svTimes) +
+                ", svTimeUncerts=" + Arrays.toString(svTimeUncerts) +
+                ", cn0DbHzs=" + Arrays.toString(cn0DbHzs) +
+                ", pseudoranges=" + Arrays.toString(pseudoranges) +
+                ", pseudorangeUncerts=" + Arrays.toString(pseudorangeUncerts) +
+                ", deltaStates=" + Arrays.toString(deltaStates) +
+                ", deltas=" + Arrays.toString(deltas) +
+                ", deltaUncerts=" + Arrays.toString(deltaUncerts) +
+                ", multipaths=" + Arrays.toString(multipaths) +
+                "} " + super.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RawGPSMeasurementsRecord)) return false;
+        if (!super.equals(o)) return false;
+
+        RawGPSMeasurementsRecord that = (RawGPSMeasurementsRecord) o;
+
+        if (getSatelliteCount() != that.getSatelliteCount()) return false;
+        if (!Arrays.equals(getSvids(), that.getSvids())) return false;
+        if (!Arrays.equals(getConstellations(), that.getConstellations())) return false;
+        if (!Arrays.equals(getTimeOffsets(), that.getTimeOffsets())) return false;
+        if (!Arrays.equals(getStateCodes(), that.getStateCodes())) return false;
+        if (!Arrays.equals(getSvTimes(), that.getSvTimes())) return false;
+        if (!Arrays.equals(getSvTimeUncerts(), that.getSvTimeUncerts())) return false;
+        if (!Arrays.equals(getCn0DbHzs(), that.getCn0DbHzs())) return false;
+        if (!Arrays.equals(getPseudoranges(), that.getPseudoranges())) return false;
+        if (!Arrays.equals(getPseudorangeUncerts(), that.getPseudorangeUncerts())) return false;
+        if (!Arrays.equals(getDeltaStates(), that.getDeltaStates())) return false;
+        if (!Arrays.equals(getDeltas(), that.getDeltas())) return false;
+        if (!Arrays.equals(getDeltaUncerts(), that.getDeltaUncerts())) return false;
+        return Arrays.equals(getMultipaths(), that.getMultipaths());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + getSatelliteCount();
+        result = 31 * result + Arrays.hashCode(getSvids());
+        result = 31 * result + Arrays.hashCode(getConstellations());
+        result = 31 * result + Arrays.hashCode(getTimeOffsets());
+        result = 31 * result + Arrays.hashCode(getStateCodes());
+        result = 31 * result + Arrays.hashCode(getSvTimes());
+        result = 31 * result + Arrays.hashCode(getSvTimeUncerts());
+        result = 31 * result + Arrays.hashCode(getCn0DbHzs());
+        result = 31 * result + Arrays.hashCode(getPseudoranges());
+        result = 31 * result + Arrays.hashCode(getPseudorangeUncerts());
+        result = 31 * result + Arrays.hashCode(getDeltaStates());
+        result = 31 * result + Arrays.hashCode(getDeltas());
+        result = 31 * result + Arrays.hashCode(getDeltaUncerts());
+        result = 31 * result + Arrays.hashCode(getMultipaths());
+        return result;
+    }
+}
