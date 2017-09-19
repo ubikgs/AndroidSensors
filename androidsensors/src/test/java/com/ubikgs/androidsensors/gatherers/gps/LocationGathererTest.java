@@ -13,7 +13,7 @@ public class LocationGathererTest extends GPSGathererTest {
     @Before
     public void setUp() throws Exception {
         sensorGatherer = new LocationGatherer(sensorConfig, locationManager,
-                sensorEnableRequester, permissionChecker, sensorChecker, criticalityChecker);
+                sensorEnableRequester, permissionChecker, sensorChecker, sensorRequirementChecker);
         super.setUp();
     }
 

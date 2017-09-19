@@ -13,7 +13,7 @@ public class LinearAccelerationGathererTest extends IMUSensorGathererTest {
     @Before
     public void setUp() throws Exception {
         sensorGatherer = new LinearAccelerationGatherer(sensorConfig, sensorManager,
-                sensorEnableRequester, permissionChecker, sensorChecker, criticalityChecker,
+                sensorEnableRequester, permissionChecker, sensorChecker, sensorRequirementChecker,
                 sensorTypeToAndroidSensor);
         super.setUp();
     }

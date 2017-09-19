@@ -2,8 +2,8 @@ package com.ubikgs.androidsensors.modules;
 
 import android.content.Context;
 
-import com.ubikgs.androidsensors.checkers.applevel.BasicCriticalityChecker;
-import com.ubikgs.androidsensors.checkers.applevel.CriticalityChecker;
+import com.ubikgs.androidsensors.checkers.applevel.BasicSensorRequirementChecker;
+import com.ubikgs.androidsensors.checkers.applevel.SensorRequirementChecker;
 import com.ubikgs.androidsensors.config.BasicSensorConfig;
 import com.ubikgs.androidsensors.config.SensorConfig;
 import com.ubikgs.androidsensors.enablers.BasicSensorEnableRequester;
@@ -32,7 +32,8 @@ public class AndroidSensorsEdgeModuleTest {
 
     @Mock SensorEnableRequester defaultSensorEnableRequester;
     @Mock SensorEnableRequester gpsSensorEnableRequester;
-    @Mock CriticalityChecker criticalityChecker;
+    @Mock
+    SensorRequirementChecker sensorRequirementChecker;
     @Mock SensorConfig sensorConfig;
 
     private AndroidSensorsEdgeModule defaultModule;
@@ -42,7 +43,7 @@ public class AndroidSensorsEdgeModuleTest {
     public void setUp() throws Exception {
         defaultModule = new AndroidSensorsEdgeModule();
         customModule = new AndroidSensorsEdgeModule(defaultSensorEnableRequester,
-                gpsSensorEnableRequester, criticalityChecker, sensorConfig);
+                gpsSensorEnableRequester, sensorRequirementChecker, sensorConfig);
     }
 
     @Test
@@ -63,7 +64,7 @@ public class AndroidSensorsEdgeModuleTest {
     public void provideBasicCriticalityChecker_withDefaultModule_returnsBasicCriticalityChecker()
             throws Exception {
         assertThat(defaultModule.provideBasicCriticalityChecker().getClass(),
-                equalTo(BasicCriticalityChecker.class));
+                equalTo(BasicSensorRequirementChecker.class));
     }
 
     @Test
@@ -91,7 +92,7 @@ public class AndroidSensorsEdgeModuleTest {
     public void provideBasicCriticalityChecker_withCustomModule_returnsCriticalityChecker()
             throws Exception {
         assertThat(customModule.provideBasicCriticalityChecker(),
-                is(criticalityChecker));
+                is(sensorRequirementChecker));
     }
 
     @Test

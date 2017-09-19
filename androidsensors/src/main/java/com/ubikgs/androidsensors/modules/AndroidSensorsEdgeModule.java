@@ -2,8 +2,8 @@ package com.ubikgs.androidsensors.modules;
 
 import android.content.Context;
 
-import com.ubikgs.androidsensors.checkers.applevel.BasicCriticalityChecker;
-import com.ubikgs.androidsensors.checkers.applevel.CriticalityChecker;
+import com.ubikgs.androidsensors.checkers.applevel.BasicSensorRequirementChecker;
+import com.ubikgs.androidsensors.checkers.applevel.SensorRequirementChecker;
 import com.ubikgs.androidsensors.config.BasicSensorConfig;
 import com.ubikgs.androidsensors.config.SensorConfig;
 import com.ubikgs.androidsensors.enablers.BasicSensorEnableRequester;
@@ -27,7 +27,7 @@ public class AndroidSensorsEdgeModule {
 
     private SensorEnableRequester defaultSensorEnableRequester;
     private SensorEnableRequester gpsSensorEnableRequester;
-    private CriticalityChecker criticalityChecker;
+    private SensorRequirementChecker sensorRequirementChecker;
     private SensorConfig sensorConfig;
 
     public AndroidSensorsEdgeModule() {
@@ -35,12 +35,12 @@ public class AndroidSensorsEdgeModule {
 
     public AndroidSensorsEdgeModule(SensorEnableRequester defaultSensorEnableRequester,
                                     SensorEnableRequester gpsSensorEnableRequester,
-                                    CriticalityChecker criticalityChecker,
+                                    SensorRequirementChecker sensorRequirementChecker,
                                     SensorConfig sensorConfig) {
 
         this.defaultSensorEnableRequester = defaultSensorEnableRequester;
         this.gpsSensorEnableRequester = gpsSensorEnableRequester;
-        this.criticalityChecker = criticalityChecker;
+        this.sensorRequirementChecker = sensorRequirementChecker;
         this.sensorConfig = sensorConfig;
     }
 
@@ -62,13 +62,13 @@ public class AndroidSensorsEdgeModule {
     }
 
     /*
-    * CriticalityCheckers
+    * SensorRequirementCheckers
     * */
 
     @Provides
-    CriticalityChecker provideBasicCriticalityChecker() {
-        return criticalityChecker != null ?
-                criticalityChecker : new BasicCriticalityChecker();
+    SensorRequirementChecker provideBasicCriticalityChecker() {
+        return sensorRequirementChecker != null ?
+                sensorRequirementChecker : new BasicSensorRequirementChecker();
     }
 
     /*

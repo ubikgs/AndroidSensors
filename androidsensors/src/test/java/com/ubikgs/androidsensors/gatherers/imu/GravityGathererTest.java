@@ -15,7 +15,7 @@ public class GravityGathererTest extends IMUSensorGathererTest {
     @Before
     public void setUp() throws Exception {
         sensorGatherer = new GravityGatherer(sensorConfig, sensorManager,
-                sensorEnableRequester, permissionChecker, sensorChecker, criticalityChecker,
+                sensorEnableRequester, permissionChecker, sensorChecker, sensorRequirementChecker,
                 sensorTypeToAndroidSensor);
         super.setUp();
     }

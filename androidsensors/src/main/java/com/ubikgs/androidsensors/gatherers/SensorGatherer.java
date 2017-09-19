@@ -21,7 +21,7 @@ public interface SensorGatherer {
 
     void askForEnabling();
 
-    boolean isCritical();
+    boolean isRequired();
 
     SensorType getSensorType();
 

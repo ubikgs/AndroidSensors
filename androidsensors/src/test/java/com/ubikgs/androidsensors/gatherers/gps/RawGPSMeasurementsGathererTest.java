@@ -13,7 +13,7 @@ public class RawGPSMeasurementsGathererTest extends GPSGathererTest {
     @Before
     public void setUp() throws Exception {
         sensorGatherer = new RawGPSMeasurementsGatherer(sensorConfig, locationManager,
-                sensorEnableRequester, permissionChecker, sensorChecker, criticalityChecker);
+                sensorEnableRequester, permissionChecker, sensorChecker, sensorRequirementChecker);
         super.setUp();
     }
 

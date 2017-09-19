@@ -2,7 +2,7 @@ package com.ubikgs.androidsensors;
 
 import android.content.Context;
 
-import com.ubikgs.androidsensors.checkers.applevel.CriticalityChecker;
+import com.ubikgs.androidsensors.checkers.applevel.SensorRequirementChecker;
 import com.ubikgs.androidsensors.config.SensorConfig;
 import com.ubikgs.androidsensors.enablers.SensorEnableRequester;
 import com.ubikgs.androidsensors.gatherers.SensorGatherer;
@@ -30,7 +30,7 @@ public class AndroidSensors {
     private AndroidSensors(Context applicationContext,
                            SensorEnableRequester defaultSensorEnableRequester,
                            SensorEnableRequester gpsSensorEnableRequester,
-                           CriticalityChecker criticalityChecker,
+                           SensorRequirementChecker sensorRequirementChecker,
                            SensorConfig sensorConfig) {
 
         this.mappedGatherersByClass = new HashMap<>();
@@ -41,7 +41,7 @@ public class AndroidSensors {
                 .androidSensorsEdgeModule(new AndroidSensorsEdgeModule(
                         defaultSensorEnableRequester,
                         gpsSensorEnableRequester,
-                        criticalityChecker,
+                        sensorRequirementChecker,
                         sensorConfig
                 )).build()
                 .inject(this);
@@ -83,7 +83,7 @@ public class AndroidSensors {
     public interface Builder {
         Builder customDefaultEnableRequester(SensorEnableRequester defaultEnableRequester);
         Builder customGPSEnableRequester(SensorEnableRequester gpsEnableRequester);
-        Builder customCriticalityChecker(CriticalityChecker criticalityChecker);
+        Builder customSensorRequirementChecker(SensorRequirementChecker sensorRequirementChecker);
         Builder customSensorConfig(SensorConfig sensorConfig);
         AndroidSensors build(Context context);
     }
@@ -94,7 +94,7 @@ public class AndroidSensors {
 
             private SensorEnableRequester defaultSensorEnableRequester;
             private SensorEnableRequester gpsSensorEnableRequester;
-            private CriticalityChecker criticalityChecker;
+            private SensorRequirementChecker sensorRequirementChecker;
             private SensorConfig sensorConfig;
 
             @Override
@@ -110,8 +110,8 @@ public class AndroidSensors {
             }
 
             @Override
-            public Builder customCriticalityChecker(CriticalityChecker criticalityChecker) {
-                this.criticalityChecker = criticalityChecker;
+            public Builder customSensorRequirementChecker(SensorRequirementChecker sensorRequirementChecker) {
+                this.sensorRequirementChecker = sensorRequirementChecker;
                 return this;
             }
 
@@ -126,7 +126,7 @@ public class AndroidSensors {
                 return new AndroidSensors(applicationContext,
                         defaultSensorEnableRequester,
                         gpsSensorEnableRequester,
-                        criticalityChecker,
+                        sensorRequirementChecker,
                         sensorConfig);
             }
         };

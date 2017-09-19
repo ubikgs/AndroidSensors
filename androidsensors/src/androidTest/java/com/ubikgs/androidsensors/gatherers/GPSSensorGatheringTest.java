@@ -6,7 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
 import com.ubikgs.androidsensors.DaggerTestBedComponent;
-import com.ubikgs.androidsensors.checkers.applevel.CriticalityChecker;
+import com.ubikgs.androidsensors.checkers.applevel.SensorRequirementChecker;
 import com.ubikgs.androidsensors.checkers.internal.SensorChecker;
 import com.ubikgs.androidsensors.checkers.permissions.PermissionChecker;
 import com.ubikgs.androidsensors.config.SensorConfig;
@@ -49,7 +49,8 @@ public class GPSSensorGatheringTest {
     @Inject @Named("fineLocationPermissionChecker") PermissionChecker permissionChecker;
     @Inject @Named("gpsSensorChecker") SensorChecker gpsSensorChecker;
     @Inject @Named("rawGPSSensorChecker") SensorChecker rawGPSSensorChecker;
-    @Inject CriticalityChecker criticalityChecker;
+    @Inject
+    SensorRequirementChecker sensorRequirementChecker;
 
     @Inject LocationGatherer locationGatherer;
 
@@ -62,28 +63,28 @@ public class GPSSensorGatheringTest {
     @Test
     public void testLocationGatherer() throws Exception {
         testSensor(() -> new LocationGatherer(sensorConfig, locationManager,
-                sensorEnableRequester, permissionChecker, gpsSensorChecker, criticalityChecker));
+                sensorEnableRequester, permissionChecker, gpsSensorChecker, sensorRequirementChecker));
     }
 
     @Ignore
     @Test
     public void testRawGPSMeasurementsGatherer() throws Exception {
         testSensor(() -> new RawGPSMeasurementsGatherer(sensorConfig, locationManager,
-                sensorEnableRequester, permissionChecker, rawGPSSensorChecker, criticalityChecker));
+                sensorEnableRequester, permissionChecker, rawGPSSensorChecker, sensorRequirementChecker));
     }
 
     @Ignore
     @Test
     public void testRawGPSNavigationGatherer() throws Exception {
         testSensor(() -> new RawGPSNavigationGatherer(sensorConfig, locationManager,
-                sensorEnableRequester, permissionChecker, rawGPSSensorChecker, criticalityChecker));
+                sensorEnableRequester, permissionChecker, rawGPSSensorChecker, sensorRequirementChecker));
     }
 
     @Ignore
     @Test
     public void testRawGPSStatusGaterer() throws Exception {
         testSensor(() -> new RawGPSStatusGatherer(sensorConfig, locationManager,
-                sensorEnableRequester, permissionChecker, rawGPSSensorChecker, criticalityChecker));
+                sensorEnableRequester, permissionChecker, rawGPSSensorChecker, sensorRequirementChecker));
     }
 
     private void testSensor(GathererCreator gathererCreator) {

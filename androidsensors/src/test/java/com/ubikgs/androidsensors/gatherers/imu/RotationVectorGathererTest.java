@@ -13,7 +13,7 @@ public class RotationVectorGathererTest extends IMUSensorGathererTest {
     @Before
     public void setUp() throws Exception {
         sensorGatherer = new RotationVectorGatherer(sensorConfig, sensorManager,
-                sensorEnableRequester, permissionChecker, sensorChecker, criticalityChecker,
+                sensorEnableRequester, permissionChecker, sensorChecker, sensorRequirementChecker,
                 sensorTypeToAndroidSensor);
         super.setUp();
     }

@@ -13,12 +13,12 @@ import javax.inject.Inject;
  * Created by alberto on 15/9/17.
  */
 
-public class BasicCriticalityChecker implements CriticalityChecker {
+public class BasicSensorRequirementChecker implements SensorRequirementChecker {
 
     private final Set<SensorType> criticalSensors;
 
     @Inject
-    public BasicCriticalityChecker() {
+    public BasicSensorRequirementChecker() {
         criticalSensors = new HashSet<>(Arrays.asList(SensorType.values()));
 
         criticalSensors.removeAll(Arrays.asList(
@@ -29,7 +29,7 @@ public class BasicCriticalityChecker implements CriticalityChecker {
     }
 
     @Override
-    public boolean isCritical(SensorType sensorType) {
+    public boolean isRequired(SensorType sensorType) {
         return criticalSensors.contains(sensorType);
     }
 }

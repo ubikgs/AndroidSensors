@@ -14,7 +14,7 @@ public class AccelerometerGathererTest extends IMUSensorGathererTest {
     @Before
     public void setUp() throws Exception {
         sensorGatherer = new AccelerometerGatherer(sensorConfig, sensorManager,
-                sensorEnableRequester, permissionChecker, sensorChecker, criticalityChecker,
+                sensorEnableRequester, permissionChecker, sensorChecker, sensorRequirementChecker,
                 sensorTypeToAndroidSensor);
         super.setUp();
     }

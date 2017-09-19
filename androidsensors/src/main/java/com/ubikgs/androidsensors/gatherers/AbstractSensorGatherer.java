@@ -1,7 +1,7 @@
 package com.ubikgs.androidsensors.gatherers;
 
 import com.ubikgs.androidsensors.SensorType;
-import com.ubikgs.androidsensors.checkers.applevel.CriticalityChecker;
+import com.ubikgs.androidsensors.checkers.applevel.SensorRequirementChecker;
 import com.ubikgs.androidsensors.checkers.internal.SensorChecker;
 import com.ubikgs.androidsensors.checkers.permissions.PermissionChecker;
 import com.ubikgs.androidsensors.config.SensorConfig;
@@ -21,19 +21,19 @@ public abstract class AbstractSensorGatherer implements SensorGatherer {
     private final SensorEnableRequester sensorEnableRequester;
     private final PermissionChecker permissionChecker;
     private final SensorChecker sensorChecker;
-    private final CriticalityChecker criticalityChecker;
+    private final SensorRequirementChecker sensorRequirementChecker;
 
     public AbstractSensorGatherer(SensorConfig sensorConfig,
                                   SensorEnableRequester sensorEnableRequester,
                                   PermissionChecker permissionChecker,
                                   SensorChecker sensorChecker,
-                                  CriticalityChecker criticalityChecker) {
+                                  SensorRequirementChecker sensorRequirementChecker) {
 
         this.sensorConfig = sensorConfig;
         this.sensorEnableRequester = sensorEnableRequester;
         this.permissionChecker = permissionChecker;
         this.sensorChecker = sensorChecker;
-        this.criticalityChecker = criticalityChecker;
+        this.sensorRequirementChecker = sensorRequirementChecker;
     }
 
     public Flowable<SensorRecord> recordStream() {
@@ -66,8 +66,8 @@ public abstract class AbstractSensorGatherer implements SensorGatherer {
     }
 
     @Override
-    public boolean isCritical() {
-        return criticalityChecker.isCritical(getSensorType());
+    public boolean isRequired() {
+        return sensorRequirementChecker.isRequired(getSensorType());
     }
 
     public abstract SensorType getSensorType();

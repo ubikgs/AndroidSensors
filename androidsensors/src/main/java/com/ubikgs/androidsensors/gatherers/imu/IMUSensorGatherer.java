@@ -6,7 +6,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
-import com.ubikgs.androidsensors.checkers.applevel.CriticalityChecker;
+import com.ubikgs.androidsensors.checkers.applevel.SensorRequirementChecker;
 import com.ubikgs.androidsensors.checkers.internal.SensorChecker;
 import com.ubikgs.androidsensors.checkers.permissions.PermissionChecker;
 import com.ubikgs.androidsensors.config.SensorConfig;
@@ -32,11 +32,11 @@ public abstract class IMUSensorGatherer extends AbstractSensorGatherer {
                              SensorEnableRequester sensorEnableRequester,
                              PermissionChecker permissionChecker,
                              SensorChecker sensorChecker,
-                             CriticalityChecker criticalityChecker,
+                             SensorRequirementChecker sensorRequirementChecker,
                              SensorTypeToAndroidSensor sensorTypeToAndroidSensor) {
 
         super(sensorConfig,
-                sensorEnableRequester, permissionChecker, sensorChecker, criticalityChecker);
+                sensorEnableRequester, permissionChecker, sensorChecker, sensorRequirementChecker);
         this.sensorManager = sensorManager;
         this.sensorTypeToAndroidSensor = sensorTypeToAndroidSensor;
 

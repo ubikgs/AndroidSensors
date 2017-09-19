@@ -5,7 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
 import com.ubikgs.androidsensors.DaggerTestBedComponent;
-import com.ubikgs.androidsensors.checkers.applevel.CriticalityChecker;
+import com.ubikgs.androidsensors.checkers.applevel.SensorRequirementChecker;
 import com.ubikgs.androidsensors.checkers.internal.SensorChecker;
 import com.ubikgs.androidsensors.checkers.permissions.PermissionChecker;
 import com.ubikgs.androidsensors.config.BasicSensorConfig;
@@ -45,7 +45,8 @@ public class IMUSensorFrequencyTest {
     @Inject SensorEnableRequester sensorEnableRequester;
     @Inject PermissionChecker permissionChecker;
     @Inject @Named("imuSensorChecker") SensorChecker imuSensorChecker;
-    @Inject CriticalityChecker criticalityChecker;
+    @Inject
+    SensorRequirementChecker sensorRequirementChecker;
     @Inject SensorTypeToAndroidSensor sensorTypeToAndroidSensor;
     @Inject MillisecondsToMicroseconds millisecondsToMicroseconds;
 
@@ -59,7 +60,7 @@ public class IMUSensorFrequencyTest {
     public void testAccelerometerSensorDelay() throws Exception {
         testSensorDelay(i -> new AccelerometerGatherer(
                 new BasicSensorConfig(i, millisecondsToMicroseconds), sensorManager,
-                sensorEnableRequester, permissionChecker, imuSensorChecker, criticalityChecker,
+                sensorEnableRequester, permissionChecker, imuSensorChecker, sensorRequirementChecker,
                 sensorTypeToAndroidSensor));
     }
 
@@ -68,7 +69,7 @@ public class IMUSensorFrequencyTest {
     public void testGravitySensorDelay() throws Exception {
         testSensorDelay(i -> new GravityGatherer(
                 new BasicSensorConfig(i, millisecondsToMicroseconds), sensorManager,
-                sensorEnableRequester, permissionChecker, imuSensorChecker, criticalityChecker,
+                sensorEnableRequester, permissionChecker, imuSensorChecker, sensorRequirementChecker,
                 sensorTypeToAndroidSensor));
     }
 
@@ -77,7 +78,7 @@ public class IMUSensorFrequencyTest {
     public void testGyroscopeSensorDelay() throws Exception {
         testSensorDelay(i -> new GyroscopeGatherer(
                 new BasicSensorConfig(i, millisecondsToMicroseconds), sensorManager,
-                sensorEnableRequester, permissionChecker, imuSensorChecker, criticalityChecker,
+                sensorEnableRequester, permissionChecker, imuSensorChecker, sensorRequirementChecker,
                 sensorTypeToAndroidSensor));
     }
 
@@ -86,7 +87,7 @@ public class IMUSensorFrequencyTest {
     public void testLinearAccelerationSensorDelay() throws Exception {
         testSensorDelay(i -> new LinearAccelerationGatherer(
                 new BasicSensorConfig(i, millisecondsToMicroseconds), sensorManager,
-                sensorEnableRequester, permissionChecker, imuSensorChecker, criticalityChecker,
+                sensorEnableRequester, permissionChecker, imuSensorChecker, sensorRequirementChecker,
                 sensorTypeToAndroidSensor));
     }
 
@@ -95,7 +96,7 @@ public class IMUSensorFrequencyTest {
     public void testMagneticFieldSensorDelay() throws Exception {
         testSensorDelay(i -> new MagneticFieldGatherer(
                 new BasicSensorConfig(i, millisecondsToMicroseconds), sensorManager,
-                sensorEnableRequester, permissionChecker, imuSensorChecker, criticalityChecker,
+                sensorEnableRequester, permissionChecker, imuSensorChecker, sensorRequirementChecker,
                 sensorTypeToAndroidSensor));
     }
 
@@ -104,7 +105,7 @@ public class IMUSensorFrequencyTest {
     public void testRotationVectorSensorDelay() throws Exception {
         testSensorDelay(i -> new RotationVectorGatherer(
                 new BasicSensorConfig(i, millisecondsToMicroseconds), sensorManager,
-                sensorEnableRequester, permissionChecker, imuSensorChecker, criticalityChecker,
+                sensorEnableRequester, permissionChecker, imuSensorChecker, sensorRequirementChecker,
                 sensorTypeToAndroidSensor));
     }
 

@@ -2,7 +2,7 @@ package com.ubikgs.androidsensors.gatherers.gps;
 
 import android.location.LocationManager;
 
-import com.ubikgs.androidsensors.checkers.applevel.CriticalityChecker;
+import com.ubikgs.androidsensors.checkers.applevel.SensorRequirementChecker;
 import com.ubikgs.androidsensors.checkers.internal.SensorChecker;
 import com.ubikgs.androidsensors.checkers.permissions.PermissionChecker;
 import com.ubikgs.androidsensors.config.SensorConfig;
@@ -22,9 +22,9 @@ public abstract class GPSGatherer extends AbstractSensorGatherer {
                        SensorEnableRequester sensorEnableRequester,
                        PermissionChecker permissionChecker,
                        SensorChecker sensorChecker,
-                       CriticalityChecker criticalityChecker) {
+                       SensorRequirementChecker sensorRequirementChecker) {
 
-        super(sensorConfig, sensorEnableRequester, permissionChecker, sensorChecker, criticalityChecker);
+        super(sensorConfig, sensorEnableRequester, permissionChecker, sensorChecker, sensorRequirementChecker);
         this.locationManager = locationManager;
     }
 }

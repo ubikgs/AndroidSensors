@@ -3,7 +3,7 @@ package com.ubikgs.androidsensors.gatherers.imu;
 import android.hardware.SensorManager;
 
 import com.ubikgs.androidsensors.SensorType;
-import com.ubikgs.androidsensors.checkers.applevel.CriticalityChecker;
+import com.ubikgs.androidsensors.checkers.applevel.SensorRequirementChecker;
 import com.ubikgs.androidsensors.checkers.internal.SensorChecker;
 import com.ubikgs.androidsensors.checkers.permissions.PermissionChecker;
 import com.ubikgs.androidsensors.config.SensorConfig;
@@ -25,11 +25,11 @@ public class AccelerometerGatherer extends IMUSensorGatherer {
                                  SensorEnableRequester sensorEnableRequester,
                                  PermissionChecker permissionChecker,
                                  @Named("imuSensorChecker") SensorChecker sensorChecker,
-                                 CriticalityChecker criticalityChecker,
+                                 SensorRequirementChecker sensorRequirementChecker,
                                  SensorTypeToAndroidSensor sensorTypeToAndroidSensor) {
 
         super(sensorConfig, sensorManager,
-                sensorEnableRequester, permissionChecker, sensorChecker, criticalityChecker,
+                sensorEnableRequester, permissionChecker, sensorChecker, sensorRequirementChecker,
                 sensorTypeToAndroidSensor);
     }
 

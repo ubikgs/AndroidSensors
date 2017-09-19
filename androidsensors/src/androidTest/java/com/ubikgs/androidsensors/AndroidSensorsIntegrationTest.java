@@ -3,7 +3,7 @@ package com.ubikgs.androidsensors;
 import android.content.Context;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.ubikgs.androidsensors.checkers.applevel.CriticalityChecker;
+import com.ubikgs.androidsensors.checkers.applevel.SensorRequirementChecker;
 import com.ubikgs.androidsensors.config.SensorConfig;
 import com.ubikgs.androidsensors.enablers.SensorEnableRequester;
 import com.ubikgs.androidsensors.gatherers.SensorGatherer;
@@ -50,7 +50,7 @@ public class AndroidSensorsIntegrationTest {
                 .builder()
                 .customDefaultEnableRequester(helper.defaultSensorEnableRequester)
                 .customGPSEnableRequester(helper.gpsSensorEnableRequester)
-                .customCriticalityChecker(helper.criticalityChecker)
+                .customSensorRequirementChecker(helper.sensorRequirementChecker)
                 .customSensorConfig(helper.sensorConfig)
                 .build(context);
     }
@@ -106,12 +106,12 @@ public class AndroidSensorsIntegrationTest {
     }
 
     @Test
-    public void sensorGatherer_withCustomConfig_returnsWithCustomCriticalityChecker() throws Exception {
+    public void sensorGatherer_withCustomConfig_returnsWithCustomSensorRequirementChecker() throws Exception {
         AccelerometerGatherer accelerometerGatherer =
                 customAndroidSensors.sensorGatherer(AccelerometerGatherer.class);
 
-        accelerometerGatherer.isCritical();
-        assertThat(helper.criticalityCheckerCalled, is(true));
+        accelerometerGatherer.isRequired();
+        assertThat(helper.sensorRequirementCheckerCalled, is(true));
     }
 
     @Test
@@ -130,15 +130,15 @@ public class AndroidSensorsIntegrationTest {
     private class Helper {
         boolean defaultSensorEnableRequesterCalled = false;
         boolean gpsEnableRequesterCalled = false;
-        boolean criticalityCheckerCalled = false;
+        boolean sensorRequirementCheckerCalled = false;
         boolean sensorConfigCalled = false;
 
         SensorEnableRequester defaultSensorEnableRequester = sensorType -> defaultSensorEnableRequesterCalled = true;
 
         SensorEnableRequester gpsSensorEnableRequester = sensorType -> gpsEnableRequesterCalled = true;
 
-        CriticalityChecker criticalityChecker = sensorType -> {
-            criticalityCheckerCalled = true;
+        SensorRequirementChecker sensorRequirementChecker = sensorType -> {
+            sensorRequirementCheckerCalled = true;
             return true;
         };
 

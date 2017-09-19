@@ -1,7 +1,7 @@
 package com.ubikgs.androidsensors.gatherers;
 
 import com.ubikgs.androidsensors.SensorType;
-import com.ubikgs.androidsensors.checkers.applevel.CriticalityChecker;
+import com.ubikgs.androidsensors.checkers.applevel.SensorRequirementChecker;
 import com.ubikgs.androidsensors.checkers.internal.SensorChecker;
 import com.ubikgs.androidsensors.checkers.permissions.PermissionChecker;
 import com.ubikgs.androidsensors.config.SensorConfig;
@@ -36,7 +36,7 @@ public abstract class SensorGathererTest {
     @Mock protected SensorEnableRequester sensorEnableRequester;
     @Mock protected PermissionChecker permissionChecker;
     @Mock protected SensorChecker sensorChecker;
-    @Mock protected CriticalityChecker criticalityChecker;
+    @Mock protected SensorRequirementChecker sensorRequirementChecker;
 
     protected SensorGatherer sensorGatherer;
 
@@ -102,10 +102,10 @@ public abstract class SensorGathererTest {
     }
 
     @Test
-    public void isCritical_callsCriticalityChecker() throws Exception {
-        sensorGatherer.isCritical();
+    public void isRequired_callsCriticalityChecker() throws Exception {
+        sensorGatherer.isRequired();
 
-        verify(criticalityChecker, times(1)).isCritical(getSensorType());
+        verify(sensorRequirementChecker, times(1)).isRequired(getSensorType());
     }
 
     protected abstract SensorType getSensorType();

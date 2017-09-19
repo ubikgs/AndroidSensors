@@ -6,7 +6,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 
 import com.ubikgs.androidsensors.SensorType;
-import com.ubikgs.androidsensors.checkers.applevel.CriticalityChecker;
+import com.ubikgs.androidsensors.checkers.applevel.SensorRequirementChecker;
 import com.ubikgs.androidsensors.checkers.internal.SensorChecker;
 import com.ubikgs.androidsensors.checkers.permissions.PermissionChecker;
 import com.ubikgs.androidsensors.config.SensorConfig;
@@ -35,9 +35,9 @@ public class LocationGatherer extends GPSGatherer {
                             @Named("gpsSensorEnableRequester") SensorEnableRequester sensorEnableRequester,
                             @Named("fineLocationPermissionChecker") PermissionChecker permissionChecker,
                             @Named("gpsSensorChecker") SensorChecker sensorChecker,
-                            CriticalityChecker criticalityChecker) {
+                            SensorRequirementChecker sensorRequirementChecker) {
         super(sensorConfig, locationManager,
-                sensorEnableRequester, permissionChecker, sensorChecker, criticalityChecker);
+                sensorEnableRequester, permissionChecker, sensorChecker, sensorRequirementChecker);
     }
 
     @Override
