@@ -1,6 +1,8 @@
-# AndroidSensors
+# AndroidSensors [ ![Download](https://api.bintray.com/packages/ubikgs/AndroidSensors/android-sensors/images/download.svg) ](https://bintray.com/ubikgs/AndroidSensors/android-sensors/_latestVersion)
 
 A collection of classes that facilitates the access to Android devices' sensors
+
+Uses RxJava to improve sensor records flows management experience.
 
 ## Usage
 
