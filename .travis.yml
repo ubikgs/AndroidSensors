@@ -17,13 +17,18 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
-script: ./gradlew test
+before_install:
+  - chmod +x gradlew
+
+script:
+  - ./gradlew test
+
+before_deploy:
+  - ./gradlew install
 
 deploy:
   provider: script
-  script:
-    - ./gradlew install
-    - ./gradlew bintrayUpload
+  script: ./gradlew bintrayUpload
   skip_cleanup: true
   on:
     tags: true
