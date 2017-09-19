@@ -93,7 +93,7 @@ AndroidSensors customAndroidSensors = AndroidSensors
                                .builder()
                                .customDefaultEnableRequester(defaultSensorEnableRequester)
                                .customGPSEnableRequester(gpsSensorEnableRequester)
-                               .customCriticalityChecker(sensorRequirementChecker)
+                               .customSensorRequirementChecker(sensorRequirementChecker)
                                .customSensorConfig(sensorConfig)
                                .build(applicationContext);
 ```
