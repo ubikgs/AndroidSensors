@@ -1,4 +1,12 @@
-language: java
+language: android
+
+android:
+  components:
+    - tools
+    - platform-tools
+
+    - build-tools-26.1.0
+    - android-26
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
