@@ -18,3 +18,11 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script: ./gradlew test
+
+deploy:
+  provider: script
+  script:
+    - ./gradlew install
+    - ./gradlew bintrayUpload
+  on:
+    tags: true
