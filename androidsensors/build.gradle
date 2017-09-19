@@ -147,7 +147,7 @@ bintray {
         version {
             desc = description
             released = new Date()
-            vcsTag = version
+            vcsTag = 'v' + version
         }
     }
 }

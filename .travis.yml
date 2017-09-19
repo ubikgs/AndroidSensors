@@ -24,5 +24,6 @@ deploy:
   script:
     - ./gradlew install
     - ./gradlew bintrayUpload
+  skip_cleanup: true
   on:
     tags: true
