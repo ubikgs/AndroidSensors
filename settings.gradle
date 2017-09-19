@@ -1,1 +1,1 @@
-include ':app', ':androidsensors'
+include ':app', ':android-sensors'

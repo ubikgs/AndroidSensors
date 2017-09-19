@@ -3,7 +3,8 @@ apply plugin: 'com.jfrog.bintray'
 
 def projectName = 'android-sensors'
 group = 'com.ubikgs'
-version = '1.0.0-alpha1'
+def projectVersion = '1.0.0-alpha1'
+version = projectVersion
 
 def repoName = 'AndroidSensors'
 description = 'A collection of classes that facilitates the access to Android devices\' sensors'
@@ -147,7 +148,7 @@ bintray {
         version {
             desc = description
             released = new Date()
-            vcsTag = 'v' + version
+            vcsTag = projectUrl + '/releases/tag/v' + projectVersion
         }
     }
 }
