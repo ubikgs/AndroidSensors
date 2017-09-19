@@ -1,4 +1,4 @@
-# AndroidSensors [ ![Download](https://api.bintray.com/packages/ubikgs/AndroidSensors/android-sensors/images/download.svg) ](https://bintray.com/ubikgs/AndroidSensors/android-sensors/_latestVersion)
+# AndroidSensors [ ![Download](https://api.bintray.com/packages/ubikgs/AndroidSensors/android-sensors/images/download.svg) ](https://bintray.com/ubikgs/AndroidSensors/android-sensors/_latestVersion) [![Build Status](https://travis-ci.org/ubikgs/AndroidSensors.svg?branch=master)](https://travis-ci.org/ubikgs/AndroidSensors)
 
 A collection of classes that facilitates the access to Android devices' sensors
 
