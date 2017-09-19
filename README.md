@@ -93,7 +93,7 @@ AndroidSensors customAndroidSensors = AndroidSensors
                                .customGPSEnableRequester(gpsSensorEnableRequester)
                                .customCriticalityChecker(sensorRequirementChecker)
                                .customSensorConfig(sensorConfig)
-                               .build(context);
+                               .build(applicationContext);
 ```
 Check the the default implementations of each interface to get an idea about how to customize the library.
 
