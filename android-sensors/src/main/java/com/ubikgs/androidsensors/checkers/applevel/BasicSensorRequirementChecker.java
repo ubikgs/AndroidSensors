@@ -34,9 +34,7 @@ public class BasicSensorRequirementChecker implements SensorRequirementChecker {
         criticalSensors = new HashSet<>(Arrays.asList(SensorType.values()));
 
         criticalSensors.removeAll(Arrays.asList(
-                SensorType.RAW_GPS_MEASUREMENTS,
-                SensorType.RAW_GPS_NAVIGATION,
-                SensorType.RAW_GPS_STATUS
+                SensorType.rawGPSValues()
         ));
     }
 

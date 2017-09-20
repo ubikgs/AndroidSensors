@@ -40,12 +40,7 @@ public class BasicSensorConfig implements SensorConfig {
         this.millisecondsToMicroseconds = millisecondsToMicroseconds;
 
         this.sensorsRunningInMicroseconds = new HashSet<>(Arrays.asList(
-                SensorType.ACCELEROMETER,
-                SensorType.GRAVITY,
-                SensorType.GYROSCOPE,
-                SensorType.LINEAR_ACCELERATION,
-                SensorType.MAGNETIC_FIELD,
-                SensorType.ROTATION_VECTOR
+                SensorType.imuValues()
         ));
     }
 
