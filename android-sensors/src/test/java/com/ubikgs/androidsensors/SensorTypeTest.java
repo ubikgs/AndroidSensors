@@ -91,4 +91,41 @@ public class SensorTypeTest {
     public void rotationVector() throws Exception {
         assertThat(ROTATION_VECTOR.getRecordClass(), equalTo(RotationVectorRecord.class));
     }
+
+    @Test
+    public void imuValues() throws Exception {
+        SensorType[] imuValues = new SensorType[] {
+                ACCELEROMETER,
+                GRAVITY,
+                GYROSCOPE,
+                LINEAR_ACCELERATION,
+                MAGNETIC_FIELD,
+                ROTATION_VECTOR
+        };
+
+        assertThat(SensorType.imuValues(), equalTo(imuValues));
+    }
+
+    @Test
+    public void gpsValues() throws Exception {
+        SensorType[] gpsValues = new SensorType[] {
+                LOCATION,
+                RAW_GPS_MEASUREMENTS,
+                RAW_GPS_NAVIGATION,
+                RAW_GPS_STATUS
+        };
+        
+        assertThat(SensorType.gpsValues(), equalTo(gpsValues));
+    }
+
+    @Test
+    public void rawGPSValues() throws Exception {
+        SensorType[] rawGPSValues = new SensorType[] {
+                RAW_GPS_MEASUREMENTS,
+                RAW_GPS_NAVIGATION,
+                RAW_GPS_STATUS
+        };
+
+        assertThat(SensorType.rawGPSValues(), equalTo(rawGPSValues));
+    }
 }

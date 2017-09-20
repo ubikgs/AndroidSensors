@@ -53,4 +53,32 @@ public enum SensorType {
     public Class getRecordClass() {
         return recordClasses.get(this);
     }
+
+    public static SensorType[] imuValues() {
+        return new SensorType[] {
+                ACCELEROMETER,
+                GRAVITY,
+                GYROSCOPE,
+                LINEAR_ACCELERATION,
+                MAGNETIC_FIELD,
+                ROTATION_VECTOR
+        };
+    }
+
+    public static SensorType[] gpsValues() {
+        return new SensorType[] {
+                LOCATION,
+                RAW_GPS_MEASUREMENTS,
+                RAW_GPS_NAVIGATION,
+                RAW_GPS_STATUS
+        };
+    }
+
+    public static SensorType[] rawGPSValues() {
+        return new SensorType[] {
+                RAW_GPS_MEASUREMENTS,
+                RAW_GPS_NAVIGATION,
+                RAW_GPS_STATUS
+        };
+    }
 }
