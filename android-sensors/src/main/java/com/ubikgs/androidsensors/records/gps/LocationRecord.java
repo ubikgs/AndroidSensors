@@ -46,47 +46,41 @@ public class LocationRecord extends SensorRecord {
         return latitude;
     }
 
-    public LocationRecord setLatitude(double latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
-        return this;
     }
 
     public double getLongitude() {
         return longitude;
     }
 
-    public LocationRecord setLongitude(double longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
-        return this;
     }
 
     public double getAltitude() {
         return altitude;
     }
 
-    public LocationRecord setAltitude(double altitude) {
+    public void setAltitude(double altitude) {
         this.altitude = altitude;
-        return this;
     }
 
     public float getSpeed() {
         return speed;
     }
 
-    public LocationRecord setSpeed(float speed) {
+    public void setSpeed(float speed) {
         this.speed = speed;
-        return this;
     }
 
     public float getBearing() {
         return bearing;
     }
 
-    public LocationRecord setBearing(float bearing) {
+    public void setBearing(float bearing) {
         this.bearing = bearing;
-        return this;
     }
-
 
     @Override
     public String toString() {

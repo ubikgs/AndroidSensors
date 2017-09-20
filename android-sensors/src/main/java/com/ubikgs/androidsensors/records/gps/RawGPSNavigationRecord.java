@@ -41,9 +41,8 @@ public class RawGPSNavigationRecord extends SensorRecord {
         return message;
     }
 
-    public RawGPSNavigationRecord setMessage(String message) {
+    public void setMessage(String message) {
         this.message = message;
-        return this;
     }
 
     @Override

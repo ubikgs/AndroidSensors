@@ -38,27 +38,24 @@ public abstract class SensorRecord implements Serializable {
         return accuracy;
     }
 
-    public SensorRecord setAccuracy(float accuracy) {
+    public void setAccuracy(float accuracy) {
         this.accuracy = accuracy;
-        return this;
     }
 
     public long getSensorTimestamp() {
         return sensorTimestamp;
     }
 
-    public SensorRecord setSensorTimestamp(long sensorTimestamp) {
+    public void setSensorTimestamp(long sensorTimestamp) {
         this.sensorTimestamp = sensorTimestamp;
-        return this;
     }
 
     public long getSystemTimestamp() {
         return systemTimestamp;
     }
 
-    public SensorRecord setSystemTimestamp(long systemTimestamp) {
+    public void setSystemTimestamp(long systemTimestamp) {
         this.systemTimestamp = systemTimestamp;
-        return this;
     }
 
     @Override

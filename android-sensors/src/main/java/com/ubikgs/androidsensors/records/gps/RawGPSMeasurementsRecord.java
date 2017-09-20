@@ -94,126 +94,112 @@ public class RawGPSMeasurementsRecord extends SensorRecord {
         return satelliteCount;
     }
 
-    public RawGPSMeasurementsRecord setSatelliteCount(int satelliteCount) {
+    public void setSatelliteCount(int satelliteCount) {
         this.satelliteCount = satelliteCount;
-        return this;
     }
 
     public int[] getSvids() {
         return svids;
     }
 
-    public RawGPSMeasurementsRecord setSvids(int[] svids) {
+    public void setSvids(int[] svids) {
         this.svids = svids;
-        return this;
     }
 
     public int[] getConstellations() {
         return constellations;
     }
 
-    public RawGPSMeasurementsRecord setConstellations(int[] constellations) {
+    public void setConstellations(int[] constellations) {
         this.constellations = constellations;
-        return this;
     }
 
     public double[] getTimeOffsets() {
         return timeOffsets;
     }
 
-    public RawGPSMeasurementsRecord setTimeOffsets(double[] timeOffsets) {
+    public void setTimeOffsets(double[] timeOffsets) {
         this.timeOffsets = timeOffsets;
-        return this;
     }
 
     public int[] getStateCodes() {
         return stateCodes;
     }
 
-    public RawGPSMeasurementsRecord setStateCodes(int[] stateCodes) {
+    public void setStateCodes(int[] stateCodes) {
         this.stateCodes = stateCodes;
-        return this;
     }
 
     public long[] getSvTimes() {
         return svTimes;
     }
 
-    public RawGPSMeasurementsRecord setSvTimes(long[] svTimes) {
+    public void setSvTimes(long[] svTimes) {
         this.svTimes = svTimes;
-        return this;
     }
 
     public long[] getSvTimeUncerts() {
         return svTimeUncerts;
     }
 
-    public RawGPSMeasurementsRecord setSvTimeUncerts(long[] svTimeUncerts) {
+    public void setSvTimeUncerts(long[] svTimeUncerts) {
         this.svTimeUncerts = svTimeUncerts;
-        return this;
     }
 
     public double[] getCn0DbHzs() {
         return cn0DbHzs;
     }
 
-    public RawGPSMeasurementsRecord setCn0DbHzs(double[] cn0DbHzs) {
+    public void setCn0DbHzs(double[] cn0DbHzs) {
         this.cn0DbHzs = cn0DbHzs;
-        return this;
     }
 
     public double[] getPseudoranges() {
         return pseudoranges;
     }
 
-    public RawGPSMeasurementsRecord setPseudoranges(double[] pseudoranges) {
+    public void setPseudoranges(double[] pseudoranges) {
         this.pseudoranges = pseudoranges;
-        return this;
     }
 
     public double[] getPseudorangeUncerts() {
         return pseudorangeUncerts;
     }
 
-    public RawGPSMeasurementsRecord setPseudorangeUncerts(double[] pseudorangeUncerts) {
+    public void setPseudorangeUncerts(double[] pseudorangeUncerts) {
         this.pseudorangeUncerts = pseudorangeUncerts;
-        return this;
     }
 
     public int[] getDeltaStates() {
         return deltaStates;
     }
 
-    public RawGPSMeasurementsRecord setDeltaStates(int[] deltaStates) {
+    public void setDeltaStates(int[] deltaStates) {
         this.deltaStates = deltaStates;
-        return this;
     }
 
     public double[] getDeltas() {
         return deltas;
     }
 
-    public RawGPSMeasurementsRecord setDeltas(double[] deltas) {
+    public void setDeltas(double[] deltas) {
         this.deltas = deltas;
-        return this;
     }
 
     public double[] getDeltaUncerts() {
         return deltaUncerts;
     }
 
-    public RawGPSMeasurementsRecord setDeltaUncerts(double[] deltaUncerts) {
+    public void setDeltaUncerts(double[] deltaUncerts) {
         this.deltaUncerts = deltaUncerts;
-        return this;
     }
 
     public int[] getMultipaths() {
         return multipaths;
     }
 
-    public RawGPSMeasurementsRecord setMultipaths(int[] multipaths) {
+    public void setMultipaths(int[] multipaths) {
         this.multipaths = multipaths;
-        return this;
     }
 
     @Override

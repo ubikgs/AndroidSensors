@@ -64,54 +64,48 @@ public class RawGPSStatusRecord extends SensorRecord {
         return satelliteCount;
     }
 
-    public RawGPSStatusRecord setSatelliteCount(int satelliteCount) {
+    public void setSatelliteCount(int satelliteCount) {
         this.satelliteCount = satelliteCount;
-        return this;
     }
 
     public float[] getAzimuths() {
         return azimuths;
     }
 
-    public RawGPSStatusRecord setAzimuths(float[] azimuths) {
+    public void setAzimuths(float[] azimuths) {
         this.azimuths = azimuths;
-        return this;
     }
 
     public float[] getCn0DHzs() {
         return cn0DHzs;
     }
 
-    public RawGPSStatusRecord setCn0DHzs(float[] cn0DHzs) {
+    public void setCn0DHzs(float[] cn0DHzs) {
         this.cn0DHzs = cn0DHzs;
-        return this;
     }
 
     public int[] getConstellationTypes() {
         return constellationTypes;
     }
 
-    public RawGPSStatusRecord setConstellationTypes(int[] constellationTypes) {
+    public void setConstellationTypes(int[] constellationTypes) {
         this.constellationTypes = constellationTypes;
-        return this;
     }
 
     public float[] getElevations() {
         return elevations;
     }
 
-    public RawGPSStatusRecord setElevations(float[] elevations) {
+    public void setElevations(float[] elevations) {
         this.elevations = elevations;
-        return this;
     }
 
     public int[] getSvids() {
         return svids;
     }
 
-    public RawGPSStatusRecord setSvids(int[] svids) {
+    public void setSvids(int[] svids) {
         this.svids = svids;
-        return this;
     }
 
     @Override
