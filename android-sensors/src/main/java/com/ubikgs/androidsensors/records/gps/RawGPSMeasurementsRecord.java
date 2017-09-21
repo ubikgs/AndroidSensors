@@ -72,8 +72,11 @@ public class RawGPSMeasurementsRecord extends SensorRecord {
         this.multipaths = new int[satelliteCount];
 
         Iterator<GnssMeasurement> it = measurements.iterator();
-        GnssMeasurement measurement = it.next();
-        for (int i = 0; i < satelliteCount; i++, measurement = it.next()) {
+        int i = 0;
+
+        while (it.hasNext()) {
+            GnssMeasurement measurement = it.next();
+
             svids[i] = measurement.getSvid();
             constellations[i] = measurement.getConstellationType();
             timeOffsets[i] = measurement.getTimeOffsetNanos();
@@ -87,6 +90,8 @@ public class RawGPSMeasurementsRecord extends SensorRecord {
             deltas[i] = measurement.getAccumulatedDeltaRangeMeters();
             deltaUncerts[i] = measurement.getAccumulatedDeltaRangeUncertaintyMeters();
             multipaths[i] = measurement.getMultipathIndicator();
+
+            i++;
         }
     }
 
