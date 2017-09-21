@@ -3,7 +3,7 @@ apply plugin: 'com.jfrog.bintray'
 
 def projectName = 'android-sensors'
 group = 'com.ubikgs'
-def projectVersion = '1.0.0-alpha2'
+def projectVersion = '1.0.0-alpha3'
 version = projectVersion
 
 def repoName = 'AndroidSensors'
@@ -52,7 +52,7 @@ android {
     }
 
     testOptions {
-        unitTests.returnDefaultValues = true;
+        unitTests.returnDefaultValues = true
     }
 
     compileOptions {
