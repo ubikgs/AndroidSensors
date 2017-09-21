@@ -42,6 +42,15 @@ public class LocationRecord extends SensorRecord {
         this.bearing = location.getBearing();
     }
 
+    public LocationRecord(LocationRecord locationRecord) {
+        super(locationRecord);
+        this.latitude = locationRecord.getLatitude();
+        this.longitude = locationRecord.getLongitude();
+        this.altitude = locationRecord.getAltitude();
+        this.speed = locationRecord.getSpeed();
+        this.bearing = locationRecord.getBearing();
+    }
+
     public double getLatitude() {
         return latitude;
     }

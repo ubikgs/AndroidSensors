@@ -48,6 +48,13 @@ public abstract class TriAxisRecord extends SensorRecord {
         );
     }
 
+    public TriAxisRecord(TriAxisRecord triAxisRecord) {
+        super(triAxisRecord);
+        this.x = triAxisRecord.getX();
+        this.y = triAxisRecord.getY();
+        this.z = triAxisRecord.getZ();
+    }
+
     public float getX() {
         return x;
     }

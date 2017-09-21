@@ -60,6 +60,16 @@ public class RawGPSStatusRecord extends SensorRecord {
 
     }
 
+    public RawGPSStatusRecord(RawGPSStatusRecord rawGPSStatusRecord) {
+        super(rawGPSStatusRecord);
+        this.satelliteCount = rawGPSStatusRecord.getSatelliteCount();
+        this.azimuths = rawGPSStatusRecord.getAzimuths();
+        this.cn0DHzs = rawGPSStatusRecord.getCn0DHzs();
+        this.constellationTypes = rawGPSStatusRecord.getConstellationTypes();
+        this.elevations = rawGPSStatusRecord.getElevations();
+        this.svids = rawGPSStatusRecord.getSvids();
+    }
+
     public int getSatelliteCount() {
         return satelliteCount;
     }

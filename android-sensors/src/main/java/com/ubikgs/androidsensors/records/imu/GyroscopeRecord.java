@@ -34,6 +34,10 @@ public class GyroscopeRecord extends TriAxisRecord {
         super(event);
     }
 
+    public GyroscopeRecord(GyroscopeRecord gyroscopeRecord) {
+        super(gyroscopeRecord);
+    }
+
     @Override
     public String toString() {
         return "GyroscopeRecord{} " + super.toString();

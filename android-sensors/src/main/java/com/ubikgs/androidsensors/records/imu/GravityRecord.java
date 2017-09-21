@@ -34,6 +34,10 @@ public class GravityRecord extends TriAxisRecord {
         super(event);
     }
 
+    public GravityRecord(GravityRecord gravityRecord) {
+        super(gravityRecord);
+    }
+
     @Override
     public String toString() {
         return "GravityRecord{} " + super.toString();

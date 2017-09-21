@@ -37,6 +37,11 @@ public class RawGPSNavigationRecord extends SensorRecord {
         this.message = navigationMessage.toString().replace('\n', ',');
     }
 
+    public RawGPSNavigationRecord(RawGPSNavigationRecord rawGPSNavigationRecord) {
+        super(rawGPSNavigationRecord);
+        this.message = rawGPSNavigationRecord.getMessage();
+    }
+
     public String getMessage() {
         return message;
     }

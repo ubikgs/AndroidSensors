@@ -55,6 +55,10 @@ public class RotationVectorRecord extends SensorRecord {
         );
     }
 
+    public RotationVectorRecord(RotationVectorRecord rotationVectorRecord) {
+        super(rotationVectorRecord);
+    }
+
     public float getXSin() {
         return xSin;
     }

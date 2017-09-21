@@ -34,6 +34,10 @@ public class AccelerometerRecord extends TriAxisRecord {
         super(event);
     }
 
+    public AccelerometerRecord(AccelerometerRecord accelerometerRecord) {
+        super(accelerometerRecord);
+    }
+
     @Override
     public String toString() {
         return "AccelerometerRecord{} " + super.toString();

@@ -95,6 +95,24 @@ public class RawGPSMeasurementsRecord extends SensorRecord {
         }
     }
 
+    public RawGPSMeasurementsRecord(RawGPSMeasurementsRecord rawGPSMeasurementsRecord) {
+        super(rawGPSMeasurementsRecord);
+        this.satelliteCount = rawGPSMeasurementsRecord.getSatelliteCount();
+        this.svids = rawGPSMeasurementsRecord.getSvids();
+        this.constellations = rawGPSMeasurementsRecord.getConstellations();
+        this.timeOffsets = rawGPSMeasurementsRecord.getTimeOffsets();
+        this.stateCodes = rawGPSMeasurementsRecord.getStateCodes();
+        this.svTimes = rawGPSMeasurementsRecord.getSvTimes();
+        this.svTimeUncerts = rawGPSMeasurementsRecord.getSvTimeUncerts();
+        this.cn0DbHzs = rawGPSMeasurementsRecord.getCn0DbHzs();
+        this.pseudoranges = rawGPSMeasurementsRecord.getPseudoranges();
+        this.pseudorangeUncerts = rawGPSMeasurementsRecord.getPseudorangeUncerts();
+        this.deltaStates = rawGPSMeasurementsRecord.getDeltaStates();
+        this.deltas = rawGPSMeasurementsRecord.getDeltas();
+        this.deltaUncerts = rawGPSMeasurementsRecord.getDeltaUncerts();
+        this.multipaths = rawGPSMeasurementsRecord.getMultipaths();
+    }
+
     public int getSatelliteCount() {
         return satelliteCount;
     }

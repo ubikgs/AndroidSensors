@@ -34,6 +34,10 @@ public class MagneticFieldRecord extends TriAxisRecord {
         super(event);
     }
 
+    public MagneticFieldRecord(MagneticFieldRecord magneticFieldRecord) {
+        super(magneticFieldRecord);
+    }
+
     @Override
     public String toString() {
         return "MagneticFieldRecord{} " + super.toString();

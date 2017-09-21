@@ -34,6 +34,12 @@ public abstract class SensorRecord implements Serializable {
         this.systemTimestamp = new Date().getTime();
     }
 
+    public SensorRecord(SensorRecord sensorRecord) {
+        this.accuracy = sensorRecord.getAccuracy();
+        this.sensorTimestamp = sensorRecord.getSensorTimestamp();
+        this.systemTimestamp = sensorRecord.getSystemTimestamp();
+    }
+
     public float getAccuracy() {
         return accuracy;
     }

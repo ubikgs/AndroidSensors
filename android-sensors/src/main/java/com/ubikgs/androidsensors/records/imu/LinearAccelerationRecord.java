@@ -34,6 +34,10 @@ public class LinearAccelerationRecord extends TriAxisRecord {
         super(event);
     }
 
+    public LinearAccelerationRecord(LinearAccelerationRecord linearAccelerationRecord) {
+        super(linearAccelerationRecord);
+    }
+
     @Override
     public String toString() {
         return "LinearAccelerationRecord{} " + super.toString();
