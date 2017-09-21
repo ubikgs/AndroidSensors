@@ -55,27 +55,27 @@ public class RotationVectorRecord extends SensorRecord {
         );
     }
 
-    public float getxSin() {
+    public float getXSin() {
         return xSin;
     }
 
-    public void setxSin(float xSin) {
+    public void setXSin(float xSin) {
         this.xSin = xSin;
     }
 
-    public float getySin() {
+    public float getYSin() {
         return ySin;
     }
 
-    public void setySin(float ySin) {
+    public void setYSin(float ySin) {
         this.ySin = ySin;
     }
 
-    public float getzSin() {
+    public float getZSin() {
         return zSin;
     }
 
-    public void setzSin(float zSin) {
+    public void setZSin(float zSin) {
         this.zSin = zSin;
     }
 
@@ -91,9 +91,8 @@ public class RotationVectorRecord extends SensorRecord {
         return headingAccuracy;
     }
 
-    public RotationVectorRecord setHeadingAccuracy(float headingAccuracy) {
+    public void setHeadingAccuracy(float headingAccuracy) {
         this.headingAccuracy = headingAccuracy;
-        return this;
     }
 
     @Override
