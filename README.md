@@ -1,6 +1,6 @@
 # AndroidSensors [![Build Status](https://travis-ci.org/ubikgs/AndroidSensors.svg?branch=master)](https://travis-ci.org/ubikgs/AndroidSensors) [ ![Download](https://api.bintray.com/packages/ubikgs/AndroidSensors/android-sensors/images/download.svg) ](https://bintray.com/ubikgs/AndroidSensors/android-sensors/_latestVersion) [![Javadocs](https://www.javadoc.io/badge/com.ubikgs/android-sensors.svg)](https://www.javadoc.io/doc/com.ubikgs/android-sensors)
 
-A collection of classes that facilitates the access to Android devices' sensors
+A library that facilitates the access to Android devices' sensors
 
 Uses RxJava to improve sensor records flows management experience.
 
