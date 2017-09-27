@@ -1,5 +1,6 @@
 package com.ubikgs.androidsensors;
 
+import com.ubikgs.androidsensors.records.SensorRecord;
 import com.ubikgs.androidsensors.records.gps.LocationRecord;
 import com.ubikgs.androidsensors.records.gps.RawGPSMeasurementsRecord;
 import com.ubikgs.androidsensors.records.gps.RawGPSNavigationRecord;
@@ -35,7 +36,7 @@ public enum SensorType {
     RAW_GPS_MEASUREMENTS, RAW_GPS_NAVIGATION, RAW_GPS_STATUS,
     ROTATION_VECTOR;
 
-    private static HashMap<SensorType, Class> recordClasses = new HashMap<>();
+    private static HashMap<SensorType, Class<? extends SensorRecord>> recordClasses = new HashMap<>();
 
     static {
         recordClasses.put(ACCELEROMETER, AccelerometerRecord.class);
@@ -50,7 +51,7 @@ public enum SensorType {
         recordClasses.put(ROTATION_VECTOR, RotationVectorRecord.class);
     }
 
-    public Class getRecordClass() {
+    public Class<? extends SensorRecord> getRecordClass() {
         return recordClasses.get(this);
     }
 

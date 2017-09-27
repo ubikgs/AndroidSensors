@@ -44,8 +44,7 @@ public class AndroidSensorsEdgeModuleTest {
 
     @Mock SensorEnableRequester defaultSensorEnableRequester;
     @Mock SensorEnableRequester gpsSensorEnableRequester;
-    @Mock
-    SensorRequirementChecker sensorRequirementChecker;
+    @Mock SensorRequirementChecker sensorRequirementChecker;
     @Mock SensorConfig sensorConfig;
 
     private AndroidSensorsEdgeModule defaultModule;
