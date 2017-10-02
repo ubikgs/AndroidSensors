@@ -18,8 +18,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.reactivex.Completable;
+import io.reactivex.CompletableEmitter;
+import io.reactivex.CompletableOnSubscribe;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Cancellable;
 
 /**
  *  Copyright 2017 Alberto González Pérez
@@ -60,7 +63,7 @@ public class RawGPSStatusGatherer extends RawGPSGatherer {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private GnssStatus.Callback initializeGnssStatusCallbackFor(FlowableEmitter<SensorRecord> subscriber) {
+    private GnssStatus.Callback initializeGnssStatusCallbackFor(final FlowableEmitter<SensorRecord> subscriber) {
         return new GnssStatus.Callback() {
             @Override
             public void onSatelliteStatusChanged(GnssStatus status) {
@@ -71,18 +74,27 @@ public class RawGPSStatusGatherer extends RawGPSGatherer {
 
     @SuppressWarnings("MissingPermission")
     @RequiresApi(Build.VERSION_CODES.N)
-    private void startListeningGnssStatusChanges(GnssStatus.Callback callback) {
+    private void startListeningGnssStatusChanges(final GnssStatus.Callback callback) {
         // This is needed because location manager location updates need a looper
-        Completable.create(e ->
-                checkRegistrationSuccess(locationManager.registerGnssStatusCallback(callback)))
+        Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(CompletableEmitter e) throws Exception {
+                checkRegistrationSuccess(locationManager.registerGnssStatusCallback(callback));
+            }
+        })
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe();
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private void addUnsubscribeCallbackFor(FlowableEmitter<SensorRecord> subscriber, GnssStatus.Callback callback) {
-        subscriber.setCancellable(() ->
-                locationManager.unregisterGnssStatusCallback(callback));
+    private void addUnsubscribeCallbackFor(FlowableEmitter<SensorRecord> subscriber,
+                                           final GnssStatus.Callback callback) {
+        subscriber.setCancellable(new Cancellable() {
+            @Override
+            public void cancel() throws Exception {
+                locationManager.unregisterGnssStatusCallback(callback);
+            }
+        });
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.ubikgs.androidsensors.records.SensorRecord;
 
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
 
 /**
  *  Copyright 2017 Alberto González Pérez
@@ -55,7 +56,12 @@ public abstract class AbstractSensorGatherer implements SensorGatherer {
                     "Please, ensure that you're calling isReady() and hasPermissionGranted()."));
 
 
-        return Flowable.create(this::configureSensorSubscribeAndUnsubscribeBehaviors,
+        return Flowable.create(new FlowableOnSubscribe<SensorRecord>() {
+                                   @Override
+                                   public void subscribe(FlowableEmitter<SensorRecord> e) throws Exception {
+                                       configureSensorSubscribeAndUnsubscribeBehaviors(e);
+                                   }
+                               },
                 sensorConfig.getBackpressureStrategy(getSensorType()));
     }
 

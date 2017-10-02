@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import io.reactivex.BackpressureStrategy;
+import io.reactivex.functions.Consumer;
 import io.reactivex.subscribers.TestSubscriber;
 
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -56,9 +57,9 @@ public abstract class SensorGathererTest {
         if (sensorGatherer == null)
             throw new Error("sensorGatherer must be initialized before calling super.setUp() method");
 
-        when(sensorConfig.getBackpressureStrategy(any())).thenReturn(BackpressureStrategy.BUFFER);
+        when(sensorConfig.getBackpressureStrategy(any(SensorType.class))).thenReturn(BackpressureStrategy.BUFFER);
         when(permissionChecker.isPermissionGranted()).thenReturn(true);
-        when(sensorChecker.isReady(any())).thenReturn(true);
+        when(sensorChecker.isReady(any(SensorType.class))).thenReturn(true);
     }
 
 
@@ -79,15 +80,26 @@ public abstract class SensorGathererTest {
 
     @Test
     public void dataStream_withNonReadySensor_returnsError() throws Exception {
-        when(sensorChecker.isReady(any())).thenReturn(false);
+        when(sensorChecker.isReady(any(SensorType.class))).thenReturn(false);
 
         assertFlowableReturnsErrorWithUndesiredState();
     }
 
     private void assertFlowableReturnsErrorWithUndesiredState() {
+
         sensorGatherer.recordStream()
-                .blockingSubscribe(sensorRecord -> fail(),
-                        throwable -> assertThat(throwable.getClass(), equalTo(Error.class)));
+                .blockingSubscribe(new Consumer<SensorRecord>() {
+                                       @Override
+                                       public void accept(SensorRecord sensorRecord) throws Exception {
+                                           fail();
+                                       }
+                                   },
+                        new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                assertThat(throwable.getClass(), equalTo((Class) Error.class));
+                            }
+                        });
     }
 
     @Test

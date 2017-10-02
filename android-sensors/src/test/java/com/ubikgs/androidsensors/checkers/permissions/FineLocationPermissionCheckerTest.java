@@ -43,7 +43,12 @@ public class FineLocationPermissionCheckerTest {
 
     @Before
     public void setUp() throws Exception {
-        checkPermission = (innerContext, permission) -> context.checkSelfPermission(permission);
+        checkPermission = new FineLocationPermissionChecker.CheckPermission() {
+            @Override
+            public int check(Context context, String permission) {
+                return context.checkSelfPermission(permission);
+            }
+        };
 
         fineLocationPermissionChecker = new FineLocationPermissionChecker(SDK_THRESHOLD,
                 context, checkPermission);

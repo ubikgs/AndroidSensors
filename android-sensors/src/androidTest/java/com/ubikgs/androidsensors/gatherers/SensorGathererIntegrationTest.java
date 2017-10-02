@@ -53,7 +53,10 @@ public abstract class SensorGathererIntegrationTest {
                 .take(1)
                 .blockingFirst();
 
-        assertThat(sensorRecord.getClass(), equalTo(getSensorRecordClass()));
+        Class recordClass = sensorRecord.getClass();
+        Class expectedClass = getSensorRecordClass();
+
+        assertThat(recordClass, equalTo(expectedClass));
     }
 
     @Test

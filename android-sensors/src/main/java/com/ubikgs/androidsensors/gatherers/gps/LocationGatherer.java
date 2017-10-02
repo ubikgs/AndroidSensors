@@ -18,8 +18,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.reactivex.Completable;
+import io.reactivex.CompletableEmitter;
+import io.reactivex.CompletableOnSubscribe;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Cancellable;
 
 /**
  *  Copyright 2017 Alberto González Pérez
@@ -60,7 +63,7 @@ public class LocationGatherer extends GPSGatherer {
         addUnsubscribeCallbackFor(subscriber, locationListener);
     }
 
-    private LocationListener initializeLocationListenerFor(FlowableEmitter<SensorRecord> subscriber) {
+    private LocationListener initializeLocationListenerFor(final FlowableEmitter<SensorRecord> subscriber) {
         return new LocationListener() {
 
             @Override
@@ -86,19 +89,29 @@ public class LocationGatherer extends GPSGatherer {
     }
 
     @SuppressWarnings("MissingPermission")
-    private void startListeningLocationChanges(LocationListener locationListener) {
+    private void startListeningLocationChanges(final LocationListener locationListener) {
         // This is needed because location manager location updates need a looper
-        Completable.create(e ->
+        Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(CompletableEmitter e) throws Exception {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                         sensorConfig.getMinSensorDelay(getSensorType()),
                         MIN_DISTANCE,
-                        locationListener))
+                        locationListener);
+            }
+        })
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe();
     }
 
-    private void addUnsubscribeCallbackFor(FlowableEmitter<SensorRecord> subscriber, LocationListener locationListener) {
-        subscriber.setCancellable(() -> locationManager.removeUpdates(locationListener));
+    private void addUnsubscribeCallbackFor(FlowableEmitter<SensorRecord> subscriber,
+                                           final LocationListener locationListener) {
+        subscriber.setCancellable(new Cancellable() {
+            @Override
+            public void cancel() throws Exception {
+                locationManager.removeUpdates(locationListener);
+            }
+        });
     }
 
     @Override

@@ -14,6 +14,8 @@ import java.util.HashSet;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Observable;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
@@ -61,7 +63,12 @@ public class BasicSensorConfigTest {
         ));
 
         Observable.fromIterable(imuSensors)
-                .map(basicSensorConfig::getMinSensorDelay)
+                .map(new Function<SensorType, Long>() {
+                    @Override
+                    public Long apply(SensorType sensorType) throws Exception {
+                        return basicSensorConfig.getMinSensorDelay(sensorType);
+                    }
+                })
                 .blockingSubscribe();
 
         verify(millisecondsToMicroseconds, times(imuSensors.size())).convert(MIN_DELAY_MS);
@@ -77,8 +84,18 @@ public class BasicSensorConfigTest {
         ));
 
         Long count = Observable.fromIterable(nonIMUSensors)
-                .map(basicSensorConfig::getMinSensorDelay)
-                .filter(delay -> delay.equals(MIN_DELAY_MS))
+                .map(new Function<SensorType, Long>() {
+                    @Override
+                    public Long apply(SensorType sensorType) throws Exception {
+                        return basicSensorConfig.getMinSensorDelay(sensorType);
+                    }
+                })
+                .filter(new Predicate<Long>() {
+                    @Override
+                    public boolean test(Long delay) throws Exception {
+                        return delay.equals(MIN_DELAY_MS);
+                    }
+                })
                 .count()
                 .blockingGet();
 
@@ -90,9 +107,18 @@ public class BasicSensorConfigTest {
         HashSet<SensorType> allSensors = new HashSet<>(Arrays.asList(SensorType.values()));
 
         Long count = Observable.fromIterable(allSensors)
-                .map(basicSensorConfig::getBackpressureStrategy)
-                .filter(backpressureStrategy ->
-                        backpressureStrategy.equals(BackpressureStrategy.BUFFER))
+                .map(new Function<SensorType, BackpressureStrategy>() {
+                    @Override
+                    public BackpressureStrategy apply(SensorType sensorType) throws Exception {
+                        return basicSensorConfig.getBackpressureStrategy(sensorType);
+                    }
+                })
+                .filter(new Predicate<BackpressureStrategy>() {
+                    @Override
+                    public boolean test(BackpressureStrategy backpressureStrategy) throws Exception {
+                        return backpressureStrategy.equals(BackpressureStrategy.BUFFER);
+                    }
+                })
                 .count()
                 .blockingGet();
 

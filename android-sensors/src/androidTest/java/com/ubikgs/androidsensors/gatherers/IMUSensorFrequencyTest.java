@@ -32,6 +32,9 @@ import javax.inject.Named;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -69,78 +72,146 @@ public class IMUSensorFrequencyTest {
     @Ignore
     @Test
     public void testAccelerometerSensorDelay() throws Exception {
-        testSensorDelay(i -> new AccelerometerGatherer(
-                new BasicSensorConfig(i, millisecondsToMicroseconds), sensorManager,
-                sensorEnableRequester, permissionChecker, imuSensorChecker, sensorRequirementChecker,
-                sensorTypeToAndroidSensor));
+        testSensorDelay(new GathererCreator() {
+            @Override
+            public IMUSensorGatherer createWithDelay(long i) {
+                return new AccelerometerGatherer(
+                        new BasicSensorConfig(i, millisecondsToMicroseconds), sensorManager,
+                        sensorEnableRequester, permissionChecker, imuSensorChecker, sensorRequirementChecker,
+                        sensorTypeToAndroidSensor);
+            }
+        });
     }
 
     @Ignore
     @Test
     public void testGravitySensorDelay() throws Exception {
-        testSensorDelay(i -> new GravityGatherer(
-                new BasicSensorConfig(i, millisecondsToMicroseconds), sensorManager,
-                sensorEnableRequester, permissionChecker, imuSensorChecker, sensorRequirementChecker,
-                sensorTypeToAndroidSensor));
+        testSensorDelay(new GathererCreator() {
+            @Override
+            public IMUSensorGatherer createWithDelay(long i) {
+                return new GravityGatherer(
+                        new BasicSensorConfig(i, millisecondsToMicroseconds), sensorManager,
+                        sensorEnableRequester, permissionChecker, imuSensorChecker, sensorRequirementChecker,
+                        sensorTypeToAndroidSensor);
+            }
+        });
     }
 
     @Ignore
     @Test
     public void testGyroscopeSensorDelay() throws Exception {
-        testSensorDelay(i -> new GyroscopeGatherer(
-                new BasicSensorConfig(i, millisecondsToMicroseconds), sensorManager,
-                sensorEnableRequester, permissionChecker, imuSensorChecker, sensorRequirementChecker,
-                sensorTypeToAndroidSensor));
+        testSensorDelay(new GathererCreator() {
+            @Override
+            public IMUSensorGatherer createWithDelay(long i) {
+                return new GyroscopeGatherer(
+                        new BasicSensorConfig(i, millisecondsToMicroseconds), sensorManager,
+                        sensorEnableRequester, permissionChecker, imuSensorChecker, sensorRequirementChecker,
+                        sensorTypeToAndroidSensor);
+            }
+        });
     }
 
     @Ignore
     @Test
     public void testLinearAccelerationSensorDelay() throws Exception {
-        testSensorDelay(i -> new LinearAccelerationGatherer(
-                new BasicSensorConfig(i, millisecondsToMicroseconds), sensorManager,
-                sensorEnableRequester, permissionChecker, imuSensorChecker, sensorRequirementChecker,
-                sensorTypeToAndroidSensor));
+        testSensorDelay(new GathererCreator() {
+            @Override
+            public IMUSensorGatherer createWithDelay(long i) {
+                return new LinearAccelerationGatherer(
+                        new BasicSensorConfig(i, millisecondsToMicroseconds), sensorManager,
+                        sensorEnableRequester, permissionChecker, imuSensorChecker, sensorRequirementChecker,
+                        sensorTypeToAndroidSensor);
+            }
+        });
     }
 
     @Ignore
     @Test
     public void testMagneticFieldSensorDelay() throws Exception {
-        testSensorDelay(i -> new MagneticFieldGatherer(
-                new BasicSensorConfig(i, millisecondsToMicroseconds), sensorManager,
-                sensorEnableRequester, permissionChecker, imuSensorChecker, sensorRequirementChecker,
-                sensorTypeToAndroidSensor));
+        testSensorDelay(new GathererCreator() {
+            @Override
+            public IMUSensorGatherer createWithDelay(long i) {
+                return new MagneticFieldGatherer(
+                        new BasicSensorConfig(i, millisecondsToMicroseconds), sensorManager,
+                        sensorEnableRequester, permissionChecker, imuSensorChecker, sensorRequirementChecker,
+                        sensorTypeToAndroidSensor);
+            }
+        });
     }
 
     @Ignore
     @Test
     public void testRotationVectorSensorDelay() throws Exception {
-        testSensorDelay(i -> new RotationVectorGatherer(
-                new BasicSensorConfig(i, millisecondsToMicroseconds), sensorManager,
-                sensorEnableRequester, permissionChecker, imuSensorChecker, sensorRequirementChecker,
-                sensorTypeToAndroidSensor));
+        testSensorDelay(new GathererCreator() {
+            @Override
+            public IMUSensorGatherer createWithDelay(long i) {
+                return new RotationVectorGatherer(
+                        new BasicSensorConfig(i, millisecondsToMicroseconds), sensorManager,
+                        sensorEnableRequester, permissionChecker, imuSensorChecker, sensorRequirementChecker,
+                        sensorTypeToAndroidSensor);
+            }
+        });
     }
 
-    private void testSensorDelay(GathererCreator gathererCreator) {
+    private void testSensorDelay(final GathererCreator gathererCreator) {
 
-        String sensor = gathererCreator.createWithDelay(0).getSensorType().name().toUpperCase();
+        final String sensor = gathererCreator.createWithDelay(0).getSensorType().name().toUpperCase();
 
         Log.d(sensor + " BENCHMARK", "TBR\treal\texpected");
 
         Observable.rangeLong(0, 101)
-                .map(i -> grab1SecGatheringSamplesAndAverage(i, gathererCreator)
-                        .map(count -> new long[]{i, count})
-                ).map(Single::blockingGet)
-                .subscribe(result -> Log.d(sensor + " BENCHMARK",
-                        String.format("%dms\t%dHz\t%dHz", result[0], result[1], result[0] == 0 ? 1000 : 1000 / result[0])));
+                .map(new Function<Long, Single<long[]>>() {
+                    @Override
+                    public Single<long[]> apply(final Long i) throws Exception {
+                        return grab1SecGatheringSamplesAndAverage(i, gathererCreator)
+                                .map(new Function<Long, long[]>() {
+                                    @Override
+                                    public long[] apply(Long count) throws Exception {
+                                        return new long[]{i, count};
+                                    }
+                                });
+                    }
+                }).map(new Function<Single<long[]>, long[]>() {
+                    @Override
+                    public long[] apply(Single<long[]> single) throws Exception {
+                        return single.blockingGet();
+                    }
+                })
+                .subscribe(new Consumer<long[]>() {
+                    @Override
+                    public void accept(long[] result) throws Exception {
+                        Log.d(sensor + " BENCHMARK",
+                                String.format("%dms\t%dHz\t%dHz", result[0], result[1], result[0] == 0 ? 1000 : 1000 / result[0]));
+                    }
+                });
     }
 
-    private Single<Long> grab1SecGatheringSamplesAndAverage(Long i, GathererCreator gathererCreator) {
+    private Single<Long> grab1SecGatheringSamplesAndAverage(final Long i, final GathererCreator gathererCreator) {
         return Observable.range(0, 10)
-                .map(__ -> gatherDuring1SecWithSpecifiedDelay(i, gathererCreator))
-                .map(Single::blockingGet)
-                .reduce(new long[2], (aggregate, result) ->
-                        new long[]{aggregate[0]+1, aggregate[1] + result})
-                .map(result -> result[0] == 0 ? 0 : result[1] / result[0]);
+                .map(new Function<Integer, Single<Long>>() {
+                    @Override
+                    public Single<Long> apply(Integer __) throws Exception {
+                        return gatherDuring1SecWithSpecifiedDelay(i, gathererCreator);
+                    }
+                })
+                .map(new Function<Single<Long>, Long>() {
+                    @Override
+                    public Long apply(Single<Long> longSingle) throws Exception {
+                        return longSingle.blockingGet();
+                    }
+                })
+                .reduce(new long[2], new BiFunction<long[], Long, long[]>() {
+                    @Override
+                    public long[] apply(long[] aggregate, Long result) throws Exception {
+                        return new long[]{aggregate[0]+1, aggregate[1] + result};
+                    }
+                })
+                .map(new Function<long[], Long>() {
+                    @Override
+                    public Long apply(long[] result) throws Exception {
+                        return result[0] == 0 ? 0 : result[1] / result[0];
+                    }
+                });
     }
 
     private Single<Long> gatherDuring1SecWithSpecifiedDelay(Long i, GathererCreator gathererCreator) {

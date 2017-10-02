@@ -34,7 +34,7 @@ public class FineLocationPermissionChecker implements PermissionChecker {
 
     @Inject
     public FineLocationPermissionChecker(Context context) {
-        this(Build.VERSION.SDK_INT, context, ContextCompat::checkSelfPermission);
+        this(Build.VERSION.SDK_INT, context, compatCheckPermission);
     }
 
     protected FineLocationPermissionChecker(int androidSdkVersion, Context context, CheckPermission checkPermission) {
@@ -58,4 +58,11 @@ public class FineLocationPermissionChecker implements PermissionChecker {
     protected interface CheckPermission {
         int check(Context context, String string);
     }
+
+    private static CheckPermission compatCheckPermission = new CheckPermission() {
+        @Override
+        public int check(Context context, String string) {
+            return ContextCompat.checkSelfPermission(context, string);
+        }
+    };
 }

@@ -145,13 +145,26 @@ public class AndroidSensorsIntegrationTest {
         boolean sensorRequirementCheckerCalled = false;
         boolean sensorConfigCalled = false;
 
-        SensorEnableRequester defaultSensorEnableRequester = sensorType -> defaultSensorEnableRequesterCalled = true;
+        SensorEnableRequester defaultSensorEnableRequester = new SensorEnableRequester() {
+            @Override
+            public void performEnableRequestFor(SensorType sensorType) {
+                defaultSensorEnableRequesterCalled = true;
+            }
+        };
 
-        SensorEnableRequester gpsSensorEnableRequester = sensorType -> gpsEnableRequesterCalled = true;
+        SensorEnableRequester gpsSensorEnableRequester = new SensorEnableRequester() {
+            @Override
+            public void performEnableRequestFor(SensorType sensorType) {
+                gpsEnableRequesterCalled = true;
+            }
+        };
 
-        SensorRequirementChecker sensorRequirementChecker = sensorType -> {
-            sensorRequirementCheckerCalled = true;
-            return true;
+        SensorRequirementChecker sensorRequirementChecker = new SensorRequirementChecker() {
+            @Override
+            public boolean isRequired(SensorType sensorType) {
+                sensorRequirementCheckerCalled = true;
+                return true;
+            }
         };
 
         SensorConfig sensorConfig = new SensorConfig() {

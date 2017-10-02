@@ -31,6 +31,9 @@ import javax.inject.Named;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -73,56 +76,115 @@ public class GPSSensorGatheringTest {
     @Ignore
     @Test
     public void testLocationGatherer() throws Exception {
-        testSensor(() -> new LocationGatherer(sensorConfig, locationManager,
-                sensorEnableRequester, permissionChecker, gpsSensorChecker, sensorRequirementChecker));
+        testSensor(new GathererCreator() {
+            @Override
+            public GPSGatherer create() {
+                return new LocationGatherer(sensorConfig, locationManager,
+                        sensorEnableRequester, permissionChecker, gpsSensorChecker, sensorRequirementChecker);
+            }
+        });
     }
 
     @Ignore
     @Test
     public void testRawGPSMeasurementsGatherer() throws Exception {
-        testSensor(() -> new RawGPSMeasurementsGatherer(sensorConfig, locationManager,
-                sensorEnableRequester, permissionChecker, rawGPSSensorChecker, sensorRequirementChecker));
+        testSensor(new GathererCreator() {
+            @Override
+            public GPSGatherer create() {
+                return new RawGPSMeasurementsGatherer(sensorConfig, locationManager,
+                        sensorEnableRequester, permissionChecker, rawGPSSensorChecker, sensorRequirementChecker);
+            }
+        });
     }
 
     @Ignore
     @Test
     public void testRawGPSNavigationGatherer() throws Exception {
-        testSensor(() -> new RawGPSNavigationGatherer(sensorConfig, locationManager,
-                sensorEnableRequester, permissionChecker, rawGPSSensorChecker, sensorRequirementChecker));
+        testSensor(new GathererCreator() {
+            @Override
+            public GPSGatherer create() {
+                return new RawGPSNavigationGatherer(sensorConfig, locationManager,
+                        sensorEnableRequester, permissionChecker, rawGPSSensorChecker, sensorRequirementChecker);
+            }
+        });
     }
 
     @Ignore
     @Test
     public void testRawGPSStatusGaterer() throws Exception {
-        testSensor(() -> new RawGPSStatusGatherer(sensorConfig, locationManager,
-                sensorEnableRequester, permissionChecker, rawGPSSensorChecker, sensorRequirementChecker));
+        testSensor(new GathererCreator() {
+            @Override
+            public GPSGatherer create() {
+                return new RawGPSStatusGatherer(sensorConfig, locationManager,
+                        sensorEnableRequester, permissionChecker, rawGPSSensorChecker, sensorRequirementChecker);
+            }
+        });
     }
 
-    private void testSensor(GathererCreator gathererCreator) {
+    private void testSensor(final GathererCreator gathererCreator) {
 
-        String sensor = gathererCreator.create().getSensorType().name().toUpperCase();
+        final String sensor = gathererCreator.create().getSensorType().name().toUpperCase();
 
         Log.d(sensor + " BENCHMARK", "Nº\treal");
 
         Disposable subscribe = locationGatherer.recordStream().subscribeOn(Schedulers.newThread()).subscribe();
 
         Observable.rangeLong(0, 10)
-                .map(i -> grab1SecGatheringSamplesAndAverage(gathererCreator)
-                        .map(count -> new long[]{i, count})
-                ).map(Single::blockingGet)
-                .subscribe(result -> Log.d(sensor + " BENCHMARK",
-                        String.format("%d\t%d", result[0], result[1])));
+                .map(new Function<Long, Single<BenchmarkStep>>() {
+                    @Override
+                    public Single<BenchmarkStep> apply(final Long i) throws Exception {
+                        return grab1SecGatheringSamplesAndAverage(gathererCreator)
+                                .map(new Function<Long, BenchmarkStep>() {
+                                    @Override
+                                    public BenchmarkStep apply(Long count) throws Exception {
+                                        return new BenchmarkStep(i, count);
+                                    }
+                                });
+                    }
+                })
+                .map(new Function<Single<BenchmarkStep>, BenchmarkStep>() {
+                    @Override
+                    public BenchmarkStep apply(Single<BenchmarkStep> benchmarkStepSingle) throws Exception {
+                        return benchmarkStepSingle.blockingGet();
+                    }
+                })
+                .subscribe(new Consumer<BenchmarkStep>() {
+                    @Override
+                    public void accept(BenchmarkStep benchmarkStep) throws Exception {
+                        Log.d(sensor + " BENCHMARK",
+                                String.format("%d\t%d", benchmarkStep.number, benchmarkStep.count));
+                    }
+                });
 
         subscribe.dispose();
     }
 
-    private Single<Long> grab1SecGatheringSamplesAndAverage(GathererCreator gathererCreator) {
+    private Single<Long> grab1SecGatheringSamplesAndAverage(final GathererCreator gathererCreator) {
         return Observable.range(0, 3)
-                .map(__ -> gatherDuring10Sec(gathererCreator))
-                .map(Single::blockingGet)
-                .reduce(new long[2], (aggregate, result) ->
-                        new long[]{aggregate[0]+1, aggregate[1] + result})
-                .map(result -> result[0] == 0 ? 0 : result[1] / result[0]);
+                .map(new Function<Integer, Single<Long>>() {
+                    @Override
+                    public Single<Long> apply(Integer integer) throws Exception {
+                        return gatherDuring10Sec(gathererCreator);
+                    }
+                })
+                .map(new Function<Single<Long>, Long>() {
+                    @Override
+                    public Long apply(Single<Long> longSingle) throws Exception {
+                        return longSingle.blockingGet();
+                    }
+                })
+                .reduce(new long[2], new BiFunction<long[], Long, long[]>() {
+                    @Override
+                    public long[] apply(long[] aggregate, Long result) throws Exception {
+                        return new long[]{aggregate[0]+1, aggregate[1] + result};
+                    }
+                })
+                .map(new Function<long[], Long>() {
+                    @Override
+                    public Long apply(long[] result) throws Exception {
+                        return result[0] == 0 ? 0 : result[1] / result[0];
+                    }
+                });
     }
 
     private Single<Long> gatherDuring10Sec(GathererCreator gathererCreator) {
@@ -133,11 +195,15 @@ public class GPSSensorGatheringTest {
                 .count();
     }
 
-    /*
-    ------------------------
-    Gatherer creators
-    ------------------------
-     */
+    private class BenchmarkStep {
+        private final long number;
+        private final long count;
+
+        private BenchmarkStep(long number, long count) {
+            this.number = number;
+            this.count = count;
+        }
+    }
 
     private interface GathererCreator {
         GPSGatherer create();

@@ -18,8 +18,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.reactivex.Completable;
+import io.reactivex.CompletableEmitter;
+import io.reactivex.CompletableOnSubscribe;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Cancellable;
 
 /**
  *  Copyright 2017 Alberto González Pérez
@@ -60,7 +63,7 @@ public class RawGPSNavigationGatherer extends RawGPSGatherer {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private GnssNavigationMessage.Callback initializeGnssNavigationCallbackFor(FlowableEmitter<SensorRecord> subscriber) {
+    private GnssNavigationMessage.Callback initializeGnssNavigationCallbackFor(final FlowableEmitter<SensorRecord> subscriber) {
         return new GnssNavigationMessage.Callback() {
             @Override
             public void onGnssNavigationMessageReceived(GnssNavigationMessage event) {
@@ -70,17 +73,27 @@ public class RawGPSNavigationGatherer extends RawGPSGatherer {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private void startListeningGnssNavigationMessages(GnssNavigationMessage.Callback callback) {
+    private void startListeningGnssNavigationMessages(final GnssNavigationMessage.Callback callback) {
         // This is needed because location manager location updates need a looper
-        Completable.create(e ->
-                checkRegistrationSuccess(locationManager.registerGnssNavigationMessageCallback(callback)))
+        Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(CompletableEmitter e) throws Exception {
+                checkRegistrationSuccess(locationManager.registerGnssNavigationMessageCallback(callback));
+            }
+        })
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe();
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private void addUnsubscribeCallbackFor(FlowableEmitter<SensorRecord> subscriber, GnssNavigationMessage.Callback callback) {
-        subscriber.setCancellable(() -> locationManager.unregisterGnssNavigationMessageCallback(callback));
+    private void addUnsubscribeCallbackFor(FlowableEmitter<SensorRecord> subscriber,
+                                           final GnssNavigationMessage.Callback callback) {
+        subscriber.setCancellable(new Cancellable() {
+            @Override
+            public void cancel() throws Exception {
+                locationManager.unregisterGnssNavigationMessageCallback(callback);
+            }
+        });
     }
 
     @Override

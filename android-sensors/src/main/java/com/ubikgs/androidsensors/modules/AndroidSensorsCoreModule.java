@@ -71,7 +71,7 @@ public class AndroidSensorsCoreModule {
             RawGPSNavigationGatherer rawGPSNavigationGatherer,
             RawGPSStatusGatherer rawGPSStatusGatherer) {
 
-        return new HashSet<>(Arrays.asList(
+        return new HashSet<SensorGatherer>(Arrays.asList(
                 accelerometerGatherer,
                 gravityGatherer,
                 gyroscopeGatherer,

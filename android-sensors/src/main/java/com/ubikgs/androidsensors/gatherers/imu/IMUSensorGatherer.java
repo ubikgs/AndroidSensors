@@ -17,6 +17,7 @@ import com.ubikgs.androidsensors.records.SensorRecord;
 import com.ubikgs.androidsensors.utils.SensorTypeToAndroidSensor;
 
 import io.reactivex.FlowableEmitter;
+import io.reactivex.functions.Cancellable;
 
 /**
  *  Copyright 2017 Alberto González Pérez
@@ -62,7 +63,7 @@ public abstract class IMUSensorGatherer extends AbstractSensorGatherer {
         addUnsubscribeCallbackFor(subscriber, sensorEventListener);
     }
 
-    private SensorEventListener initializeSensorEventListenerFor(FlowableEmitter<SensorRecord> subscriber) {
+    private SensorEventListener initializeSensorEventListenerFor(final FlowableEmitter<SensorRecord> subscriber) {
         return new SensorEventListener() {
 
             @Override
@@ -82,8 +83,14 @@ public abstract class IMUSensorGatherer extends AbstractSensorGatherer {
                 (int) sensorConfig.getMinSensorDelay(getSensorType()));
     }
 
-    private void addUnsubscribeCallbackFor(FlowableEmitter<SensorRecord> subscriber, SensorEventListener sensorEventListener) {
-        subscriber.setCancellable(() -> sensorManager.unregisterListener(sensorEventListener));
+    private void addUnsubscribeCallbackFor(FlowableEmitter<SensorRecord> subscriber,
+                                           final SensorEventListener sensorEventListener) {
+        subscriber.setCancellable(new Cancellable() {
+            @Override
+            public void cancel() throws Exception {
+                sensorManager.unregisterListener(sensorEventListener);
+            }
+        });
     }
 
     private Sensor getDefaultSensor() {

@@ -61,28 +61,28 @@ public class AndroidSensorsEdgeModuleTest {
     public void provideBasicSensorEnableRequester_withDefaultModule_returnsBasicSensorEnableRequester()
             throws Exception {
         assertThat(defaultModule.provideBasicSensorEnableRequester(context).getClass(),
-                equalTo(BasicSensorEnableRequester.class));
+                equalTo((Class) BasicSensorEnableRequester.class));
     }
 
     @Test
     public void provideGPSSensorEnableRequester_withDefaultModule_returnsGPSSensorEnableRequester()
             throws Exception {
         assertThat(defaultModule.provideGPSSensorEnableRequester(context).getClass(),
-                equalTo(GPSSensorEnableRequester.class));
+                equalTo((Class) GPSSensorEnableRequester.class));
     }
 
     @Test
     public void provideBasicCriticalityChecker_withDefaultModule_returnsBasicCriticalityChecker()
             throws Exception {
         assertThat(defaultModule.provideBasicCriticalityChecker().getClass(),
-                equalTo(BasicSensorRequirementChecker.class));
+                equalTo((Class) BasicSensorRequirementChecker.class));
     }
 
     @Test
     public void provideBasicSensorConfig_withDefaultModule_returnsBasicSensorConfig()
             throws Exception {
         assertThat(defaultModule.provideBasicSensorConfig(millisecondsToMicroseconds).getClass(),
-                equalTo(BasicSensorConfig.class));
+                equalTo((Class) BasicSensorConfig.class));
     }
 
     @Test

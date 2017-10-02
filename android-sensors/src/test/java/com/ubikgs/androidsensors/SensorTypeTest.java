@@ -44,52 +44,52 @@ import static org.junit.Assert.assertThat;
 public class SensorTypeTest {
     @Test
     public void accelerometer() throws Exception {
-        assertThat(ACCELEROMETER.getRecordClass(), equalTo(AccelerometerRecord.class));
+        assertThat(ACCELEROMETER.getRecordClass(), equalTo((Class) AccelerometerRecord.class));
     }
 
     @Test
     public void gravity() throws Exception {
-        assertThat(GRAVITY.getRecordClass(), equalTo(GravityRecord.class));
+        assertThat(GRAVITY.getRecordClass(), equalTo((Class) GravityRecord.class));
     }
 
     @Test
     public void gyroscope() throws Exception {
-        assertThat(GYROSCOPE.getRecordClass(), equalTo(GyroscopeRecord.class));
+        assertThat(GYROSCOPE.getRecordClass(), equalTo((Class) GyroscopeRecord.class));
     }
 
     @Test
     public void linearAcceleration() throws Exception {
-        assertThat(LINEAR_ACCELERATION.getRecordClass(), equalTo(LinearAccelerationRecord.class));
+        assertThat(LINEAR_ACCELERATION.getRecordClass(), equalTo((Class) LinearAccelerationRecord.class));
     }
 
     @Test
     public void locationProducer() throws Exception {
-        assertThat(LOCATION.getRecordClass(), equalTo(LocationRecord.class));
+        assertThat(LOCATION.getRecordClass(), equalTo((Class) LocationRecord.class));
     }
 
     @Test
     public void magneticField() throws Exception {
-        assertThat(MAGNETIC_FIELD.getRecordClass(), equalTo(MagneticFieldRecord.class));
+        assertThat(MAGNETIC_FIELD.getRecordClass(), equalTo((Class) MagneticFieldRecord.class));
     }
 
     @Test
     public void rawGPSMeasurements() throws Exception {
-        assertThat(RAW_GPS_MEASUREMENTS.getRecordClass(), equalTo(RawGPSMeasurementsRecord.class));
+        assertThat(RAW_GPS_MEASUREMENTS.getRecordClass(), equalTo((Class) RawGPSMeasurementsRecord.class));
     }
 
     @Test
     public void rawGPSNavigation() throws Exception {
-        assertThat(RAW_GPS_NAVIGATION.getRecordClass(), equalTo(RawGPSNavigationRecord.class));
+        assertThat(RAW_GPS_NAVIGATION.getRecordClass(), equalTo((Class) RawGPSNavigationRecord.class));
     }
 
     @Test
     public void rawGPSStatus() throws Exception {
-        assertThat(RAW_GPS_STATUS.getRecordClass(), equalTo(RawGPSStatusRecord.class));
+        assertThat(RAW_GPS_STATUS.getRecordClass(), equalTo((Class) RawGPSStatusRecord.class));
     }
 
     @Test
     public void rotationVector() throws Exception {
-        assertThat(ROTATION_VECTOR.getRecordClass(), equalTo(RotationVectorRecord.class));
+        assertThat(ROTATION_VECTOR.getRecordClass(), equalTo((Class) RotationVectorRecord.class));
     }
 
     @Test
