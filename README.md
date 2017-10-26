@@ -10,11 +10,11 @@ Add the dependency
 
 ```groovy
 dependencies {
-    implementation 'com.ubikgs:android-sensors:1.0.0-alpha5'
+    implementation 'com.ubikgs:android-sensors:1.0.0-alpha6'
     
-    // Needed to work with AndroidSensors output Flowables
+    // To conveniently work with AndroidSensors output Flowables
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.3'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.5'
 }
 ```
 
