@@ -34,16 +34,16 @@ public abstract class RawGPSGathererIntegrationTest extends GPSGathererIntegrati
     }
 
     @Override
-    public void dataStream_emitsAtLeastOneRecord_whenSensorIsAvailable() throws Exception {
+    public void recordStream_emitsAtLeastOneRecord_whenSensorIsAvailable() throws Exception {
         Disposable subscribe = createLocationGathererSubscription();
-        super.dataStream_emitsAtLeastOneRecord_whenSensorIsAvailable();
+        super.recordStream_emitsAtLeastOneRecord_whenSensorIsAvailable();
         subscribe.dispose();
     }
 
     @Override
-    public void dataStream_emitsAtLeastXRecords_duringPeriod_whenSensorIsAvailable() throws Exception {
+    public void recordStream_emitsAtLeastXRecords_duringPeriod_whenSensorIsAvailable() throws Exception {
         Disposable subscribe = createLocationGathererSubscription();
-        super.dataStream_emitsAtLeastXRecords_duringPeriod_whenSensorIsAvailable();
+        super.recordStream_emitsAtLeastXRecords_duringPeriod_whenSensorIsAvailable();
         subscribe.dispose();
     }
 

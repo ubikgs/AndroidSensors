@@ -47,7 +47,7 @@ public abstract class SensorGathererIntegrationTest {
     }
 
     @Test(timeout = 20000)
-    public void dataStream_emitsAtLeastOneRecord_whenSensorIsAvailable() throws Exception {
+    public void recordStream_emitsAtLeastOneRecord_whenSensorIsAvailable() throws Exception {
         SensorRecord sensorRecord = sensorGatherer.recordStream()
                 .subscribeOn(Schedulers.newThread())
                 .take(1)
@@ -60,7 +60,7 @@ public abstract class SensorGathererIntegrationTest {
     }
 
     @Test
-    public void dataStream_emitsAtLeastXRecords_duringPeriod_whenSensorIsAvailable() throws Exception {
+    public void recordStream_emitsAtLeastXRecords_duringPeriod_whenSensorIsAvailable() throws Exception {
         List<SensorRecord> sensorRecords = sensorGatherer.recordStream()
                 .subscribeOn(Schedulers.newThread())
                 .take(gatheringPeriod, TimeUnit.SECONDS)
