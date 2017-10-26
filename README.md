@@ -2,7 +2,7 @@
 
 A library that facilitates the access to Android devices' sensors
 
-Uses RxJava to improve sensor records flows management experience.
+Uses [RxJava](https://github.com/ReactiveX/RxJava) to improve sensor records flows management experience.
 
 ## Usage
 
