@@ -10,6 +10,7 @@ import com.ubikgs.androidsensors.records.imu.GyroscopeRecord;
 import com.ubikgs.androidsensors.records.imu.LinearAccelerationRecord;
 import com.ubikgs.androidsensors.records.imu.MagneticFieldRecord;
 import com.ubikgs.androidsensors.records.imu.RotationVectorRecord;
+import com.ubikgs.androidsensors.records.wifi.WifiMeasurementsRecord;
 
 import org.junit.Test;
 
@@ -23,6 +24,7 @@ import static com.ubikgs.androidsensors.SensorType.RAW_GPS_MEASUREMENTS;
 import static com.ubikgs.androidsensors.SensorType.RAW_GPS_NAVIGATION;
 import static com.ubikgs.androidsensors.SensorType.RAW_GPS_STATUS;
 import static com.ubikgs.androidsensors.SensorType.ROTATION_VECTOR;
+import static com.ubikgs.androidsensors.SensorType.WIFI_MEASUREMENTS;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -93,6 +95,11 @@ public class SensorTypeTest {
     }
 
     @Test
+    public void wifiMeasurements() throws Exception {
+        assertThat(WIFI_MEASUREMENTS.getRecordClass(), equalTo((Class) WifiMeasurementsRecord.class));
+    }
+
+    @Test
     public void imuValues() throws Exception {
         SensorType[] imuValues = new SensorType[] {
                 ACCELEROMETER,
@@ -127,5 +134,14 @@ public class SensorTypeTest {
         };
 
         assertThat(SensorType.rawGPSValues(), equalTo(rawGPSValues));
+    }
+
+    @Test
+    public void wifiValues() throws Exception {
+        SensorType[] wifiValues = new SensorType[] {
+                WIFI_MEASUREMENTS
+        };
+
+        assertThat(SensorType.wifiValues(), equalTo(wifiValues));
     }
 }
