@@ -12,6 +12,7 @@ import com.ubikgs.androidsensors.gatherers.imu.GyroscopeGathererIntegrationTest;
 import com.ubikgs.androidsensors.gatherers.imu.LinearAccelerationGathererIntegrationTest;
 import com.ubikgs.androidsensors.gatherers.imu.MagneticFieldGathererIntegrationTest;
 import com.ubikgs.androidsensors.gatherers.imu.RotationVectorGathererIntegrationTest;
+import com.ubikgs.androidsensors.gatherers.wifi.WifiMeasurementsGathererIntegrationTest;
 import com.ubikgs.androidsensors.modules.AndroidSensorsCoreModule;
 import com.ubikgs.androidsensors.modules.AndroidSensorsEdgeModule;
 import com.ubikgs.androidsensors.modules.SystemServicesModule;
@@ -66,4 +67,6 @@ public interface TestBedComponent {
     void inject(GPSSensorGatheringTest test);
 
     void inject(AndroidSensorsIntegrationTest test);
+
+    void inject(WifiMeasurementsGathererIntegrationTest test);
 }

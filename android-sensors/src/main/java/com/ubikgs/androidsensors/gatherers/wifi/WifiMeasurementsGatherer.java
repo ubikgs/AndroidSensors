@@ -1,6 +1,5 @@
 package com.ubikgs.androidsensors.gatherers.wifi;
 
-import android.content.BroadcastReceiver;
 import android.net.wifi.WifiManager;
 
 import com.ubikgs.androidsensors.SensorType;
@@ -9,7 +8,6 @@ import com.ubikgs.androidsensors.checkers.internal.SensorChecker;
 import com.ubikgs.androidsensors.checkers.permissions.PermissionChecker;
 import com.ubikgs.androidsensors.config.SensorConfig;
 import com.ubikgs.androidsensors.enablers.SensorEnableRequester;
-import com.ubikgs.androidsensors.enablers.WifiSensorEnableRequester;
 import com.ubikgs.androidsensors.gatherers.AbstractSensorGatherer;
 import com.ubikgs.androidsensors.records.SensorRecord;
 import com.ubikgs.androidsensors.records.wifi.WifiMeasurementsRecord;
