@@ -49,11 +49,13 @@ public class AndroidSensorsEdgeModule {
 
     public AndroidSensorsEdgeModule(SensorEnableRequester defaultSensorEnableRequester,
                                     SensorEnableRequester gpsSensorEnableRequester,
+                                    SensorEnableRequester wifiSensorEnableRequester,
                                     SensorRequirementChecker sensorRequirementChecker,
                                     SensorConfig sensorConfig) {
 
         this.defaultSensorEnableRequester = defaultSensorEnableRequester;
         this.gpsSensorEnableRequester = gpsSensorEnableRequester;
+        this.wifiSensorEnableRequester = wifiSensorEnableRequester;
         this.sensorRequirementChecker = sensorRequirementChecker;
         this.sensorConfig = sensorConfig;
     }
