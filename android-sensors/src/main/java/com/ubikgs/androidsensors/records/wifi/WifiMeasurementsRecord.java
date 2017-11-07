@@ -2,10 +2,7 @@ package com.ubikgs.androidsensors.records.wifi;
 
 import android.net.wifi.ScanResult;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 
-import com.ubikgs.androidsensors.gatherers.wifi.WifiMeasurementsGatherer;
-import com.ubikgs.androidsensors.records.RecordInfo;
 import com.ubikgs.androidsensors.records.SensorRecord;
 
 import java.util.Arrays;
@@ -72,7 +69,7 @@ public class WifiMeasurementsRecord extends SensorRecord {
             venueNames[i] = getVenueName(result);
 
             i++;
-            }
+        }
     }
 
     public WifiMeasurementsRecord(WifiMeasurementsRecord wifiMeasurementsRecord){
