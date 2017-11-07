@@ -3,7 +3,7 @@ apply plugin: 'com.jfrog.bintray'
 
 def projectName = 'android-sensors'
 group = 'com.ubikgs'
-def projectVersion = '1.0.0-alpha6'
+def projectVersion = '1.0.0-alpha7'
 version = projectVersion
 
 def repoName = 'AndroidSensors'
@@ -80,7 +80,7 @@ dependencies {
 
     // RxAndroid
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.5'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.6'
 
     /*
     * Testing
