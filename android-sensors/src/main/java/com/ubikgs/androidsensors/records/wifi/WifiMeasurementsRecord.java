@@ -4,6 +4,7 @@ import android.net.wifi.ScanResult;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
+import com.ubikgs.androidsensors.gatherers.wifi.WifiMeasurementsGatherer;
 import com.ubikgs.androidsensors.records.RecordInfo;
 import com.ubikgs.androidsensors.records.SensorRecord;
 
@@ -27,16 +28,14 @@ public class WifiMeasurementsRecord extends SensorRecord {
     private int[] channelWidths;
     private int[] frequencies;
     private int[] levels;
-    private CharSequence[] operatorsFriendlyName;
+    private String[] operatorsFriendlyName;
     private long[] timestamps;
-    private CharSequence[] venueNames;
+    private String[] venueNames;
 
     public WifiMeasurementsRecord(){
         super();
     }
 
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
     public WifiMeasurementsRecord(List<ScanResult> results){
 
         this.ssidCount = results.size();
@@ -56,6 +55,7 @@ public class WifiMeasurementsRecord extends SensorRecord {
         Iterator<ScanResult> it = results.iterator();
         int i = 0;
 
+
         while (it.hasNext()) {
             ScanResult result = it.next();
 
@@ -67,16 +67,17 @@ public class WifiMeasurementsRecord extends SensorRecord {
             channelWidths[i] = result.channelWidth;
             frequencies[i] = result.frequency;
             levels[i] = result.level;
-            operatorsFriendlyName[i] = result.operatorFriendlyName;
+            operatorsFriendlyName[i] = getOperatorFriendlyName(result);
             timestamps[i] = result.timestamp;
-            venueNames[i] = result.venueName;
+            venueNames[i] = getVenueName(result);
 
             i++;
-        }
+            }
     }
 
     public WifiMeasurementsRecord(WifiMeasurementsRecord wifiMeasurementsRecord){
         super(wifiMeasurementsRecord);
+
         this.ssidCount = wifiMeasurementsRecord.getSsidCount();
         this.bssids = wifiMeasurementsRecord.getBssids();
         this.ssids = wifiMeasurementsRecord.getSsids();
@@ -163,11 +164,11 @@ public class WifiMeasurementsRecord extends SensorRecord {
         this.levels = levels;
     }
 
-    public CharSequence[] getOperatorsFriendlyName() {
+    public String[] getOperatorsFriendlyName() {
         return operatorsFriendlyName;
     }
 
-    public void setOperatorsFriendlyName(CharSequence[] operatorsFriendlyName) {
+    public void setOperatorsFriendlyName(String[] operatorsFriendlyName) {
         this.operatorsFriendlyName = operatorsFriendlyName;
     }
 
@@ -179,11 +180,11 @@ public class WifiMeasurementsRecord extends SensorRecord {
         this.timestamps = timestamps;
     }
 
-    public CharSequence[] getVenueNames() {
+    public String[] getVenueNames() {
         return venueNames;
     }
 
-    public void setVenueNames(CharSequence[] venueNames) {
+    public void setVenueNames(String[] venueNames) {
         this.venueNames = venueNames;
     }
 
@@ -249,5 +250,19 @@ public class WifiMeasurementsRecord extends SensorRecord {
         result = 31 * result + Arrays.hashCode(getTimestamps());
         result = 31 * result + Arrays.hashCode(getVenueNames());
         return result;
+    }
+
+    private String getOperatorFriendlyName(ScanResult result){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            return result.operatorFriendlyName.toString();
+        }
+        return "";
+    }
+
+    private String getVenueName(ScanResult result){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            return result.venueName.toString();
+        }
+        return "";
     }
 }
