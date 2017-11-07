@@ -3,11 +3,13 @@ package com.ubikgs.androidsensors.modules;
 import android.content.Context;
 import android.hardware.SensorManager;
 import android.location.LocationManager;
+import android.net.wifi.WifiManager;
 
 import com.ubikgs.androidsensors.checkers.internal.GPSSensorChecker;
 import com.ubikgs.androidsensors.checkers.internal.IMUSensorChecker;
 import com.ubikgs.androidsensors.checkers.internal.RawGPSSensorChecker;
 import com.ubikgs.androidsensors.checkers.internal.SensorChecker;
+import com.ubikgs.androidsensors.checkers.internal.WifiSensorChecker;
 import com.ubikgs.androidsensors.checkers.permissions.FineLocationPermissionChecker;
 import com.ubikgs.androidsensors.checkers.permissions.NoPermissionChecker;
 import com.ubikgs.androidsensors.checkers.permissions.PermissionChecker;
@@ -22,6 +24,7 @@ import com.ubikgs.androidsensors.gatherers.imu.GyroscopeGatherer;
 import com.ubikgs.androidsensors.gatherers.imu.LinearAccelerationGatherer;
 import com.ubikgs.androidsensors.gatherers.imu.MagneticFieldGatherer;
 import com.ubikgs.androidsensors.gatherers.imu.RotationVectorGatherer;
+import com.ubikgs.androidsensors.gatherers.wifi.WifiMeasurementsGatherer;
 import com.ubikgs.androidsensors.utils.SensorTypeToAndroidSensor;
 
 import java.util.Arrays;
@@ -69,7 +72,8 @@ public class AndroidSensorsCoreModule {
             LocationGatherer locationGatherer,
             RawGPSMeasurementsGatherer rawGPSMeasurementsGatherer,
             RawGPSNavigationGatherer rawGPSNavigationGatherer,
-            RawGPSStatusGatherer rawGPSStatusGatherer) {
+            RawGPSStatusGatherer rawGPSStatusGatherer,
+            WifiMeasurementsGatherer wifiMeasurementsGatherer) {
 
         return new HashSet<SensorGatherer>(Arrays.asList(
                 accelerometerGatherer,
@@ -81,7 +85,8 @@ public class AndroidSensorsCoreModule {
                 locationGatherer,
                 rawGPSMeasurementsGatherer,
                 rawGPSNavigationGatherer,
-                rawGPSStatusGatherer));
+                rawGPSStatusGatherer,
+                wifiMeasurementsGatherer));
     }
 
     /*
@@ -119,5 +124,11 @@ public class AndroidSensorsCoreModule {
     @Named("rawGPSSensorChecker")
     SensorChecker provideRawGPSSensorChecker(LocationManager locationManager) {
         return new RawGPSSensorChecker(locationManager);
+    }
+
+    @Provides
+    @Named("wifiSensorChecker")
+    SensorChecker provideWifiSensorChecker (WifiManager wifiManager){
+        return new WifiSensorChecker(wifiManager);
     }
 }

@@ -18,6 +18,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.reactivex.FlowableEmitter;
 import io.reactivex.functions.Cancellable;
@@ -32,11 +33,11 @@ public class WifiMeasurementsGatherer extends AbstractSensorGatherer {
 
     @Inject
     public WifiMeasurementsGatherer(SensorConfig sensorConfig,
-                                     WifiManager wifiManager,
-                                     SensorEnableRequester sensorEnableRequester,
-                                     PermissionChecker permissionChecker,
-                                     SensorChecker sensorChecker,
-                                     SensorRequirementChecker sensorRequirementChecker){
+                                    WifiManager wifiManager,
+                                    @Named("wifiSensorEnableRequester")SensorEnableRequester sensorEnableRequester,
+                                    PermissionChecker permissionChecker,
+                                    @Named("wifiSensorChecker")SensorChecker sensorChecker,
+                                    SensorRequirementChecker sensorRequirementChecker){
         super(sensorConfig, sensorEnableRequester, permissionChecker, sensorChecker, sensorRequirementChecker);
         this.wifiManager = wifiManager;
     }
