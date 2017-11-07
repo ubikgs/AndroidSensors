@@ -53,14 +53,8 @@ public class BasicSensorConfigTest {
 
     @Test
     public void getMinSensorDelay_forAllIMUSensor_returnsInUs() throws Exception {
-        HashSet<SensorType> imuSensors = new HashSet<>(Arrays.asList(
-                SensorType.ACCELEROMETER,
-                SensorType.GRAVITY,
-                SensorType.GYROSCOPE,
-                SensorType.LINEAR_ACCELERATION,
-                SensorType.MAGNETIC_FIELD,
-                SensorType.ROTATION_VECTOR
-        ));
+        HashSet<SensorType> imuSensors =
+                new HashSet<>(Arrays.asList(SensorType.imuValues()));
 
         Observable.fromIterable(imuSensors)
                 .map(new Function<SensorType, Long>() {
@@ -76,12 +70,9 @@ public class BasicSensorConfigTest {
 
     @Test
     public void getMinSensorDelay_forAllNonIMUSensor_returnsInMs() throws Exception {
-        HashSet<SensorType> nonIMUSensors = new HashSet<>(Arrays.asList(
-                SensorType.LOCATION,
-                SensorType.RAW_GPS_MEASUREMENTS,
-                SensorType.RAW_GPS_NAVIGATION,
-                SensorType.RAW_GPS_STATUS
-        ));
+        HashSet<SensorType> nonIMUSensors = new HashSet<>();
+        nonIMUSensors.addAll(Arrays.asList(SensorType.gpsValues()));
+        nonIMUSensors.add(SensorType.WIFI_MEASUREMENTS);
 
         Long count = Observable.fromIterable(nonIMUSensors)
                 .map(new Function<SensorType, Long>() {

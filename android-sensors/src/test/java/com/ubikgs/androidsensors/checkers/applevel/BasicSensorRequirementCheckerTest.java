@@ -7,8 +7,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
+import io.reactivex.Observable;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
+
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
 
 /**
  *  Copyright 2017 Alberto González Pérez
@@ -36,26 +43,48 @@ public class BasicSensorRequirementCheckerTest {
     }
 
     @Test
-    public void isRequired_locationGatherer_isRequired() throws Exception {
-        boolean required = basicSensorRequirementChecker.isRequired(SensorType.LOCATION);
-        assertThat(required, is(true));
+    public void isRequired_IMULocationAndWifi_areRequired() throws Exception {
+        HashSet<SensorType> sensorTypes = new HashSet<>();
+        sensorTypes.addAll(Arrays.asList(SensorType.imuValues()));
+        sensorTypes.add(SensorType.LOCATION);
+        sensorTypes.addAll(Arrays.asList(SensorType.wifiValues()));
+
+        Long count = Observable.fromIterable(sensorTypes)
+                .map(new Function<SensorType, Boolean>() {
+                    @Override
+                    public Boolean apply(SensorType sensorType) throws Exception {
+                        return basicSensorRequirementChecker.isRequired(sensorType);
+                    }
+                }).filter(new Predicate<Boolean>() {
+                    @Override
+                    public boolean test(Boolean required) throws Exception {
+                        return required;
+                    }
+                }).count()
+                .blockingGet();
+
+        assertThat(count.intValue(), equalTo(sensorTypes.size()));
     }
 
     @Test
-    public void isRequired_rawGPSMeasurementsGatherer_isNotRequired() throws Exception {
-        boolean required = basicSensorRequirementChecker.isRequired(SensorType.RAW_GPS_MEASUREMENTS);
-        assertThat(required, is(false));
-    }
+    public void isRequired_rawGPS_areNotRequired() throws Exception {
+        HashSet<SensorType> sensorTypes =
+                new HashSet<>(Arrays.asList(SensorType.rawGPSValues()));
 
-    @Test
-    public void isRequired_rawGPSNavigationGatherer_isNotRequired() throws Exception {
-        boolean required = basicSensorRequirementChecker.isRequired(SensorType.RAW_GPS_NAVIGATION);
-        assertThat(required, is(false));
-    }
+        Long count = Observable.fromIterable(sensorTypes)
+                .map(new Function<SensorType, Boolean>() {
+                    @Override
+                    public Boolean apply(SensorType sensorType) throws Exception {
+                        return basicSensorRequirementChecker.isRequired(sensorType);
+                    }
+                }).filter(new Predicate<Boolean>() {
+                    @Override
+                    public boolean test(Boolean required) throws Exception {
+                        return !required;
+                    }
+                }).count()
+                .blockingGet();
 
-    @Test
-    public void isRequired_rawGPSStatusGatherer_isNotRequired() throws Exception {
-        boolean required = basicSensorRequirementChecker.isRequired(SensorType.RAW_GPS_STATUS);
-        assertThat(required, is(false));
+        assertThat(count.intValue(), equalTo(sensorTypes.size()));
     }
 }
