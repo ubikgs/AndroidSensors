@@ -86,6 +86,7 @@ You can also configure some library inner behaviors via the builder interface:
 Context applicationContext;
 SensorEnableRequester defaultSensorEnableRequester;
 SensorEnableRequester gpsSensorEnableRequester;
+SensorEnableRequester wifiSensorEnableRequester;
 SensorRequirementChecker sensorRequirementChecker;
 SensorConfig sensorConfig;
 
@@ -93,6 +94,7 @@ AndroidSensors customAndroidSensors = AndroidSensors
                                .builder()
                                .customDefaultEnableRequester(defaultSensorEnableRequester)
                                .customGPSEnableRequester(gpsSensorEnableRequester)
+                               .customWifiEnableRequester(wifiSensorEnableRequester)
                                .customSensorRequirementChecker(sensorRequirementChecker)
                                .customSensorConfig(sensorConfig)
                                .build(applicationContext);

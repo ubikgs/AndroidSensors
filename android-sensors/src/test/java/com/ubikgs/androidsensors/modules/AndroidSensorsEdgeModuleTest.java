@@ -9,6 +9,7 @@ import com.ubikgs.androidsensors.config.SensorConfig;
 import com.ubikgs.androidsensors.enablers.BasicSensorEnableRequester;
 import com.ubikgs.androidsensors.enablers.GPSSensorEnableRequester;
 import com.ubikgs.androidsensors.enablers.SensorEnableRequester;
+import com.ubikgs.androidsensors.enablers.WifiSensorEnableRequester;
 import com.ubikgs.androidsensors.utils.MillisecondsToMicroseconds;
 
 import org.junit.Before;
@@ -44,6 +45,7 @@ public class AndroidSensorsEdgeModuleTest {
 
     @Mock SensorEnableRequester defaultSensorEnableRequester;
     @Mock SensorEnableRequester gpsSensorEnableRequester;
+    @Mock SensorEnableRequester wifiSensorEnableRequester;
     @Mock SensorRequirementChecker sensorRequirementChecker;
     @Mock SensorConfig sensorConfig;
 
@@ -54,7 +56,8 @@ public class AndroidSensorsEdgeModuleTest {
     public void setUp() throws Exception {
         defaultModule = new AndroidSensorsEdgeModule();
         customModule = new AndroidSensorsEdgeModule(defaultSensorEnableRequester,
-                gpsSensorEnableRequester, sensorRequirementChecker, sensorConfig);
+                gpsSensorEnableRequester, wifiSensorEnableRequester, sensorRequirementChecker,
+                sensorConfig);
     }
 
     @Test
@@ -69,6 +72,13 @@ public class AndroidSensorsEdgeModuleTest {
             throws Exception {
         assertThat(defaultModule.provideGPSSensorEnableRequester(context).getClass(),
                 equalTo((Class) GPSSensorEnableRequester.class));
+    }
+
+    @Test
+    public void provideWifiSensorEnableRequester_withDefaultModule_returnsWifiSensorEnableRequester()
+            throws Exception {
+        assertThat(defaultModule.provideWiFiSensorEnableRequester(context).getClass(),
+                equalTo((Class) WifiSensorEnableRequester.class));
     }
 
     @Test
@@ -97,6 +107,13 @@ public class AndroidSensorsEdgeModuleTest {
             throws Exception {
         assertThat(customModule.provideGPSSensorEnableRequester(context),
                 is(gpsSensorEnableRequester));
+    }
+
+    @Test
+    public void provideWifiSensorEnableRequester_withCustomModule_returnsWifiSensorEnableRequester()
+            throws Exception {
+        assertThat(customModule.provideWiFiSensorEnableRequester(context),
+                is(wifiSensorEnableRequester));
     }
 
     @Test

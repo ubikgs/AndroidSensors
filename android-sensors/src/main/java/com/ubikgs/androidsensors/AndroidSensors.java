@@ -42,6 +42,7 @@ public class AndroidSensors {
     private AndroidSensors(Context applicationContext,
                            SensorEnableRequester defaultSensorEnableRequester,
                            SensorEnableRequester gpsSensorEnableRequester,
+                           SensorEnableRequester wifiSensorEnableRequester,
                            SensorRequirementChecker sensorRequirementChecker,
                            SensorConfig sensorConfig) {
 
@@ -53,6 +54,7 @@ public class AndroidSensors {
                 .androidSensorsEdgeModule(new AndroidSensorsEdgeModule(
                         defaultSensorEnableRequester,
                         gpsSensorEnableRequester,
+                        wifiSensorEnableRequester,
                         sensorRequirementChecker,
                         sensorConfig
                 )).build()
@@ -95,9 +97,11 @@ public class AndroidSensors {
     public interface Builder {
         Builder customDefaultEnableRequester(SensorEnableRequester defaultEnableRequester);
         Builder customGPSEnableRequester(SensorEnableRequester gpsEnableRequester);
+        Builder customWifiEnableRequester(SensorEnableRequester wifiSensorEnableRequester);
         Builder customSensorRequirementChecker(SensorRequirementChecker sensorRequirementChecker);
         Builder customSensorConfig(SensorConfig sensorConfig);
         AndroidSensors build(Context context);
+
     }
 
     public static Builder builder() {
@@ -106,6 +110,7 @@ public class AndroidSensors {
 
             private SensorEnableRequester defaultSensorEnableRequester;
             private SensorEnableRequester gpsSensorEnableRequester;
+            private SensorEnableRequester wifiSensorEnableRequester;
             private SensorRequirementChecker sensorRequirementChecker;
             private SensorConfig sensorConfig;
 
@@ -118,6 +123,12 @@ public class AndroidSensors {
             @Override
             public Builder customGPSEnableRequester(SensorEnableRequester gpsEnableRequester) {
                 this.gpsSensorEnableRequester = gpsEnableRequester;
+                return this;
+            }
+
+            @Override
+            public Builder customWifiEnableRequester(SensorEnableRequester wifiSensorEnableRequester) {
+                this.wifiSensorEnableRequester = wifiSensorEnableRequester;
                 return this;
             }
 
@@ -138,6 +149,7 @@ public class AndroidSensors {
                 return new AndroidSensors(applicationContext,
                         defaultSensorEnableRequester,
                         gpsSensorEnableRequester,
+                        wifiSensorEnableRequester,
                         sensorRequirementChecker,
                         sensorConfig);
             }

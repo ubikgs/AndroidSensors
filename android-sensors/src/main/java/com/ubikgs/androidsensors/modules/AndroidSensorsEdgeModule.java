@@ -9,6 +9,7 @@ import com.ubikgs.androidsensors.config.SensorConfig;
 import com.ubikgs.androidsensors.enablers.BasicSensorEnableRequester;
 import com.ubikgs.androidsensors.enablers.GPSSensorEnableRequester;
 import com.ubikgs.androidsensors.enablers.SensorEnableRequester;
+import com.ubikgs.androidsensors.enablers.WifiSensorEnableRequester;
 import com.ubikgs.androidsensors.utils.MillisecondsToMicroseconds;
 
 import javax.inject.Named;
@@ -39,6 +40,7 @@ public class AndroidSensorsEdgeModule {
 
     private SensorEnableRequester defaultSensorEnableRequester;
     private SensorEnableRequester gpsSensorEnableRequester;
+    private SensorEnableRequester wifiSensorEnableRequester;
     private SensorRequirementChecker sensorRequirementChecker;
     private SensorConfig sensorConfig;
 
@@ -47,11 +49,13 @@ public class AndroidSensorsEdgeModule {
 
     public AndroidSensorsEdgeModule(SensorEnableRequester defaultSensorEnableRequester,
                                     SensorEnableRequester gpsSensorEnableRequester,
+                                    SensorEnableRequester wifiSensorEnableRequester,
                                     SensorRequirementChecker sensorRequirementChecker,
                                     SensorConfig sensorConfig) {
 
         this.defaultSensorEnableRequester = defaultSensorEnableRequester;
         this.gpsSensorEnableRequester = gpsSensorEnableRequester;
+        this.wifiSensorEnableRequester = wifiSensorEnableRequester;
         this.sensorRequirementChecker = sensorRequirementChecker;
         this.sensorConfig = sensorConfig;
     }
@@ -71,6 +75,13 @@ public class AndroidSensorsEdgeModule {
     SensorEnableRequester provideGPSSensorEnableRequester(Context context) {
         return gpsSensorEnableRequester != null ?
                 gpsSensorEnableRequester : new GPSSensorEnableRequester(context);
+    }
+
+    @Provides
+    @Named("wifiSensorEnableRequester")
+    SensorEnableRequester provideWiFiSensorEnableRequester(Context context){
+        return wifiSensorEnableRequester != null ?
+                wifiSensorEnableRequester : new WifiSensorEnableRequester(context);
     }
 
     /*
