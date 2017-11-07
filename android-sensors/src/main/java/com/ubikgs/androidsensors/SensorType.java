@@ -11,6 +11,7 @@ import com.ubikgs.androidsensors.records.imu.GyroscopeRecord;
 import com.ubikgs.androidsensors.records.imu.LinearAccelerationRecord;
 import com.ubikgs.androidsensors.records.imu.MagneticFieldRecord;
 import com.ubikgs.androidsensors.records.imu.RotationVectorRecord;
+import com.ubikgs.androidsensors.records.wifi.WifiMeasurementsRecord;
 
 import java.util.HashMap;
 
@@ -34,7 +35,7 @@ public enum SensorType {
     ACCELEROMETER, GRAVITY, GYROSCOPE, LINEAR_ACCELERATION,
     LOCATION, MAGNETIC_FIELD,
     RAW_GPS_MEASUREMENTS, RAW_GPS_NAVIGATION, RAW_GPS_STATUS,
-    ROTATION_VECTOR;
+    ROTATION_VECTOR, WIFI_MEASUREMENTS;
 
     private static HashMap<SensorType, Class<? extends SensorRecord>> recordClasses = new HashMap<>();
 
@@ -49,6 +50,7 @@ public enum SensorType {
         recordClasses.put(RAW_GPS_NAVIGATION, RawGPSNavigationRecord.class);
         recordClasses.put(RAW_GPS_STATUS, RawGPSStatusRecord.class);
         recordClasses.put(ROTATION_VECTOR, RotationVectorRecord.class);
+        recordClasses.put(WIFI_MEASUREMENTS, WifiMeasurementsRecord.class);
     }
 
     public Class<? extends SensorRecord> getRecordClass() {
@@ -80,6 +82,12 @@ public enum SensorType {
                 RAW_GPS_MEASUREMENTS,
                 RAW_GPS_NAVIGATION,
                 RAW_GPS_STATUS
+        };
+    }
+
+    public static SensorType[] wifiValues() {
+        return new SensorType[] {
+                WIFI_MEASUREMENTS
         };
     }
 }
