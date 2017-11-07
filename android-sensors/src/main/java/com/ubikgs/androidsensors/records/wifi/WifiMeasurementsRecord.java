@@ -59,13 +59,13 @@ public class WifiMeasurementsRecord extends SensorRecord {
             bssids[i] = result.BSSID;
             ssids[i] = result.SSID;
             capabilities[i] = result.capabilities;
-            centerFreq0s[i] = result.centerFreq0;
-            centerFreq1s[i] = result.centerFreq1;
-            channelWidths[i] = result.channelWidth;
+            centerFreq0s[i] = getCenterFrequency0(result);
+            centerFreq1s[i] = getCenterFrequency1(result);
+            channelWidths[i] = getChannelWidth(result);
             frequencies[i] = result.frequency;
             levels[i] = result.level;
             operatorsFriendlyName[i] = getOperatorFriendlyName(result);
-            timestamps[i] = result.timestamp;
+            timestamps[i] = getTimestamp(result);
             venueNames[i] = getVenueName(result);
 
             i++;
@@ -249,11 +249,39 @@ public class WifiMeasurementsRecord extends SensorRecord {
         return result;
     }
 
+    private int getCenterFrequency0(ScanResult result){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            return result.centerFreq0;
+        }
+        return -1;
+    }
+
+    private int getCenterFrequency1(ScanResult result){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            return result.centerFreq1;
+        }
+        return -1;
+    }
+
+    private int getChannelWidth(ScanResult result){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            return result.channelWidth;
+        }
+        return -1;
+    }
+
     private String getOperatorFriendlyName(ScanResult result){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             return result.operatorFriendlyName.toString();
         }
         return "";
+    }
+
+    private long getTimestamp(ScanResult result){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            return result.timestamp;
+        }
+        return -1;
     }
 
     private String getVenueName(ScanResult result){
