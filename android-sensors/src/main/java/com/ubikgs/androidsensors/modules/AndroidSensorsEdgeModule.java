@@ -7,6 +7,7 @@ import com.ubikgs.androidsensors.checkers.applevel.SensorRequirementChecker;
 import com.ubikgs.androidsensors.config.BasicSensorConfig;
 import com.ubikgs.androidsensors.config.SensorConfig;
 import com.ubikgs.androidsensors.enablers.BasicSensorEnableRequester;
+import com.ubikgs.androidsensors.enablers.BluetoothSensorEnableRequester;
 import com.ubikgs.androidsensors.enablers.GPSSensorEnableRequester;
 import com.ubikgs.androidsensors.enablers.SensorEnableRequester;
 import com.ubikgs.androidsensors.enablers.WifiSensorEnableRequester;
@@ -41,6 +42,7 @@ public class AndroidSensorsEdgeModule {
     private SensorEnableRequester defaultSensorEnableRequester;
     private SensorEnableRequester gpsSensorEnableRequester;
     private SensorEnableRequester wifiSensorEnableRequester;
+    private SensorEnableRequester bluetoothSensorEnableRequester;
     private SensorRequirementChecker sensorRequirementChecker;
     private SensorConfig sensorConfig;
 
@@ -50,12 +52,14 @@ public class AndroidSensorsEdgeModule {
     public AndroidSensorsEdgeModule(SensorEnableRequester defaultSensorEnableRequester,
                                     SensorEnableRequester gpsSensorEnableRequester,
                                     SensorEnableRequester wifiSensorEnableRequester,
+                                    SensorEnableRequester bluetoothSensorEnableRequester,
                                     SensorRequirementChecker sensorRequirementChecker,
                                     SensorConfig sensorConfig) {
 
         this.defaultSensorEnableRequester = defaultSensorEnableRequester;
         this.gpsSensorEnableRequester = gpsSensorEnableRequester;
         this.wifiSensorEnableRequester = wifiSensorEnableRequester;
+        this.bluetoothSensorEnableRequester = bluetoothSensorEnableRequester;
         this.sensorRequirementChecker = sensorRequirementChecker;
         this.sensorConfig = sensorConfig;
     }
@@ -82,6 +86,13 @@ public class AndroidSensorsEdgeModule {
     SensorEnableRequester provideWiFiSensorEnableRequester(Context context){
         return wifiSensorEnableRequester != null ?
                 wifiSensorEnableRequester : new WifiSensorEnableRequester(context);
+    }
+
+    @Provides
+    @Named("bluetoothSensorEnableRequester")
+    SensorEnableRequester provideBluetoothSensorEnableRequester(Context context){
+        return bluetoothSensorEnableRequester != null ?
+                bluetoothSensorEnableRequester : new BluetoothSensorEnableRequester(context);
     }
 
     /*

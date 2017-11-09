@@ -1,5 +1,6 @@
 package com.ubikgs.androidsensors.modules;
 
+import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.hardware.SensorManager;
 import android.location.LocationManager;
@@ -40,5 +41,10 @@ public class SystemServicesModule {
     @Provides
     WifiManager provideWifiManager(Context context) {
         return (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+    }
+
+    @Provides
+    BluetoothManager provideBluetoothManager(Context context) {
+        return (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
     }
 }
