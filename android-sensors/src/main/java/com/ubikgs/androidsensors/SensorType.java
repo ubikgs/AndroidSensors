@@ -1,7 +1,7 @@
 package com.ubikgs.androidsensors;
 
 import com.ubikgs.androidsensors.records.SensorRecord;
-import com.ubikgs.androidsensors.records.bluetooth.BluetoothMeasurementsRecord;
+import com.ubikgs.androidsensors.records.bluetooth.BLEMeasurementsRecord;
 import com.ubikgs.androidsensors.records.gps.LocationRecord;
 import com.ubikgs.androidsensors.records.gps.RawGPSMeasurementsRecord;
 import com.ubikgs.androidsensors.records.gps.RawGPSNavigationRecord;
@@ -36,7 +36,7 @@ public enum SensorType {
     ACCELEROMETER, GRAVITY, GYROSCOPE, LINEAR_ACCELERATION,
     LOCATION, MAGNETIC_FIELD,
     RAW_GPS_MEASUREMENTS, RAW_GPS_NAVIGATION, RAW_GPS_STATUS,
-    ROTATION_VECTOR, WIFI_MEASUREMENTS, BLUETOOTH_MEASUREMENTS;
+    ROTATION_VECTOR, WIFI_MEASUREMENTS, BLE_MEASUREMENTS;
 
     private static HashMap<SensorType, Class<? extends SensorRecord>> recordClasses = new HashMap<>();
 
@@ -52,7 +52,7 @@ public enum SensorType {
         recordClasses.put(RAW_GPS_STATUS, RawGPSStatusRecord.class);
         recordClasses.put(ROTATION_VECTOR, RotationVectorRecord.class);
         recordClasses.put(WIFI_MEASUREMENTS, WifiMeasurementsRecord.class);
-        recordClasses.put(BLUETOOTH_MEASUREMENTS, BluetoothMeasurementsRecord.class);
+        recordClasses.put(BLE_MEASUREMENTS, BLEMeasurementsRecord.class);
     }
 
     public Class<? extends SensorRecord> getRecordClass() {
@@ -95,7 +95,7 @@ public enum SensorType {
 
     public static SensorType[] bluetoothValues() {
         return new SensorType[] {
-                BLUETOOTH_MEASUREMENTS
+                BLE_MEASUREMENTS
         };
     }
 }

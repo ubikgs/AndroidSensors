@@ -1,5 +1,6 @@
 package com.ubikgs.androidsensors;
 
+import com.ubikgs.androidsensors.records.bluetooth.BLEMeasurementsRecord;
 import com.ubikgs.androidsensors.records.gps.LocationRecord;
 import com.ubikgs.androidsensors.records.gps.RawGPSMeasurementsRecord;
 import com.ubikgs.androidsensors.records.gps.RawGPSNavigationRecord;
@@ -15,6 +16,7 @@ import com.ubikgs.androidsensors.records.wifi.WifiMeasurementsRecord;
 import org.junit.Test;
 
 import static com.ubikgs.androidsensors.SensorType.ACCELEROMETER;
+import static com.ubikgs.androidsensors.SensorType.BLE_MEASUREMENTS;
 import static com.ubikgs.androidsensors.SensorType.GRAVITY;
 import static com.ubikgs.androidsensors.SensorType.GYROSCOPE;
 import static com.ubikgs.androidsensors.SensorType.LINEAR_ACCELERATION;
@@ -100,8 +102,13 @@ public class SensorTypeTest {
     }
 
     @Test
+    public void bleMeasurements() throws Exception {
+        assertThat(BLE_MEASUREMENTS.getRecordClass(), equalTo((Class) BLEMeasurementsRecord.class));
+    }
+
+    @Test
     public void imuValues() throws Exception {
-        SensorType[] imuValues = new SensorType[] {
+        SensorType[] imuValues = {
                 ACCELEROMETER,
                 GRAVITY,
                 GYROSCOPE,
@@ -115,7 +122,7 @@ public class SensorTypeTest {
 
     @Test
     public void gpsValues() throws Exception {
-        SensorType[] gpsValues = new SensorType[] {
+        SensorType[] gpsValues = {
                 LOCATION,
                 RAW_GPS_MEASUREMENTS,
                 RAW_GPS_NAVIGATION,
@@ -127,7 +134,7 @@ public class SensorTypeTest {
 
     @Test
     public void rawGPSValues() throws Exception {
-        SensorType[] rawGPSValues = new SensorType[] {
+        SensorType[] rawGPSValues = {
                 RAW_GPS_MEASUREMENTS,
                 RAW_GPS_NAVIGATION,
                 RAW_GPS_STATUS
@@ -138,10 +145,19 @@ public class SensorTypeTest {
 
     @Test
     public void wifiValues() throws Exception {
-        SensorType[] wifiValues = new SensorType[] {
+        SensorType[] wifiValues = {
                 WIFI_MEASUREMENTS
         };
 
         assertThat(SensorType.wifiValues(), equalTo(wifiValues));
+    }
+
+    @Test
+    public void bluetoothValues() throws Exception {
+        SensorType[] bluetoothValues = {
+                BLE_MEASUREMENTS
+        };
+
+        assertThat(SensorType.bluetoothValues(), equalTo(bluetoothValues));
     }
 }
