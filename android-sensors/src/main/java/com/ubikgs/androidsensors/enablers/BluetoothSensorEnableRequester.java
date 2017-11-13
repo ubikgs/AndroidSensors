@@ -1,8 +1,8 @@
 package com.ubikgs.androidsensors.enablers;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
-import android.provider.Settings;
 import android.widget.Toast;
 
 import com.ubikgs.androidsensors.SensorType;
@@ -34,7 +34,7 @@ public class BluetoothSensorEnableRequester implements SensorEnableRequester {
     }
 
     private void navigateToBluetoothSettings(){
-        Intent bluetoothSettingsIntent = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
-        context.startActivity(bluetoothSettingsIntent);
+        Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        context.startActivity(enableBluetoothIntent);
     }
 }
