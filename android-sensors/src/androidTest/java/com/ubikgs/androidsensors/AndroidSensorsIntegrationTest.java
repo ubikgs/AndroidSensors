@@ -7,7 +7,7 @@ import com.ubikgs.androidsensors.checkers.applevel.SensorRequirementChecker;
 import com.ubikgs.androidsensors.config.SensorConfig;
 import com.ubikgs.androidsensors.enablers.SensorEnableRequester;
 import com.ubikgs.androidsensors.gatherers.SensorGatherer;
-import com.ubikgs.androidsensors.gatherers.bluetooth.BluetoothMeasurementsGatherer;
+import com.ubikgs.androidsensors.gatherers.bluetooth.BLEMeasurementsGatherer;
 import com.ubikgs.androidsensors.gatherers.gps.LocationGatherer;
 import com.ubikgs.androidsensors.gatherers.imu.AccelerometerGatherer;
 import com.ubikgs.androidsensors.gatherers.wifi.WifiMeasurementsGatherer;
@@ -146,10 +146,10 @@ public class AndroidSensorsIntegrationTest {
 
     @Test
     public void sensorGatherer_withCustomConfig_returnsWithCustomBluetoothEnableRequester() throws Exception {
-        BluetoothMeasurementsGatherer bluetoothMeasurementsGatherer =
-                customAndroidSensors.sensorGatherer(BluetoothMeasurementsGatherer.class);
+        BLEMeasurementsGatherer bleMeasurementsGatherer =
+                customAndroidSensors.sensorGatherer(BLEMeasurementsGatherer.class);
 
-        bluetoothMeasurementsGatherer.askForEnabling();
+        bleMeasurementsGatherer.askForEnabling();
         assertThat(helper.bluetoothEnableRequesterCalled, is(true));
     }
 

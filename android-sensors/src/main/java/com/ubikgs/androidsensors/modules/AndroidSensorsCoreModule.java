@@ -16,7 +16,7 @@ import com.ubikgs.androidsensors.checkers.permissions.FineLocationPermissionChec
 import com.ubikgs.androidsensors.checkers.permissions.NoPermissionChecker;
 import com.ubikgs.androidsensors.checkers.permissions.PermissionChecker;
 import com.ubikgs.androidsensors.gatherers.SensorGatherer;
-import com.ubikgs.androidsensors.gatherers.bluetooth.BluetoothMeasurementsGatherer;
+import com.ubikgs.androidsensors.gatherers.bluetooth.BLEMeasurementsGatherer;
 import com.ubikgs.androidsensors.gatherers.gps.LocationGatherer;
 import com.ubikgs.androidsensors.gatherers.gps.RawGPSMeasurementsGatherer;
 import com.ubikgs.androidsensors.gatherers.gps.RawGPSNavigationGatherer;
@@ -77,7 +77,7 @@ public class AndroidSensorsCoreModule {
             RawGPSNavigationGatherer rawGPSNavigationGatherer,
             RawGPSStatusGatherer rawGPSStatusGatherer,
             WifiMeasurementsGatherer wifiMeasurementsGatherer,
-            BluetoothMeasurementsGatherer bluetoothMeasurementsGatherer) {
+            BLEMeasurementsGatherer bleMeasurementsGatherer) {
 
         return new HashSet<SensorGatherer>(Arrays.asList(
                 accelerometerGatherer,
@@ -91,7 +91,7 @@ public class AndroidSensorsCoreModule {
                 rawGPSNavigationGatherer,
                 rawGPSStatusGatherer,
                 wifiMeasurementsGatherer,
-                bluetoothMeasurementsGatherer));
+                bleMeasurementsGatherer));
     }
 
     /*

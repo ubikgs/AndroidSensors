@@ -15,7 +15,7 @@ import com.ubikgs.androidsensors.config.SensorConfig;
 import com.ubikgs.androidsensors.enablers.SensorEnableRequester;
 import com.ubikgs.androidsensors.gatherers.AbstractSensorGatherer;
 import com.ubikgs.androidsensors.records.SensorRecord;
-import com.ubikgs.androidsensors.records.bluetooth.BluetoothMeasurementsRecord;
+import com.ubikgs.androidsensors.records.bluetooth.BLEMeasurementsRecord;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -27,20 +27,19 @@ import io.reactivex.functions.Cancellable;
  * Created by geotec-laptop01 on 08/11/2017.
  */
 
-public class BluetoothMeasurementsGatherer extends AbstractSensorGatherer {
+public class BLEMeasurementsGatherer extends AbstractSensorGatherer {
 
-    private BluetoothLeScanner bleScanner;
+    private BluetoothManager bluetoothManager;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Inject
-    public BluetoothMeasurementsGatherer(SensorConfig sensorConfig,
-                                         BluetoothManager bluetoothManager,
-                                         @Named("bluetoothSensorEnableRequester")SensorEnableRequester sensorEnableRequester,
-                                         PermissionChecker permissionChecker,
-                                         @Named("bluetoothSensorChecker")SensorChecker sensorChecker,
-                                         SensorRequirementChecker sensorRequirementChecker){
+    public BLEMeasurementsGatherer(SensorConfig sensorConfig,
+                                   BluetoothManager bluetoothManager,
+                                   @Named("bluetoothSensorEnableRequester")SensorEnableRequester sensorEnableRequester,
+                                   PermissionChecker permissionChecker,
+                                   @Named("bleSensorChecker")SensorChecker sensorChecker,
+                                   SensorRequirementChecker sensorRequirementChecker){
         super(sensorConfig, sensorEnableRequester, permissionChecker,sensorChecker,sensorRequirementChecker);
-        this.bleScanner = bluetoothManager.getAdapter().getBluetoothLeScanner();
+        this.bluetoothManager = bluetoothManager;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -57,29 +56,31 @@ public class BluetoothMeasurementsGatherer extends AbstractSensorGatherer {
         return new ScanCallback() {
             @Override
             public void onScanResult(int callbackType, ScanResult result) {
-                subscriber.onNext(new BluetoothMeasurementsRecord(result));
+                subscriber.onNext(new BLEMeasurementsRecord(result));
             }
         };
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void startListeningBluetoothMeasurements(ScanCallback scanCallback){
-        bleScanner.startScan(scanCallback);
+        BluetoothLeScanner scanner = bluetoothManager.getAdapter().getBluetoothLeScanner();
+        scanner.startScan(scanCallback);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void addUnsuscribeCallbackFor(FlowableEmitter<SensorRecord> subscriber,
                                           final ScanCallback scanCallback){
+        final BluetoothLeScanner scanner = bluetoothManager.getAdapter().getBluetoothLeScanner();
         subscriber.setCancellable(new Cancellable() {
             @Override
             public void cancel() throws Exception {
-                bleScanner.stopScan(scanCallback);
+                scanner.stopScan(scanCallback);
             }
         });
     }
 
     @Override
     public SensorType getSensorType() {
-        return SensorType.BLUETOOTH_MEASUREMENTS;
+        return SensorType.BLE_MEASUREMENTS;
     }
 }
