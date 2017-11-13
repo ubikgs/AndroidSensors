@@ -6,7 +6,7 @@ import android.hardware.SensorManager;
 import android.location.LocationManager;
 import android.net.wifi.WifiManager;
 
-import com.ubikgs.androidsensors.checkers.internal.BluetoothSensorChecker;
+import com.ubikgs.androidsensors.checkers.internal.BLESensorChecker;
 import com.ubikgs.androidsensors.checkers.internal.GPSSensorChecker;
 import com.ubikgs.androidsensors.checkers.internal.IMUSensorChecker;
 import com.ubikgs.androidsensors.checkers.internal.RawGPSSensorChecker;
@@ -138,8 +138,8 @@ public class AndroidSensorsCoreModule {
     }
 
     @Provides
-    @Named("bluetoothSensorChecker")
-    SensorChecker provideBluetoothSensorChecker(BluetoothManager bluetoothManager){
-        return new BluetoothSensorChecker(bluetoothManager);
+    @Named("bleSensorChecker")
+    SensorChecker provideBLESensorChecker(BluetoothManager bluetoothManager){
+        return new BLESensorChecker(bluetoothManager);
     }
 }

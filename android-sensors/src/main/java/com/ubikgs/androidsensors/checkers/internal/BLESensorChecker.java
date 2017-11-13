@@ -13,19 +13,19 @@ import javax.inject.Inject;
  * Created by geotec-laptop01 on 08/11/2017.
  */
 
-public class BluetoothSensorChecker implements SensorChecker {
+public class BLESensorChecker implements SensorChecker {
 
-    private static final int MIN_SDK_THRESHOLD = Build.VERSION_CODES.JELLY_BEAN_MR2;
+    private static final int MIN_SDK_THRESHOLD = Build.VERSION_CODES.LOLLIPOP;
 
     private final BluetoothManager bluetoothManager;
     private final int androidVersion;
 
     @Inject
-    public BluetoothSensorChecker(BluetoothManager bluetoothManager){
+    public BLESensorChecker(BluetoothManager bluetoothManager){
         this(bluetoothManager, Build.VERSION.SDK_INT);
     }
 
-    public BluetoothSensorChecker(BluetoothManager bluetoothManager, int androidVersion) {
+    public BLESensorChecker(BluetoothManager bluetoothManager, int androidVersion) {
         this.bluetoothManager = bluetoothManager;
         this.androidVersion = androidVersion;
     }

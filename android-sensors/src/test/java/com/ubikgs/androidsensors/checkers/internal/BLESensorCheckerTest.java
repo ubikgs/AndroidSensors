@@ -31,17 +31,17 @@ import static org.mockito.Mockito.when;
  * limitations under the License.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class BluetoothSensorCheckerTest {
-    private final static int SDK_THRESHOLD = 18;
+public class BLESensorCheckerTest {
+    private final static int SDK_THRESHOLD = 21;
 
     @Mock BluetoothManager bluetoothManager;
     @Mock BluetoothAdapter bluetoothAdapter;
 
-    private BluetoothSensorChecker bluetoothSensorChecker;
+    private BLESensorChecker bleSensorChecker;
 
     @Before
     public void setUp() throws Exception {
-        bluetoothSensorChecker = new BluetoothSensorChecker(bluetoothManager, SDK_THRESHOLD);
+        bleSensorChecker = new BLESensorChecker(bluetoothManager, SDK_THRESHOLD);
         when(bluetoothManager.getAdapter()).thenReturn(bluetoothAdapter);
         when(bluetoothAdapter.isEnabled()).thenReturn(true);
     }
@@ -60,13 +60,13 @@ public class BluetoothSensorCheckerTest {
 
     @Test
     public void isReady_whenBelowSDKVersion_returnsFalse() throws Exception {
-        bluetoothSensorChecker = new BluetoothSensorChecker(bluetoothManager, SDK_THRESHOLD - 1);
+        bleSensorChecker = new BLESensorChecker(bluetoothManager, SDK_THRESHOLD - 1);
 
         assertThatSensorStatusIs(false);
     }
 
     private void assertThatSensorStatusIs(boolean expected) {
-        boolean ready = bluetoothSensorChecker.isReady(SensorType.BLE_MEASUREMENTS);
+        boolean ready = bleSensorChecker.isReady(SensorType.BLE_MEASUREMENTS);
 
         assertThat(ready, is(expected));
     }
