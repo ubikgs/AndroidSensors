@@ -2,6 +2,7 @@ package com.ubikgs.androidsensors.modules;
 
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.hardware.SensorManager;
 import android.location.LocationManager;
 import android.net.wifi.WifiManager;
@@ -139,7 +140,7 @@ public class AndroidSensorsCoreModule {
 
     @Provides
     @Named("bleSensorChecker")
-    SensorChecker provideBLESensorChecker(BluetoothManager bluetoothManager){
-        return new BLESensorChecker(bluetoothManager);
+    SensorChecker provideBLESensorChecker(BluetoothManager bluetoothManager, PackageManager packageManager){
+        return new BLESensorChecker(bluetoothManager, packageManager);
     }
 }

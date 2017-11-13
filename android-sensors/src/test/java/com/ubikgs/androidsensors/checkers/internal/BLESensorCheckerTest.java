@@ -2,6 +2,7 @@ package com.ubikgs.androidsensors.checkers.internal;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
+import android.content.pm.PackageManager;
 
 import com.ubikgs.androidsensors.SensorType;
 
@@ -37,22 +38,40 @@ public class BLESensorCheckerTest {
     @Mock BluetoothManager bluetoothManager;
     @Mock BluetoothAdapter bluetoothAdapter;
 
+    @Mock PackageManager packageManager;
+
     private BLESensorChecker bleSensorChecker;
 
     @Before
     public void setUp() throws Exception {
-        bleSensorChecker = new BLESensorChecker(bluetoothManager, SDK_THRESHOLD);
+        bleSensorChecker = new BLESensorChecker(bluetoothManager, packageManager, SDK_THRESHOLD);
+
+        when(packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)).thenReturn(true);
         when(bluetoothManager.getAdapter()).thenReturn(bluetoothAdapter);
         when(bluetoothAdapter.isEnabled()).thenReturn(true);
     }
 
     @Test
-    public void is_whenMatchesRequiredVersionAndAdapterIsEnabled_returnsTrue() throws Exception {
+    public void is_whenDeviceHasBLEFeatureMatchesRequiredVersionAndAdapterIsEnabled_returnsTrue() throws Exception {
         assertThatSensorStatusIs(true);
     }
 
     @Test
-    public void is_whenMatchesRequiredVersionAndAdapterIsNotEnabled_returnsFalse() throws Exception {
+    public void is_whenDeviceNotHasBLEFeature_returnsFalse() throws Exception {
+        when(packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)).thenReturn(false);
+
+        assertThatSensorStatusIs(false);
+    }
+
+    @Test
+    public void is_whenDeviceHasBLEFeatureMatchesRequiredVersionButHasNoAdapter_returnsFalse() throws Exception {
+        when(bluetoothManager.getAdapter()).thenReturn(null);
+
+        assertThatSensorStatusIs(false);
+    }
+
+    @Test
+    public void is_whenDeviceHasBLEFeatureMatchesRequiredVersionAndAdapterIsNotEnabled_returnsFalse() throws Exception {
         when(bluetoothAdapter.isEnabled()).thenReturn(false);
 
         assertThatSensorStatusIs(false);
@@ -60,7 +79,8 @@ public class BLESensorCheckerTest {
 
     @Test
     public void isReady_whenBelowSDKVersion_returnsFalse() throws Exception {
-        bleSensorChecker = new BLESensorChecker(bluetoothManager, SDK_THRESHOLD - 1);
+        bleSensorChecker = new BLESensorChecker(bluetoothManager, packageManager,
+                SDK_THRESHOLD - 1);
 
         assertThatSensorStatusIs(false);
     }
