@@ -74,6 +74,7 @@ public class BLEMeasurementsGatherer extends AbstractSensorGatherer {
         subscriber.setCancellable(new Cancellable() {
             @Override
             public void cancel() throws Exception {
+                scanner.flushPendingScanResults(scanCallback);
                 scanner.stopScan(scanCallback);
             }
         });
