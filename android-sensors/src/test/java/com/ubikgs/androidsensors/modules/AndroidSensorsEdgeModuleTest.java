@@ -7,6 +7,7 @@ import com.ubikgs.androidsensors.checkers.applevel.SensorRequirementChecker;
 import com.ubikgs.androidsensors.config.BasicSensorConfig;
 import com.ubikgs.androidsensors.config.SensorConfig;
 import com.ubikgs.androidsensors.enablers.BasicSensorEnableRequester;
+import com.ubikgs.androidsensors.enablers.BluetoothSensorEnableRequester;
 import com.ubikgs.androidsensors.enablers.GPSSensorEnableRequester;
 import com.ubikgs.androidsensors.enablers.SensorEnableRequester;
 import com.ubikgs.androidsensors.enablers.WifiSensorEnableRequester;
@@ -46,6 +47,7 @@ public class AndroidSensorsEdgeModuleTest {
     @Mock SensorEnableRequester defaultSensorEnableRequester;
     @Mock SensorEnableRequester gpsSensorEnableRequester;
     @Mock SensorEnableRequester wifiSensorEnableRequester;
+    @Mock SensorEnableRequester bluetoothSensorEnableRequester;
     @Mock SensorRequirementChecker sensorRequirementChecker;
     @Mock SensorConfig sensorConfig;
 
@@ -56,8 +58,8 @@ public class AndroidSensorsEdgeModuleTest {
     public void setUp() throws Exception {
         defaultModule = new AndroidSensorsEdgeModule();
         customModule = new AndroidSensorsEdgeModule(defaultSensorEnableRequester,
-                gpsSensorEnableRequester, wifiSensorEnableRequester, sensorRequirementChecker,
-                sensorConfig);
+                gpsSensorEnableRequester, wifiSensorEnableRequester, bluetoothSensorEnableRequester,
+                sensorRequirementChecker, sensorConfig);
     }
 
     @Test
@@ -82,9 +84,16 @@ public class AndroidSensorsEdgeModuleTest {
     }
 
     @Test
-    public void provideBasicCriticalityChecker_withDefaultModule_returnsBasicCriticalityChecker()
+    public void provideBluetoothSensorEnableRequester_withDefaultModule_returnsWifiSensorEnableRequester()
             throws Exception {
-        assertThat(defaultModule.provideBasicCriticalityChecker().getClass(),
+        assertThat(defaultModule.provideBluetoothSensorEnableRequester(context).getClass(),
+                equalTo((Class) BluetoothSensorEnableRequester.class));
+    }
+
+    @Test
+    public void provideBasicSensorRequirementChecker_withDefaultModule_returnsBasicCriticalityChecker()
+            throws Exception {
+        assertThat(defaultModule.provideSensorRequirementChecker().getClass(),
                 equalTo((Class) BasicSensorRequirementChecker.class));
     }
 
@@ -117,9 +126,16 @@ public class AndroidSensorsEdgeModuleTest {
     }
 
     @Test
-    public void provideBasicCriticalityChecker_withCustomModule_returnsCriticalityChecker()
+    public void provideBluetoothSensorEnableRequester_withCustomModule_returnsWifiSensorEnableRequester()
             throws Exception {
-        assertThat(customModule.provideBasicCriticalityChecker(),
+        assertThat(customModule.provideBluetoothSensorEnableRequester(context),
+                is(bluetoothSensorEnableRequester));
+    }
+
+    @Test
+    public void provideBasicSensorRequirementChecker_withCustomModule_returnsCriticalityChecker()
+            throws Exception {
+        assertThat(customModule.provideSensorRequirementChecker(),
                 is(sensorRequirementChecker));
     }
 

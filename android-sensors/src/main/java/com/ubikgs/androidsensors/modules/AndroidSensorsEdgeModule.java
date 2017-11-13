@@ -100,7 +100,7 @@ public class AndroidSensorsEdgeModule {
     * */
 
     @Provides
-    SensorRequirementChecker provideBasicCriticalityChecker() {
+    SensorRequirementChecker provideSensorRequirementChecker() {
         return sensorRequirementChecker != null ?
                 sensorRequirementChecker : new BasicSensorRequirementChecker();
     }
