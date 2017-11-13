@@ -7,6 +7,7 @@ import com.ubikgs.androidsensors.checkers.applevel.SensorRequirementChecker;
 import com.ubikgs.androidsensors.config.SensorConfig;
 import com.ubikgs.androidsensors.enablers.SensorEnableRequester;
 import com.ubikgs.androidsensors.gatherers.SensorGatherer;
+import com.ubikgs.androidsensors.gatherers.bluetooth.BluetoothMeasurementsGatherer;
 import com.ubikgs.androidsensors.gatherers.gps.LocationGatherer;
 import com.ubikgs.androidsensors.gatherers.imu.AccelerometerGatherer;
 import com.ubikgs.androidsensors.gatherers.wifi.WifiMeasurementsGatherer;
@@ -42,7 +43,7 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class AndroidSensorsIntegrationTest {
 
-    private static final int GATHERER_NUMBER = 11;
+    private static final int GATHERER_NUMBER = 12;
 
     @Inject Context context;
     private Helper helper;
@@ -66,6 +67,7 @@ public class AndroidSensorsIntegrationTest {
                 .customDefaultEnableRequester(helper.defaultSensorEnableRequester)
                 .customGPSEnableRequester(helper.gpsSensorEnableRequester)
                 .customWifiEnableRequester(helper.wifiSensorEnableRequester)
+                .customBluetoothEnableRequester(helper.bluetoothSensorEnableRequester)
                 .customSensorRequirementChecker(helper.sensorRequirementChecker)
                 .customSensorConfig(helper.sensorConfig)
                 .build(context);
@@ -108,6 +110,14 @@ public class AndroidSensorsIntegrationTest {
     }
 
     @Test
+    public void sensorGatherer_withDefaultConfig_returnsWifiMeasurementsGatherer() throws Exception {
+        WifiMeasurementsGatherer wifiMeasurementsGatherer =
+                defaultAndroidSensors.sensorGatherer(WifiMeasurementsGatherer.class);
+
+        assertThat(wifiMeasurementsGatherer, not(equalTo(null)));
+    }
+
+    @Test
     public void sensorGatherer_withCustomConfig_returnsWithCustomDefaultEnableRequester() throws Exception {
         AccelerometerGatherer accelerometerGatherer =
                 customAndroidSensors.sensorGatherer(AccelerometerGatherer.class);
@@ -132,6 +142,15 @@ public class AndroidSensorsIntegrationTest {
 
         wifiMeasurementsGatherer.askForEnabling();
         assertThat(helper.wifiEnableRequesterCalled, is(true));
+    }
+
+    @Test
+    public void sensorGatherer_withCustomConfig_returnsWithCustomBluetoothEnableRequester() throws Exception {
+        BluetoothMeasurementsGatherer bluetoothMeasurementsGatherer =
+                customAndroidSensors.sensorGatherer(BluetoothMeasurementsGatherer.class);
+
+        bluetoothMeasurementsGatherer.askForEnabling();
+        assertThat(helper.bluetoothEnableRequesterCalled, is(true));
     }
 
     @Test
@@ -160,6 +179,7 @@ public class AndroidSensorsIntegrationTest {
         boolean defaultSensorEnableRequesterCalled = false;
         boolean gpsEnableRequesterCalled = false;
         boolean wifiEnableRequesterCalled = false;
+        boolean bluetoothEnableRequesterCalled = false;
         boolean sensorRequirementCheckerCalled = false;
         boolean sensorConfigCalled = false;
 
@@ -181,6 +201,13 @@ public class AndroidSensorsIntegrationTest {
             @Override
             public void performEnableRequestFor(SensorType sensorType) {
                 wifiEnableRequesterCalled = true;
+            }
+        };
+
+        SensorEnableRequester bluetoothSensorEnableRequester = new SensorEnableRequester() {
+            @Override
+            public void performEnableRequestFor(SensorType sensorType) {
+                bluetoothEnableRequesterCalled = true;
             }
         };
 
