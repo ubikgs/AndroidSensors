@@ -39,6 +39,7 @@ public class BLEMeasurementsGathererIntegrationTest extends SensorGathererIntegr
         DaggerTestBedComponent.create().inject(this);
         sensorGatherer = bleMeasurementsGatherer;
 
+        gatheringPeriod = 10;
         expectedRecordsDuringPeriod = 2;
     }
 
