@@ -72,7 +72,8 @@ public class BasicSensorConfigTest {
     public void getMinSensorDelay_forAllNonIMUSensor_returnsInMs() throws Exception {
         HashSet<SensorType> nonIMUSensors = new HashSet<>();
         nonIMUSensors.addAll(Arrays.asList(SensorType.gpsValues()));
-        nonIMUSensors.add(SensorType.WIFI_MEASUREMENTS);
+        nonIMUSensors.addAll(Arrays.asList(SensorType.wifiValues()));
+        nonIMUSensors.addAll(Arrays.asList(SensorType.bluetoothValues()));
 
         Long count = Observable.fromIterable(nonIMUSensors)
                 .map(new Function<SensorType, Long>() {
