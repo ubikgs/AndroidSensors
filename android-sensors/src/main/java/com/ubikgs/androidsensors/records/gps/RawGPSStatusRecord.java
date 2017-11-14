@@ -40,7 +40,7 @@ public class RawGPSStatusRecord extends SensorRecord {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public RawGPSStatusRecord(GnssStatus status) {
-        super(new RecordInfo(0.0f, System.currentTimeMillis()));
+        super(new RecordInfo(System.currentTimeMillis()));
 
         this.satelliteCount = status.getSatelliteCount();
 

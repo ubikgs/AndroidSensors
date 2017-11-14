@@ -3,6 +3,7 @@ package com.ubikgs.androidsensors.records.wifi;
 import android.net.wifi.ScanResult;
 import android.os.Build;
 
+import com.ubikgs.androidsensors.records.RecordInfo;
 import com.ubikgs.androidsensors.records.SensorRecord;
 
 import java.util.Arrays;
@@ -34,6 +35,7 @@ public class WifiMeasurementsRecord extends SensorRecord {
     }
 
     public WifiMeasurementsRecord(List<ScanResult> results){
+        super(new RecordInfo());
 
         this.ssidCount = results.size();
 

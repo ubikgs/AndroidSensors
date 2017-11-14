@@ -52,7 +52,7 @@ public class RawGPSMeasurementsRecord extends SensorRecord {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public RawGPSMeasurementsRecord(GnssMeasurementsEvent event) {
-        super(new RecordInfo(0.0f, event.getClock().getTimeNanos()));
+        super(new RecordInfo(event.getClock().getTimeNanos()));
         Collection<GnssMeasurement> measurements = event.getMeasurements();
 
         this.satelliteCount = measurements.size();
