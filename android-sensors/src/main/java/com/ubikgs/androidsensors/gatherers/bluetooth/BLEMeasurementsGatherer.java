@@ -86,7 +86,6 @@ public class BLEMeasurementsGatherer extends AbstractSensorGatherer {
         return new ScanCallback() {
             @Override
             public void onBatchScanResults(List<ScanResult> results) {
-                if (results.size() == 0) return;
                 subscriber.onNext(new BLEMeasurementsRecord(results));
             }
         };
