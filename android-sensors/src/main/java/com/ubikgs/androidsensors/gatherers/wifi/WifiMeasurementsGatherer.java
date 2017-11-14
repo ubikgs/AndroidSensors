@@ -45,7 +45,7 @@ public class WifiMeasurementsGatherer extends AbstractSensorGatherer {
     public WifiMeasurementsGatherer(SensorConfig sensorConfig,
                                     WifiManager wifiManager,
                                     @Named("wifiSensorEnableRequester")SensorEnableRequester sensorEnableRequester,
-                                    PermissionChecker permissionChecker,
+                                    @Named("fineLocationPermissionChecker") PermissionChecker permissionChecker,
                                     @Named("wifiSensorChecker")SensorChecker sensorChecker,
                                     SensorRequirementChecker sensorRequirementChecker){
         super(sensorConfig, sensorEnableRequester, permissionChecker, sensorChecker, sensorRequirementChecker);

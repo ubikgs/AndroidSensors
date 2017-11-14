@@ -59,8 +59,7 @@ public class IMUSensorFrequencyTest {
     @Inject SensorEnableRequester sensorEnableRequester;
     @Inject PermissionChecker permissionChecker;
     @Inject @Named("imuSensorChecker") SensorChecker imuSensorChecker;
-    @Inject
-    SensorRequirementChecker sensorRequirementChecker;
+    @Inject SensorRequirementChecker sensorRequirementChecker;
     @Inject SensorTypeToAndroidSensor sensorTypeToAndroidSensor;
     @Inject MillisecondsToMicroseconds millisecondsToMicroseconds;
 

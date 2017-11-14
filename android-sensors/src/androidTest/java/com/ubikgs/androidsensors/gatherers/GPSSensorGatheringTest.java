@@ -63,8 +63,7 @@ public class GPSSensorGatheringTest {
     @Inject @Named("fineLocationPermissionChecker") PermissionChecker permissionChecker;
     @Inject @Named("gpsSensorChecker") SensorChecker gpsSensorChecker;
     @Inject @Named("rawGPSSensorChecker") SensorChecker rawGPSSensorChecker;
-    @Inject
-    SensorRequirementChecker sensorRequirementChecker;
+    @Inject SensorRequirementChecker sensorRequirementChecker;
 
     @Inject LocationGatherer locationGatherer;
 
@@ -111,7 +110,7 @@ public class GPSSensorGatheringTest {
 
     @Ignore
     @Test
-    public void testRawGPSStatusGaterer() throws Exception {
+    public void testRawGPSStatusGatherer() throws Exception {
         testSensor(new GathererCreator() {
             @Override
             public GPSGatherer create() {

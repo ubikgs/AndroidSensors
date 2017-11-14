@@ -1,7 +1,9 @@
 package com.ubikgs.androidsensors;
 
+import com.ubikgs.androidsensors.gatherers.BluetoothSensorGatheringTest;
 import com.ubikgs.androidsensors.gatherers.GPSSensorGatheringTest;
 import com.ubikgs.androidsensors.gatherers.IMUSensorFrequencyTest;
+import com.ubikgs.androidsensors.gatherers.WifiSensorGatheringTest;
 import com.ubikgs.androidsensors.gatherers.bluetooth.BLEMeasurementsGathererIntegrationTest;
 import com.ubikgs.androidsensors.gatherers.gps.LocationGathererIntegrationTest;
 import com.ubikgs.androidsensors.gatherers.gps.RawGPSMeasurementsGathererIntegrationTest;
@@ -72,4 +74,8 @@ public interface TestBedComponent {
     void inject(WifiMeasurementsGathererIntegrationTest test);
 
     void inject(BLEMeasurementsGathererIntegrationTest test);
+
+    void inject(WifiSensorGatheringTest test);
+
+    void inject(BluetoothSensorGatheringTest test);
 }
