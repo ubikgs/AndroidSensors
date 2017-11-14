@@ -3,7 +3,9 @@ package com.ubikgs.androidsensors.gatherers.bluetooth;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanSettings;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
@@ -16,6 +18,9 @@ import com.ubikgs.androidsensors.enablers.SensorEnableRequester;
 import com.ubikgs.androidsensors.gatherers.AbstractSensorGatherer;
 import com.ubikgs.androidsensors.records.SensorRecord;
 import com.ubikgs.androidsensors.records.bluetooth.BLEMeasurementsRecord;
+
+import java.util.Collections;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -35,7 +40,7 @@ public class BLEMeasurementsGatherer extends AbstractSensorGatherer {
     public BLEMeasurementsGatherer(SensorConfig sensorConfig,
                                    BluetoothManager bluetoothManager,
                                    @Named("bluetoothSensorEnableRequester")SensorEnableRequester sensorEnableRequester,
-                                   PermissionChecker permissionChecker,
+                                   @Named("fineLocationPermissionChecker") PermissionChecker permissionChecker,
                                    @Named("bleSensorChecker")SensorChecker sensorChecker,
                                    SensorRequirementChecker sensorRequirementChecker){
         super(sensorConfig, sensorEnableRequester, permissionChecker,sensorChecker,sensorRequirementChecker);
@@ -45,26 +50,42 @@ public class BLEMeasurementsGatherer extends AbstractSensorGatherer {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void configureSensorSubscribeAndUnsubscribeBehaviors(FlowableEmitter<SensorRecord> subscriber) {
+        List<ScanFilter> scanFilters = initializeScanFilters();
+        ScanSettings scanSettings = initializeScanSettings();
         final ScanCallback scanCallback = initializeScanCallbackFor(subscriber);
 
-        startListeningBluetoothMeasurements(scanCallback);
+        startListeningBluetoothMeasurements(scanFilters, scanSettings, scanCallback);
         addUnsuscribeCallbackFor(subscriber, scanCallback);
+    }
+
+    private List<ScanFilter> initializeScanFilters() {
+        return Collections.emptyList();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private ScanSettings initializeScanSettings() {
+        return new ScanSettings.Builder()
+                .setReportDelay(sensorConfig.getMinSensorDelay(SensorType.BLE_MEASUREMENTS))
+                .build();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private ScanCallback initializeScanCallbackFor(final FlowableEmitter<SensorRecord> subscriber){
         return new ScanCallback() {
             @Override
-            public void onScanResult(int callbackType, ScanResult result) {
-                subscriber.onNext(new BLEMeasurementsRecord(result));
+            public void onBatchScanResults(List<ScanResult> results) {
+                if (results.size() == 0) return;
+                subscriber.onNext(new BLEMeasurementsRecord(results));
             }
         };
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void startListeningBluetoothMeasurements(ScanCallback scanCallback){
+    private void startListeningBluetoothMeasurements(List<ScanFilter> scanFilters,
+                                                     ScanSettings scanSettings,
+                                                     ScanCallback scanCallback){
         BluetoothLeScanner scanner = bluetoothManager.getAdapter().getBluetoothLeScanner();
-        scanner.startScan(scanCallback);
+        scanner.startScan(scanFilters, scanSettings, scanCallback);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

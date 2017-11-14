@@ -1,11 +1,14 @@
 package com.ubikgs.androidsensors.gatherers.bluetooth;
 
+import android.support.test.rule.GrantPermissionRule;
+
 import com.ubikgs.androidsensors.DaggerTestBedComponent;
 import com.ubikgs.androidsensors.gatherers.SensorGathererIntegrationTest;
 import com.ubikgs.androidsensors.records.SensorRecord;
 import com.ubikgs.androidsensors.records.bluetooth.BLEMeasurementsRecord;
 
 import org.junit.Before;
+import org.junit.Rule;
 
 import javax.inject.Inject;
 
@@ -25,6 +28,9 @@ import javax.inject.Inject;
  * limitations under the License.
  */
 public class BLEMeasurementsGathererIntegrationTest extends SensorGathererIntegrationTest {
+
+    @Rule public GrantPermissionRule mRuntimePermissionRule =
+            GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Inject BLEMeasurementsGatherer bleMeasurementsGatherer;
 
