@@ -76,8 +76,8 @@ public class BLEMeasurementsRecord extends SensorRecord {
             ScanResult scanResult = scanResults.get(i);
 
             BluetoothDevice bluetoothDevice = scanResult.getDevice();
-            this.deviceAddresses[i] = bluetoothDevice.getAddress();
-            this.deviceNames[i] = bluetoothDevice.getName();
+            this.deviceAddresses[i] = nullStringToEmpty(bluetoothDevice.getAddress());
+            this.deviceNames[i] = nullStringToEmpty(bluetoothDevice.getName());
             this.rssis[i] = scanResult.getRssi();
             this.deviceBondStatuses[i] = bluetoothDevice.getBondState();
             this.deviceTypes[i] = bluetoothDevice.getType();
@@ -351,5 +351,10 @@ public class BLEMeasurementsRecord extends SensorRecord {
     private boolean getIsLegacy(ScanResult scanResult) {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && scanResult.isLegacy();
+    }
+
+    private String nullStringToEmpty(String string) {
+        if (string == null) return "";
+        return string;
     }
 }
