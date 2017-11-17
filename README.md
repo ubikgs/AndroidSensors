@@ -10,7 +10,7 @@ Add the dependency
 
 ```groovy
 dependencies {
-    implementation 'com.ubikgs:android-sensors:1.0.0-alpha7'
+    implementation 'com.ubikgs:android-sensors:1.0.0-alpha8'
     
     // To conveniently work with AndroidSensors output Flowables
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
@@ -87,6 +87,7 @@ Context applicationContext;
 SensorEnableRequester defaultSensorEnableRequester;
 SensorEnableRequester gpsSensorEnableRequester;
 SensorEnableRequester wifiSensorEnableRequester;
+SensorEnableRequester bluetoothSensorEnableRequester;
 SensorRequirementChecker sensorRequirementChecker;
 SensorConfig sensorConfig;
 
@@ -95,6 +96,7 @@ AndroidSensors customAndroidSensors = AndroidSensors
                                .customDefaultEnableRequester(defaultSensorEnableRequester)
                                .customGPSEnableRequester(gpsSensorEnableRequester)
                                .customWifiEnableRequester(wifiSensorEnableRequester)
+                               .customBluetoothEnableRequester(bluetoothSensorEnableRequester)
                                .customSensorRequirementChecker(sensorRequirementChecker)
                                .customSensorConfig(sensorConfig)
                                .build(applicationContext);
