@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.schedulers.Schedulers;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -66,7 +66,7 @@ public abstract class SensorGathererIntegrationTest {
                 .take(gatheringPeriod, TimeUnit.SECONDS)
                 .toList().blockingGet();
 
-        assertThat(sensorRecords.size() >= expectedRecordsDuringPeriod, is(true));
+        assertThat(sensorRecords.size(), greaterThanOrEqualTo(expectedRecordsDuringPeriod));
     }
 
     protected abstract Class<? extends SensorRecord> getSensorRecordClass();

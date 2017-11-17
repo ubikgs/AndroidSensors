@@ -1,5 +1,7 @@
 package com.ubikgs.androidsensors.records;
 
+import java.util.Date;
+
 /**
  *  Copyright 2017 Alberto González Pérez
  *
@@ -19,6 +21,18 @@ package com.ubikgs.androidsensors.records;
 public class RecordInfo {
     private final float accuracy;
     private final long timestamp;
+
+    public RecordInfo() {
+        this(0.0f);
+    }
+
+    public RecordInfo(float accuracy) {
+        this(accuracy, new Date().getTime());
+    }
+
+    public RecordInfo(long timestamp) {
+        this(0.0f, timestamp);
+    }
 
     public RecordInfo(float accuracy, long timestamp) {
         this.accuracy = accuracy;

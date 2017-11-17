@@ -43,11 +43,12 @@ public class BasicSensorRequirementCheckerTest {
     }
 
     @Test
-    public void isRequired_IMULocationAndWifi_areRequired() throws Exception {
+    public void isRequired_IMULocationWifiAndBluetooth_areRequired() throws Exception {
         HashSet<SensorType> sensorTypes = new HashSet<>();
         sensorTypes.addAll(Arrays.asList(SensorType.imuValues()));
         sensorTypes.add(SensorType.LOCATION);
         sensorTypes.addAll(Arrays.asList(SensorType.wifiValues()));
+        sensorTypes.addAll(Arrays.asList(SensorType.bluetoothValues()));
 
         Long count = Observable.fromIterable(sensorTypes)
                 .map(new Function<SensorType, Boolean>() {

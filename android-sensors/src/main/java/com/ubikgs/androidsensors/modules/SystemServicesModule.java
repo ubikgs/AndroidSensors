@@ -1,9 +1,12 @@
 package com.ubikgs.androidsensors.modules;
 
+import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.hardware.SensorManager;
 import android.location.LocationManager;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 
 import dagger.Module;
 import dagger.Provides;
@@ -39,6 +42,20 @@ public class SystemServicesModule {
 
     @Provides
     WifiManager provideWifiManager(Context context) {
-        return (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        return (WifiManager) context.getApplicationContext()
+                .getSystemService(Context.WIFI_SERVICE);
+    }
+
+    @Provides
+    BluetoothManager provideBluetoothManager(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            return (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
+        }
+        return null;
+    }
+
+    @Provides
+    PackageManager providePackageManager(Context context) {
+        return context.getPackageManager();
     }
 }

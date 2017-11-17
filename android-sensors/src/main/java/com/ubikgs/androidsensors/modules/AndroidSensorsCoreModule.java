@@ -1,10 +1,13 @@
 package com.ubikgs.androidsensors.modules;
 
+import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.hardware.SensorManager;
 import android.location.LocationManager;
 import android.net.wifi.WifiManager;
 
+import com.ubikgs.androidsensors.checkers.internal.BLESensorChecker;
 import com.ubikgs.androidsensors.checkers.internal.GPSSensorChecker;
 import com.ubikgs.androidsensors.checkers.internal.IMUSensorChecker;
 import com.ubikgs.androidsensors.checkers.internal.RawGPSSensorChecker;
@@ -14,6 +17,7 @@ import com.ubikgs.androidsensors.checkers.permissions.FineLocationPermissionChec
 import com.ubikgs.androidsensors.checkers.permissions.NoPermissionChecker;
 import com.ubikgs.androidsensors.checkers.permissions.PermissionChecker;
 import com.ubikgs.androidsensors.gatherers.SensorGatherer;
+import com.ubikgs.androidsensors.gatherers.bluetooth.BLEMeasurementsGatherer;
 import com.ubikgs.androidsensors.gatherers.gps.LocationGatherer;
 import com.ubikgs.androidsensors.gatherers.gps.RawGPSMeasurementsGatherer;
 import com.ubikgs.androidsensors.gatherers.gps.RawGPSNavigationGatherer;
@@ -73,7 +77,8 @@ public class AndroidSensorsCoreModule {
             RawGPSMeasurementsGatherer rawGPSMeasurementsGatherer,
             RawGPSNavigationGatherer rawGPSNavigationGatherer,
             RawGPSStatusGatherer rawGPSStatusGatherer,
-            WifiMeasurementsGatherer wifiMeasurementsGatherer) {
+            WifiMeasurementsGatherer wifiMeasurementsGatherer,
+            BLEMeasurementsGatherer bleMeasurementsGatherer) {
 
         return new HashSet<SensorGatherer>(Arrays.asList(
                 accelerometerGatherer,
@@ -86,7 +91,8 @@ public class AndroidSensorsCoreModule {
                 rawGPSMeasurementsGatherer,
                 rawGPSNavigationGatherer,
                 rawGPSStatusGatherer,
-                wifiMeasurementsGatherer));
+                wifiMeasurementsGatherer,
+                bleMeasurementsGatherer));
     }
 
     /*
@@ -130,5 +136,11 @@ public class AndroidSensorsCoreModule {
     @Named("wifiSensorChecker")
     SensorChecker provideWifiSensorChecker (WifiManager wifiManager){
         return new WifiSensorChecker(wifiManager);
+    }
+
+    @Provides
+    @Named("bleSensorChecker")
+    SensorChecker provideBLESensorChecker(BluetoothManager bluetoothManager, PackageManager packageManager){
+        return new BLESensorChecker(bluetoothManager, packageManager);
     }
 }

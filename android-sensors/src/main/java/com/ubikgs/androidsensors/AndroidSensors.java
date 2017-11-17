@@ -43,6 +43,7 @@ public class AndroidSensors {
                            SensorEnableRequester defaultSensorEnableRequester,
                            SensorEnableRequester gpsSensorEnableRequester,
                            SensorEnableRequester wifiSensorEnableRequester,
+                           SensorEnableRequester bluetoothSensorEnableRequester,
                            SensorRequirementChecker sensorRequirementChecker,
                            SensorConfig sensorConfig) {
 
@@ -55,6 +56,7 @@ public class AndroidSensors {
                         defaultSensorEnableRequester,
                         gpsSensorEnableRequester,
                         wifiSensorEnableRequester,
+                        bluetoothSensorEnableRequester,
                         sensorRequirementChecker,
                         sensorConfig
                 )).build()
@@ -98,6 +100,7 @@ public class AndroidSensors {
         Builder customDefaultEnableRequester(SensorEnableRequester defaultEnableRequester);
         Builder customGPSEnableRequester(SensorEnableRequester gpsEnableRequester);
         Builder customWifiEnableRequester(SensorEnableRequester wifiSensorEnableRequester);
+        Builder customBluetoothEnableRequester(SensorEnableRequester bluetoothSensorEnableRequester);
         Builder customSensorRequirementChecker(SensorRequirementChecker sensorRequirementChecker);
         Builder customSensorConfig(SensorConfig sensorConfig);
         AndroidSensors build(Context context);
@@ -111,6 +114,7 @@ public class AndroidSensors {
             private SensorEnableRequester defaultSensorEnableRequester;
             private SensorEnableRequester gpsSensorEnableRequester;
             private SensorEnableRequester wifiSensorEnableRequester;
+            private SensorEnableRequester bluetoothSensorEnableRequester;
             private SensorRequirementChecker sensorRequirementChecker;
             private SensorConfig sensorConfig;
 
@@ -133,6 +137,12 @@ public class AndroidSensors {
             }
 
             @Override
+            public Builder customBluetoothEnableRequester(SensorEnableRequester bluetoothSensorEnableRequester) {
+                this.bluetoothSensorEnableRequester = bluetoothSensorEnableRequester;
+                return this;
+            }
+
+            @Override
             public Builder customSensorRequirementChecker(SensorRequirementChecker sensorRequirementChecker) {
                 this.sensorRequirementChecker = sensorRequirementChecker;
                 return this;
@@ -150,6 +160,7 @@ public class AndroidSensors {
                         defaultSensorEnableRequester,
                         gpsSensorEnableRequester,
                         wifiSensorEnableRequester,
+                        bluetoothSensorEnableRequester,
                         sensorRequirementChecker,
                         sensorConfig);
             }

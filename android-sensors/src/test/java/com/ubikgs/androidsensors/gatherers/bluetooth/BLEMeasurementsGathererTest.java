@@ -1,10 +1,12 @@
-package com.ubikgs.androidsensors.checkers.internal;
+package com.ubikgs.androidsensors.gatherers.bluetooth;
 
-import android.net.wifi.WifiManager;
+import android.bluetooth.BluetoothManager;
 
 import com.ubikgs.androidsensors.SensorType;
+import com.ubikgs.androidsensors.gatherers.SensorGathererTest;
 
-import javax.inject.Inject;
+import org.junit.Before;
+import org.mockito.Mock;
 
 /**
  * Copyright 2017 Alberto González Pérez
@@ -21,18 +23,20 @@ import javax.inject.Inject;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+public class BLEMeasurementsGathererTest extends SensorGathererTest {
 
-public class WifiSensorChecker implements SensorChecker {
+    @Mock BluetoothManager bluetoothManager;
 
-    private final WifiManager wifiManager;
-
-    @Inject
-    public WifiSensorChecker(WifiManager wifiManager){
-        this.wifiManager = wifiManager;
+    @Before
+    public void setUp() throws Exception {
+        sensorGatherer = new BLEMeasurementsGatherer(sensorConfig, bluetoothManager,
+                sensorEnableRequester, permissionChecker, sensorChecker, sensorRequirementChecker);
+        super.setUp();
     }
 
     @Override
-    public boolean isReady(SensorType sensorType) {
-        return wifiManager.isWifiEnabled();
+    protected SensorType getSensorType() {
+        return SensorType.BLE_MEASUREMENTS;
     }
+
 }

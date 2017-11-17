@@ -1,13 +1,14 @@
 package com.ubikgs.androidsensors.enablers;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
-import android.provider.Settings;
 import android.widget.Toast;
 
 import com.ubikgs.androidsensors.SensorType;
 
 import javax.inject.Inject;
+
 
 /**
  * Copyright 2017 Alberto González Pérez
@@ -25,27 +26,27 @@ import javax.inject.Inject;
  * limitations under the License.
  */
 
-public class WifiSensorEnableRequester implements SensorEnableRequester {
+public class BluetoothSensorEnableRequester implements SensorEnableRequester {
 
     private final Context context;
 
     @Inject
-    public WifiSensorEnableRequester(Context context) {
+    public BluetoothSensorEnableRequester(Context context){
         this.context = context;
     }
 
     @Override
     public void performEnableRequestFor(SensorType sensorType) {
         showAnInfoToast();
-        navigateToWifiSettings();
+        navigateToBluetoothSettings();
     }
 
     private void showAnInfoToast(){
-        Toast.makeText(context, "Please, enable WiFi", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "Please, enable Bluetooth", Toast.LENGTH_LONG).show();
     }
 
-    private void navigateToWifiSettings(){
-        Intent wifiSettingsIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);
-        context.startActivity(wifiSettingsIntent);
+    private void navigateToBluetoothSettings(){
+        Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        context.startActivity(enableBluetoothIntent);
     }
 }
