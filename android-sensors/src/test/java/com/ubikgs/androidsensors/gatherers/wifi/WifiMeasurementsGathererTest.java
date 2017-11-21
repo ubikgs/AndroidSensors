@@ -1,5 +1,6 @@
 package com.ubikgs.androidsensors.gatherers.wifi;
 
+import android.content.Context;
 import android.net.wifi.WifiManager;
 
 import com.ubikgs.androidsensors.SensorType;
@@ -26,11 +27,12 @@ import org.mockito.Mock;
 public class WifiMeasurementsGathererTest extends SensorGathererTest {
 
     @Mock WifiManager wifiManager;
+    @Mock Context context;
 
     @Before
     public void setUp() throws Exception {
         sensorGatherer = new WifiMeasurementsGatherer(sensorConfig, wifiManager,
-                sensorEnableRequester, permissionChecker, sensorChecker, sensorRequirementChecker);
+                sensorEnableRequester, permissionChecker, sensorChecker, sensorRequirementChecker, context);
         super.setUp();
     }
 
