@@ -1,5 +1,9 @@
 package com.ubikgs.androidsensors.gatherers.wifi;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 
 import com.ubikgs.androidsensors.SensorType;
@@ -40,6 +44,7 @@ import io.reactivex.functions.Cancellable;
 public class WifiMeasurementsGatherer extends AbstractSensorGatherer {
 
     private WifiManager wifiManager;
+    private Context context;
 
     @Inject
     public WifiMeasurementsGatherer(SensorConfig sensorConfig,
@@ -47,24 +52,42 @@ public class WifiMeasurementsGatherer extends AbstractSensorGatherer {
                                     @Named("wifiSensorEnableRequester")SensorEnableRequester sensorEnableRequester,
                                     @Named("fineLocationPermissionChecker") PermissionChecker permissionChecker,
                                     @Named("wifiSensorChecker")SensorChecker sensorChecker,
-                                    SensorRequirementChecker sensorRequirementChecker){
+                                    SensorRequirementChecker sensorRequirementChecker,
+                                    Context context){
         super(sensorConfig, sensorEnableRequester, permissionChecker, sensorChecker, sensorRequirementChecker);
         this.wifiManager = wifiManager;
+        this.context = context;
     }
 
     @Override
     protected void configureSensorSubscribeAndUnsubscribeBehaviors(FlowableEmitter<SensorRecord> subscriber) {
-        final TimerTask timerTask = initializeTimerTaskFor(subscriber);
+        BroadcastReceiver broadcastReceiver = initializeBroadcastReceiver(subscriber);
+        registerBroadcastReceiver(broadcastReceiver);
+        final TimerTask timerTask = initializeTimerTaskFor();
 
         startScanning(timerTask);
         cancelScanning(subscriber, timerTask);
+        unregisterBroadcastReceiver(broadcastReceiver);
     }
 
-    private TimerTask initializeTimerTaskFor(final FlowableEmitter<SensorRecord> subscriber){
+    private BroadcastReceiver initializeBroadcastReceiver(final FlowableEmitter<SensorRecord> subscriber){
+        return new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                subscriber.onNext(new WifiMeasurementsRecord(wifiManager.getScanResults()));
+            }
+        };
+    }
+
+    private void registerBroadcastReceiver(BroadcastReceiver broadcastReceiver){
+        context.registerReceiver(broadcastReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+    }
+
+    private TimerTask initializeTimerTaskFor(){
         return new TimerTask() {
             @Override
             public void run() {
-                subscriber.onNext(new WifiMeasurementsRecord(wifiManager.getScanResults()));
+                wifiManager.startScan();
             }
         };
     }
@@ -84,8 +107,13 @@ public class WifiMeasurementsGatherer extends AbstractSensorGatherer {
         });
     }
 
+    private void unregisterBroadcastReceiver(BroadcastReceiver broadcastReceiver){
+        context.unregisterReceiver(broadcastReceiver);
+    }
+
     @Override
     public SensorType getSensorType() {
         return SensorType.WIFI_MEASUREMENTS;
     }
+
 }
