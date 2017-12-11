@@ -1,5 +1,9 @@
 package com.ubikgs.androidsensors.gatherers.wifi;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 
 import com.ubikgs.androidsensors.SensorType;
@@ -12,6 +16,7 @@ import com.ubikgs.androidsensors.gatherers.AbstractSensorGatherer;
 import com.ubikgs.androidsensors.records.SensorRecord;
 import com.ubikgs.androidsensors.records.wifi.WifiMeasurementsRecord;
 
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -40,6 +45,7 @@ import io.reactivex.functions.Cancellable;
 public class WifiMeasurementsGatherer extends AbstractSensorGatherer {
 
     private WifiManager wifiManager;
+    private Context context;
 
     @Inject
     public WifiMeasurementsGatherer(SensorConfig sensorConfig,
@@ -47,39 +53,66 @@ public class WifiMeasurementsGatherer extends AbstractSensorGatherer {
                                     @Named("wifiSensorEnableRequester")SensorEnableRequester sensorEnableRequester,
                                     @Named("fineLocationPermissionChecker") PermissionChecker permissionChecker,
                                     @Named("wifiSensorChecker")SensorChecker sensorChecker,
-                                    SensorRequirementChecker sensorRequirementChecker){
+                                    SensorRequirementChecker sensorRequirementChecker,
+                                    Context context){
         super(sensorConfig, sensorEnableRequester, permissionChecker, sensorChecker, sensorRequirementChecker);
         this.wifiManager = wifiManager;
+        this.context = context;
     }
 
     @Override
     protected void configureSensorSubscribeAndUnsubscribeBehaviors(FlowableEmitter<SensorRecord> subscriber) {
-        final TimerTask timerTask = initializeTimerTaskFor(subscriber);
-
-        startScanning(timerTask);
-        cancelScanning(subscriber, timerTask);
+        BroadcastReceiver broadcastReceiver = defineBroadcastReceiverFor(subscriber);
+        registerBroadcastReceiver(broadcastReceiver);
+        addUnsubscribeCallbackFor(subscriber, broadcastReceiver);
     }
 
-    private TimerTask initializeTimerTaskFor(final FlowableEmitter<SensorRecord> subscriber){
-        return new TimerTask() {
+    private BroadcastReceiver defineBroadcastReceiverFor(final FlowableEmitter<SensorRecord> subscriber){
+        return new BroadcastReceiver() {
+            Timer timer = new Timer();
+            long prevCallTime = new Date().getTime();
+
             @Override
-            public void run() {
+            public void onReceive(Context context, Intent intent) {
+                long actualTime = new Date().getTime();
+                long delay = calculateDiffDelay(prevCallTime, actualTime);
+                prevCallTime = actualTime;
+
                 subscriber.onNext(new WifiMeasurementsRecord(wifiManager.getScanResults()));
+
+                if (delay > 0)
+                    timer.schedule(createScanTask(), delay);
+                else
+                    createScanTask().run();
             }
         };
     }
 
-    private void startScanning(TimerTask timerTask){
-        Timer timer = new Timer();
-
-        timer.schedule(timerTask, 0, sensorConfig.getMinSensorDelay(SensorType.WIFI_MEASUREMENTS));
+    protected long calculateDiffDelay(long prevCallTime, long actualTime) {
+        long diff = actualTime - prevCallTime;
+        return sensorConfig.getMinSensorDelay(SensorType.WIFI_MEASUREMENTS) - diff;
     }
 
-    private void cancelScanning(FlowableEmitter<SensorRecord> subscriber, final TimerTask timerTask){
+    private void registerBroadcastReceiver(BroadcastReceiver broadcastReceiver){
+        createScanTask().run();
+        context.registerReceiver(broadcastReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+    }
+
+    private TimerTask createScanTask(){
+        return new TimerTask() {
+            @Override
+            public void run() {
+                wifiManager.startScan();
+            }
+        };
+    }
+
+    private void addUnsubscribeCallbackFor(FlowableEmitter<SensorRecord> subscriber,
+                                           final BroadcastReceiver broadcastReceiver){
         subscriber.setCancellable(new Cancellable() {
             @Override
             public void cancel() throws Exception {
-                timerTask.cancel();
+                context.unregisterReceiver(broadcastReceiver);
             }
         });
     }
@@ -88,4 +121,5 @@ public class WifiMeasurementsGatherer extends AbstractSensorGatherer {
     public SensorType getSensorType() {
         return SensorType.WIFI_MEASUREMENTS;
     }
+
 }

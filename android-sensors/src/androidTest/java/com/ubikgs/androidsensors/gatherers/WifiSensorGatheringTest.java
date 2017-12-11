@@ -1,5 +1,6 @@
 package com.ubikgs.androidsensors.gatherers;
 
+import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.support.test.rule.GrantPermissionRule;
 import android.util.Log;
@@ -56,6 +57,7 @@ public class WifiSensorGatheringTest {
     @Inject @Named("fineLocationPermissionChecker") PermissionChecker permissionChecker;
     @Inject @Named("wifiSensorChecker") SensorChecker wifiSensorChecker;
     @Inject SensorRequirementChecker sensorRequirementChecker;
+    @Inject Context context;
 
     @Before
     public void setUp() throws Exception {
@@ -72,7 +74,7 @@ public class WifiSensorGatheringTest {
                 return new WifiMeasurementsGatherer(
                         new BasicSensorConfig(delay, new MillisecondsToMicroseconds()), wifiManager,
                         sensorEnableRequester, permissionChecker, wifiSensorChecker,
-                        sensorRequirementChecker);
+                        sensorRequirementChecker, context);
             }
         });
     }
@@ -83,7 +85,13 @@ public class WifiSensorGatheringTest {
 
         Log.d(sensor + " BENCHMARK", "TBR\treal\texpected");
 
-        Observable.rangeLong(1, 101)
+        Observable.rangeLong(1, 21)
+                .map(new Function<Long, Long>() {
+                    @Override
+                    public Long apply(Long aLong) throws Exception {
+                        return aLong * 50;
+                    }
+                })
                 .map(new Function<Long, Single<long[]>>() {
                     @Override
                     public Single<long[]> apply(final Long i) throws Exception {
@@ -111,7 +119,7 @@ public class WifiSensorGatheringTest {
     }
 
     private Single<Long> grab1SecGatheringSamplesAndAverage(final Long i, final GathererCreator gathererCreator) {
-        return Observable.range(0, 10)
+        return Observable.range(0, 3)
                 .map(new Function<Integer, Single<Long>>() {
                     @Override
                     public Single<Long> apply(Integer __) throws Exception {
@@ -141,9 +149,15 @@ public class WifiSensorGatheringTest {
     private Single<Long> gatherDuring1SecWithSpecifiedDelay(Long i, GathererCreator gathererCreator) {
         return gathererCreator.createWithDelay(i).recordStream()
                 .subscribeOn(Schedulers.newThread())
-                .take(1, TimeUnit.SECONDS)
+                .take(10, TimeUnit.SECONDS)
                 .toObservable()
-                .count();
+                .count()
+                .map(new Function<Long, Long>() {
+                    @Override
+                    public Long apply(Long count) throws Exception {
+                        return count / 10;
+                    }
+                });
     }
 
     private interface GathererCreator {
