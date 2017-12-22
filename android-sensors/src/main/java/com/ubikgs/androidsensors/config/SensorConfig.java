@@ -22,6 +22,7 @@ import io.reactivex.BackpressureStrategy;
 
 public interface SensorConfig {
     long getMinSensorDelay(SensorType sensorType);
+    long getMaxSensorDelay(SensorType sensorType);
 
     BackpressureStrategy getBackpressureStrategy(SensorType sensorType);
 }

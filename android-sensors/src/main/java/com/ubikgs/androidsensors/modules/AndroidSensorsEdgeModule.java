@@ -38,6 +38,7 @@ import dagger.Provides;
 public class AndroidSensorsEdgeModule {
 
     private static final long DEFAULT_MIN_SENSOR_DELAY = 20L;
+    private static final long DEFAULT_MAX_SENSOR_DELAY = 25L;
 
     private SensorEnableRequester defaultSensorEnableRequester;
     private SensorEnableRequester gpsSensorEnableRequester;
@@ -112,6 +113,6 @@ public class AndroidSensorsEdgeModule {
     @Provides
     SensorConfig provideBasicSensorConfig(MillisecondsToMicroseconds millisecondsToMicroseconds) {
         return sensorConfig != null ?
-                sensorConfig : new BasicSensorConfig(DEFAULT_MIN_SENSOR_DELAY, millisecondsToMicroseconds);
+                sensorConfig : new BasicSensorConfig(DEFAULT_MIN_SENSOR_DELAY, DEFAULT_MAX_SENSOR_DELAY, millisecondsToMicroseconds);
     }
 }

@@ -1,5 +1,7 @@
 package com.ubikgs.androidsensors.gatherers.wifi;
 
+import android.net.wifi.WifiManager;
+
 import com.ubikgs.androidsensors.DaggerTestBedComponent;
 import com.ubikgs.androidsensors.gatherers.SensorGathererIntegrationTest;
 import com.ubikgs.androidsensors.records.SensorRecord;
@@ -8,6 +10,7 @@ import com.ubikgs.androidsensors.records.wifi.WifiMeasurementsRecord;
 import org.junit.Before;
 
 import javax.inject.Inject;
+
 
 /**
  * Copyright 2017 Alberto González Pérez
@@ -27,6 +30,7 @@ import javax.inject.Inject;
 public class WifiMeasurementsGathererIntegrationTest extends SensorGathererIntegrationTest {
 
     @Inject WifiMeasurementsGatherer wifiMeasurementsGatherer;
+
 
     @Before
     public void setUp() throws Exception {
