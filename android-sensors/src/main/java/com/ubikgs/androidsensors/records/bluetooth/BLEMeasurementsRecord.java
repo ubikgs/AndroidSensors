@@ -45,6 +45,9 @@ public class BLEMeasurementsRecord extends SensorRecord {
     private int[] txPowers;
     private boolean[] areConnectable;
     private boolean[] areLegacy;
+    private String[] uuids;
+    private int[] majors;
+    private int[] minors;
 
 
     public BLEMeasurementsRecord() {
@@ -71,6 +74,9 @@ public class BLEMeasurementsRecord extends SensorRecord {
         this.txPowers = new int[deviceCount];
         this.areConnectable = new boolean[deviceCount];
         this.areLegacy = new boolean[deviceCount];
+        this.uuids = new String[deviceCount];
+        this.majors = new int[deviceCount];
+        this.minors = new int[deviceCount];
 
         for (int i = 0; i < scanResults.size(); i++) {
             ScanResult scanResult = scanResults.get(i);
@@ -91,6 +97,11 @@ public class BLEMeasurementsRecord extends SensorRecord {
             this.txPowers[i] = getTxPower(scanResult);
             this.areConnectable[i] = getIsConnectable(scanResult);
             this.areLegacy[i] = getIsLegacy(scanResult);
+
+            byte[] scanRecord = scanResult.getScanRecord().getBytes();
+            this.uuids[i] = getUuid(scanRecord);
+            this.majors[i] = getMajor(scanRecord);
+            this.minors[i] = getMinor(scanRecord);
         }
     }
 
@@ -111,6 +122,9 @@ public class BLEMeasurementsRecord extends SensorRecord {
         this.txPowers = bleMeasurementsRecord.getTxPowers();
         this.areConnectable = bleMeasurementsRecord.getAreConnectable();
         this.areLegacy = bleMeasurementsRecord.getAreLegacy();
+        this.uuids = bleMeasurementsRecord.getUuids();
+        this.majors = bleMeasurementsRecord.getMajors();
+        this.minors = bleMeasurementsRecord.getMinors();
     }
 
     public int getDeviceCount() {
@@ -233,6 +247,30 @@ public class BLEMeasurementsRecord extends SensorRecord {
         this.areLegacy = areLegacy;
     }
 
+    public String[] getUuids() {
+        return uuids;
+    }
+
+    public void setUuids(String[] uuids) {
+        this.uuids = uuids;
+    }
+
+    public int[] getMajors() {
+        return majors;
+    }
+
+    public void setMajors(int[] majors) {
+        this.majors = majors;
+    }
+
+    public int[] getMinors() {
+        return minors;
+    }
+
+    public void setMinors(int[] minors) {
+        this.minors = minors;
+    }
+
     @Override
     public String toString() {
         return "BLEMeasurementsRecord{" +
@@ -251,6 +289,9 @@ public class BLEMeasurementsRecord extends SensorRecord {
                 ", txPowers=" + Arrays.toString(txPowers) +
                 ", areConnectable=" + Arrays.toString(areConnectable) +
                 ", areLegacy=" + Arrays.toString(areLegacy) +
+                ", uuids=" + Arrays.toString(uuids) +
+                ", majors=" + Arrays.toString(majors) +
+                ", minors=" + Arrays.toString(minors) +
                 "} " + super.toString();
     }
 
@@ -277,7 +318,10 @@ public class BLEMeasurementsRecord extends SensorRecord {
         if (!Arrays.equals(secondaryPhies, that.secondaryPhies)) return false;
         if (!Arrays.equals(txPowers, that.txPowers)) return false;
         if (!Arrays.equals(areConnectable, that.areConnectable)) return false;
-        return Arrays.equals(areLegacy, that.areLegacy);
+        if (!Arrays.equals(areLegacy, that.areLegacy)) return false;
+        if (!Arrays.equals(uuids, that.uuids)) return false;
+        if (!Arrays.equals(majors, that.majors)) return false;
+        return Arrays.equals(minors, that.minors);
     }
 
     @Override
@@ -298,6 +342,9 @@ public class BLEMeasurementsRecord extends SensorRecord {
         result = 31 * result + Arrays.hashCode(txPowers);
         result = 31 * result + Arrays.hashCode(areConnectable);
         result = 31 * result + Arrays.hashCode(areLegacy);
+        result = 31 * result + Arrays.hashCode(uuids);
+        result = 31 * result + Arrays.hashCode(majors);
+        result = 31 * result + Arrays.hashCode(minors);
         return result;
     }
 
@@ -356,5 +403,28 @@ public class BLEMeasurementsRecord extends SensorRecord {
     private String nullStringToEmpty(String string) {
         if (string == null) return "";
         return string;
+    }
+
+    private String getUuid(byte[] scanRecord){
+        return IntToHex2(scanRecord[9] & 0xff) + IntToHex2(scanRecord[10] & 0xff) + IntToHex2(scanRecord[11] & 0xff) + IntToHex2(scanRecord[12] & 0xff)
+                + "-" + IntToHex2(scanRecord[13] & 0xff) + IntToHex2(scanRecord[14] & 0xff)
+                + "-" + IntToHex2(scanRecord[15] & 0xff) + IntToHex2(scanRecord[16] & 0xff)
+                + "-" + IntToHex2(scanRecord[17] & 0xff) + IntToHex2(scanRecord[18] & 0xff)
+                + "-" + IntToHex2(scanRecord[19] & 0xff) + IntToHex2(scanRecord[20] & 0xff) + IntToHex2(scanRecord[21] & 0xff) + IntToHex2(scanRecord[22] & 0xff) + IntToHex2(scanRecord[23] & 0xff) + IntToHex2(scanRecord[24] & 0xff);
+    }
+
+    private int getMajor(byte[] scanRecord){
+        return (scanRecord[25] & 0xff) * 0x100 + (scanRecord[26] & 0xff);
+    }
+
+    private int getMinor(byte[] scanRecord){
+        return (scanRecord[27] & 0xff) * 0x100 + (scanRecord[28] & 0xff);
+    }
+
+    private String IntToHex2(int i) {
+        char hex_2[] = {Character.forDigit((i >> 4) & 0x0f, 16), Character.forDigit(i & 0x0f, 16)};
+        String hex_2_str = new String(hex_2);
+        return hex_2_str.toUpperCase();
+
     }
 }
