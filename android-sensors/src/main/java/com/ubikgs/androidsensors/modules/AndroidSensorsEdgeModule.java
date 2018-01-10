@@ -38,7 +38,7 @@ import dagger.Provides;
 public class AndroidSensorsEdgeModule {
 
     private static final long DEFAULT_MIN_SENSOR_DELAY = 20L;
-    private static final long DEFAULT_MAX_SENSOR_DELAY = 25L;
+    private static final long DEFAULT_MAX_SENSOR_DELAY = 2000L;
 
     private SensorEnableRequester defaultSensorEnableRequester;
     private SensorEnableRequester gpsSensorEnableRequester;

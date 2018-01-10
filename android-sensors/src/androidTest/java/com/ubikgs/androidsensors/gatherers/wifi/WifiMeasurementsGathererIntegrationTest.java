@@ -1,7 +1,5 @@
 package com.ubikgs.androidsensors.gatherers.wifi;
 
-import android.net.wifi.WifiManager;
-
 import com.ubikgs.androidsensors.DaggerTestBedComponent;
 import com.ubikgs.androidsensors.gatherers.SensorGathererIntegrationTest;
 import com.ubikgs.androidsensors.records.SensorRecord;

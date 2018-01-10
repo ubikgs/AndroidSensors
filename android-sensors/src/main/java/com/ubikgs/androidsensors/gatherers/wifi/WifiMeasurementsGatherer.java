@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.os.CountDownTimer;
-import android.os.Looper;
 
 import com.ubikgs.androidsensors.SensorType;
 import com.ubikgs.androidsensors.checkers.applevel.SensorRequirementChecker;
@@ -25,7 +24,9 @@ import java.util.TimerTask;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import io.reactivex.Completable;
 import io.reactivex.FlowableEmitter;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Cancellable;
 
 /**
@@ -48,7 +49,6 @@ public class WifiMeasurementsGatherer extends AbstractSensorGatherer {
 
     private WifiManager wifiManager;
     private Context context;
-    private WatchDog watchDog;
 
 
     @Inject
@@ -75,10 +75,11 @@ public class WifiMeasurementsGatherer extends AbstractSensorGatherer {
         return new BroadcastReceiver() {
             Timer timer = new Timer();
             long prevCallTime = new Date().getTime();
+            WatchDog watchDog = new WatchDog().start();
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                watchDog.cancelWatchDog();
+                watchDog.cancel();
                 long actualTime = new Date().getTime();
                 long delay = calculateDiffDelay(prevCallTime, actualTime);
                 prevCallTime = actualTime;
@@ -89,6 +90,7 @@ public class WifiMeasurementsGatherer extends AbstractSensorGatherer {
                     timer.schedule(createScanTask(), delay);
                 else
                     createScanTask().run();
+                watchDog.start();
             }
         };
     }
@@ -108,19 +110,8 @@ public class WifiMeasurementsGatherer extends AbstractSensorGatherer {
             @Override
             public void run() {
                 wifiManager.startScan();
-                createWatchDog();
             }
         };
-    }
-
-    private void createWatchDog(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                watchDog = new WatchDog(sensorConfig.getMaxSensorDelay(SensorType.WIFI_MEASUREMENTS), 1000);
-            }
-        }).start();
     }
 
     private void addUnsubscribeCallbackFor(FlowableEmitter<SensorRecord> subscriber,
@@ -138,33 +129,54 @@ public class WifiMeasurementsGatherer extends AbstractSensorGatherer {
         return SensorType.WIFI_MEASUREMENTS;
     }
 
-    private class WatchDog extends CountDownTimer{
+    private class WatchDog {
+        private final long millisecondsLimit;
 
-        private boolean watchDogFinished;
+        private volatile CountDownTimer timer;
+        private volatile boolean finished;
 
-        public WatchDog(long millisInFuture, long countDownInterval){
-            super(millisInFuture,countDownInterval);
-            watchDogFinished = false;
+        public WatchDog() {
+            this.millisecondsLimit = sensorConfig.getMaxSensorDelay(SensorType.WIFI_MEASUREMENTS);
+            this.finished = true;
         }
 
-        @Override
-        public void onTick(long millisUntilFinished) {
-
-        }
-
-        @Override
-        public synchronized void onFinish() {
-            if (!watchDogFinished) {
-                createScanTask().run();
-                watchDogFinished = true;
+        public synchronized WatchDog start() {
+            if (finished) {
+                initializeTimerOnLooper();
+                finished = false;
             }
+            return this;
         }
 
-        public synchronized void cancelWatchDog(){
-            if (!watchDogFinished) {
-                this.cancel();
-                watchDogFinished = true;
-            }
+        public synchronized void cancel() {
+            if (finished) return;
+            if (timer != null) timer.cancel();
+            finished = true;
+        }
+
+        private void initializeTimerOnLooper() {
+            Completable.fromRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    timer = createCountDown().start();
+                }
+            }).subscribeOn(AndroidSchedulers.mainThread()).subscribe();
+        }
+
+        private CountDownTimer createCountDown() {
+            final WatchDog watchDog = this;
+            return new CountDownTimer(millisecondsLimit, millisecondsLimit) {
+                @Override
+                public void onTick(long millisUntilFinished) {}
+
+                @Override
+                public void onFinish() {
+                    if (watchDog.finished) return;
+                    createScanTask().run();
+                    watchDog.finished = true;
+                    watchDog.start();
+                }
+            };
         }
     }
 
