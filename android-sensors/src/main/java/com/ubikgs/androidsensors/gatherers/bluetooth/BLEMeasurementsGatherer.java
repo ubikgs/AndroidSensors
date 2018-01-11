@@ -78,6 +78,7 @@ public class BLEMeasurementsGatherer extends AbstractSensorGatherer {
     private ScanSettings initializeScanSettings() {
         return new ScanSettings.Builder()
                 .setReportDelay(sensorConfig.getMinSensorDelay(SensorType.BLE_MEASUREMENTS))
+                .setScanMode(ScanSettings.SCAN_MODE_BALANCED)
                 .build();
     }
 
