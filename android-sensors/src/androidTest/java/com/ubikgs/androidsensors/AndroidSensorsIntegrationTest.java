@@ -227,6 +227,12 @@ public class AndroidSensorsIntegrationTest {
             }
 
             @Override
+            public long getMaxSensorDelay(SensorType sensorType) {
+                sensorConfigCalled = true;
+                return 0;
+            }
+
+            @Override
             public BackpressureStrategy getBackpressureStrategy(SensorType sensorType) {
                 sensorConfigCalled = true;
                 return BackpressureStrategy.BUFFER;

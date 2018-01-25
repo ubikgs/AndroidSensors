@@ -9,6 +9,7 @@ import org.junit.Before;
 
 import javax.inject.Inject;
 
+
 /**
  * Copyright 2017 Alberto González Pérez
  * <p>
@@ -27,6 +28,7 @@ import javax.inject.Inject;
 public class WifiMeasurementsGathererIntegrationTest extends SensorGathererIntegrationTest {
 
     @Inject WifiMeasurementsGatherer wifiMeasurementsGatherer;
+
 
     @Before
     public void setUp() throws Exception {

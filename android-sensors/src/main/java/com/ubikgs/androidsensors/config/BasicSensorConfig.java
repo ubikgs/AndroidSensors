@@ -30,13 +30,29 @@ import io.reactivex.BackpressureStrategy;
 public class BasicSensorConfig implements SensorConfig {
 
     private final long minSensorDelayMs;
+    private final long maxSensorDelayMs;
+    private static final long DEFAULT_MAX_SENSOR_DELAY = 5000L;
     private final MillisecondsToMicroseconds millisecondsToMicroseconds;
     private final Set<SensorType> sensorsRunningInMicroseconds;
 
+
+    public BasicSensorConfig(long minSensorDelayMs,
+                             MillisecondsToMicroseconds millisecondsToMicroseconds){
+        this.minSensorDelayMs = minSensorDelayMs;
+        this.maxSensorDelayMs = DEFAULT_MAX_SENSOR_DELAY;
+        this.millisecondsToMicroseconds = millisecondsToMicroseconds;
+
+        this.sensorsRunningInMicroseconds = new HashSet<>(Arrays.asList(
+                SensorType.imuValues()
+        ));
+    }
+
     @Inject
     public BasicSensorConfig(long minSensorDelayMs,
+                             long maxSensorDelayMs,
                              MillisecondsToMicroseconds millisecondsToMicroseconds) {
         this.minSensorDelayMs = minSensorDelayMs;
+        this.maxSensorDelayMs = maxSensorDelayMs;
         this.millisecondsToMicroseconds = millisecondsToMicroseconds;
 
         this.sensorsRunningInMicroseconds = new HashSet<>(Arrays.asList(
@@ -50,6 +66,14 @@ public class BasicSensorConfig implements SensorConfig {
             return millisecondsToMicroseconds.convert(minSensorDelayMs);
         return minSensorDelayMs;
     }
+
+    @Override
+    public long getMaxSensorDelay(SensorType sensorType) {
+        if (sensorsRunningInMicroseconds.contains(sensorType))
+            return millisecondsToMicroseconds.convert(maxSensorDelayMs);
+        return maxSensorDelayMs;
+    }
+
 
     @Override
     public BackpressureStrategy getBackpressureStrategy(SensorType sensorType) {

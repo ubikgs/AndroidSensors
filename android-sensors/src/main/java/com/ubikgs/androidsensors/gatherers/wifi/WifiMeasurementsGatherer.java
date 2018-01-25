@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
+import android.os.CountDownTimer;
 
 import com.ubikgs.androidsensors.SensorType;
 import com.ubikgs.androidsensors.checkers.applevel.SensorRequirementChecker;
@@ -23,7 +24,9 @@ import java.util.TimerTask;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import io.reactivex.Completable;
 import io.reactivex.FlowableEmitter;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Cancellable;
 
 /**
@@ -46,6 +49,7 @@ public class WifiMeasurementsGatherer extends AbstractSensorGatherer {
 
     private WifiManager wifiManager;
     private Context context;
+
 
     @Inject
     public WifiMeasurementsGatherer(SensorConfig sensorConfig,
@@ -71,9 +75,11 @@ public class WifiMeasurementsGatherer extends AbstractSensorGatherer {
         return new BroadcastReceiver() {
             Timer timer = new Timer();
             long prevCallTime = new Date().getTime();
+            WatchDog watchDog = new WatchDog().start();
 
             @Override
             public void onReceive(Context context, Intent intent) {
+                watchDog.cancel();
                 long actualTime = new Date().getTime();
                 long delay = calculateDiffDelay(prevCallTime, actualTime);
                 prevCallTime = actualTime;
@@ -84,6 +90,7 @@ public class WifiMeasurementsGatherer extends AbstractSensorGatherer {
                     timer.schedule(createScanTask(), delay);
                 else
                     createScanTask().run();
+                watchDog.start();
             }
         };
     }
@@ -120,6 +127,57 @@ public class WifiMeasurementsGatherer extends AbstractSensorGatherer {
     @Override
     public SensorType getSensorType() {
         return SensorType.WIFI_MEASUREMENTS;
+    }
+
+    private class WatchDog {
+        private final long millisecondsLimit;
+
+        private volatile CountDownTimer timer;
+        private volatile boolean finished;
+
+        public WatchDog() {
+            this.millisecondsLimit = sensorConfig.getMaxSensorDelay(SensorType.WIFI_MEASUREMENTS);
+            this.finished = true;
+        }
+
+        public synchronized WatchDog start() {
+            if (finished) {
+                initializeTimerOnLooper();
+                finished = false;
+            }
+            return this;
+        }
+
+        public synchronized void cancel() {
+            if (finished) return;
+            if (timer != null) timer.cancel();
+            finished = true;
+        }
+
+        private void initializeTimerOnLooper() {
+            Completable.fromRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    timer = createCountDown().start();
+                }
+            }).subscribeOn(AndroidSchedulers.mainThread()).subscribe();
+        }
+
+        private CountDownTimer createCountDown() {
+            final WatchDog watchDog = this;
+            return new CountDownTimer(millisecondsLimit, millisecondsLimit) {
+                @Override
+                public void onTick(long millisUntilFinished) {}
+
+                @Override
+                public void onFinish() {
+                    if (watchDog.finished) return;
+                    createScanTask().run();
+                    watchDog.finished = true;
+                    watchDog.start();
+                }
+            };
+        }
     }
 
 }

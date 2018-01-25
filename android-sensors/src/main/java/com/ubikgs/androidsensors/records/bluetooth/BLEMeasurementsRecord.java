@@ -99,6 +99,7 @@ public class BLEMeasurementsRecord extends SensorRecord {
             this.areLegacy[i] = getIsLegacy(scanResult);
 
             byte[] scanRecord = scanResult.getScanRecord().getBytes();
+
             this.uuids[i] = getUuid(scanRecord);
             this.majors[i] = getMajor(scanRecord);
             this.minors[i] = getMinor(scanRecord);
@@ -406,19 +407,28 @@ public class BLEMeasurementsRecord extends SensorRecord {
     }
 
     private String getUuid(byte[] scanRecord){
-        return IntToHex2(scanRecord[9] & 0xff) + IntToHex2(scanRecord[10] & 0xff) + IntToHex2(scanRecord[11] & 0xff) + IntToHex2(scanRecord[12] & 0xff)
-                + "-" + IntToHex2(scanRecord[13] & 0xff) + IntToHex2(scanRecord[14] & 0xff)
-                + "-" + IntToHex2(scanRecord[15] & 0xff) + IntToHex2(scanRecord[16] & 0xff)
-                + "-" + IntToHex2(scanRecord[17] & 0xff) + IntToHex2(scanRecord[18] & 0xff)
-                + "-" + IntToHex2(scanRecord[19] & 0xff) + IntToHex2(scanRecord[20] & 0xff) + IntToHex2(scanRecord[21] & 0xff) + IntToHex2(scanRecord[22] & 0xff) + IntToHex2(scanRecord[23] & 0xff) + IntToHex2(scanRecord[24] & 0xff);
+        if (scanRecord.length > 28){
+            return IntToHex2(scanRecord[9] & 0xff) + IntToHex2(scanRecord[10] & 0xff) + IntToHex2(scanRecord[11] & 0xff) + IntToHex2(scanRecord[12] & 0xff)
+                    + "-" + IntToHex2(scanRecord[13] & 0xff) + IntToHex2(scanRecord[14] & 0xff)
+                    + "-" + IntToHex2(scanRecord[15] & 0xff) + IntToHex2(scanRecord[16] & 0xff)
+                    + "-" + IntToHex2(scanRecord[17] & 0xff) + IntToHex2(scanRecord[18] & 0xff)
+                    + "-" + IntToHex2(scanRecord[19] & 0xff) + IntToHex2(scanRecord[20] & 0xff) + IntToHex2(scanRecord[21] & 0xff) + IntToHex2(scanRecord[22] & 0xff) + IntToHex2(scanRecord[23] & 0xff) + IntToHex2(scanRecord[24] & 0xff);
+        }
+        return "";  //UUID NOT PRESENT
     }
 
     private int getMajor(byte[] scanRecord){
-        return (scanRecord[25] & 0xff) * 0x100 + (scanRecord[26] & 0xff);
+        if (scanRecord.length > 28) {
+            return (scanRecord[25] & 0xff) * 0x100 + (scanRecord[26] & 0xff);
+        }
+        return -1;  //MAJOR NOT PRESENT
     }
 
     private int getMinor(byte[] scanRecord){
-        return (scanRecord[27] & 0xff) * 0x100 + (scanRecord[28] & 0xff);
+        if (scanRecord.length > 28) {
+            return (scanRecord[27] & 0xff) * 0x100 + (scanRecord[28] & 0xff);
+        }
+        return -1;  //MINOR NOT PRESENT
     }
 
     private String IntToHex2(int i) {
